@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Otp-Verification</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    
+
+  </head>
+  <body>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="d-flex justify-content-center align-items-center continer" style="display:flex;  align-items:center;">
+      <div class="card py-5 px-3">
+        <h5 class="m-0">OTP</h5>
+        <span class="mobile-text"
+          ><b>Enter the code we just sent on your Email</b>
+          <b class="text-color"></b>
+        </span>
+        <form action="/otp" method="post">
+        <div class="d-flex flex-row mt-5">
+
+          <input type="number" name="otp" id="otp" placeholder="OTP here"">
+        </div>
+        <br>
+        <% if(typeof message !== 'undefined'){ %>
+          <span id="er2" style="color: rgb(241, 7, 7);text-align: center;"><%= message%></span>
+          <% } %>
+          <br>
+        <br>
+        <button type="submit" onclick="validate()" class="btn btn-success">Enter</button>
+    </form>
+    
+        <div class="text-center mt-5">
+          
+          <p style="color:rgb(8, 8, 8);" id="countdown-timer">OTP will expire in <span id="countdown">30</span> seconds.</p>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    
+      <script>
+  function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10)
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
+}
+
+var countdown = document.getElementById("countdown");
+var countdownTimer = document.getElementById("countdown-timer");
+
+startTimer(30, countdown);
+// Update timer element and display message when OTP expires
+function countdownExpired() {
+  countdownTimer.innerHTML = 'OTP has expired. Resend the OTP <a href="/resend">here</a>.';
+
+}
+
+setTimeout(countdownExpired, 30000);
+</script>
+ 
+
+
+
+
+
+    <script>
+
+      function validate(){
+      const otp = document.getElementById('otp').value;
+      if(otp==''){
+        document.getElementById('er1').innerText='Must fillout this field'
+      }
+      
+
+
+
+    }
+
+
+    </script>
+  </body>
+</html>

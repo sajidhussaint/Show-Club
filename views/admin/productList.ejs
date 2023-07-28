@@ -1,0 +1,85 @@
+<%- include('./layouts/header') %>
+                    <!-- card-header end// -->
+                    <div class="card-body" style="padding: 50px;">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">NO</th>
+                                        <th scope="col">PRODUCTS</th>
+                                        <th scope="col">DESCRIPTION</th>
+                                        <th scope="col">CATEGORY</th>
+                                        <th scope="col">QUANTITY</th>
+                                        <th scope="col">PRICE</th>
+                                        
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <% product.forEach(function(product,index) { %>
+
+                                        <tr>
+                                            <td><%=index+1 %></td>
+                                            <td><%=product.name %></td>
+                                            <td><%=product.description %></td>
+                                            <td><%=product.category %></td>
+                                            <td><%=product.quantity %></td>
+                                            <td>₹<%=product.price %></td>
+                                            <td class="text-end">
+                                                <a href="/admin/editProduct?product=<%=product._id %>" class="btn btn-md rounded font-sm" style="background-color: green;">EDIT</a>
+                                            </td>
+                                            <td class="text-center">
+
+                                                <% if (product.blocked==false) { %>
+
+                                                    
+                                           <a href="/admin/blockProduct?product=<%=product._id %>" class="btn btn-md rounded font-sm" style="background-color: RED;">
+                                            
+                                            <% } else { %>
+                                                
+                                                <a href="/admin/unblockProduct?product=<%=product._id %>" class="btn btn-md rounded font-sm" style="background-color: blue;">
+                                                 
+                                                                                                      
+                                                <% } %>
+                                                
+                                                    <% if (product.blocked==false) { %>
+
+                                                        UNLIST
+                                                                                                           
+                                                      <% } else { %>
+                                                                                                          
+                                                     LIST
+                                                                                                          
+                                                    <% } %>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        
+                                        <% },1); %>  
+   
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- table-responsive //end -->
+                    </div>
+                    <!-- card-body end// -->
+                </div>
+                <!-- card end// -->
+                <!-- pagination -->
+                <!-- <div class="pagination-area mt-15 mb-50">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                            <li class="page-item"><a class="page-link" href="#">02</a></li>
+                            <li class="page-item"><a class="page-link" href="#">03</a></li>
+                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#">16</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div> -->
+            </section>
+            <%- include('./layouts/footer') %>

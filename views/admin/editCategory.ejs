@@ -1,0 +1,66 @@
+<%- include('./layouts/header') %>
+<h4> EDIT CATEGORY</h4>
+<div class="container-edit" style="padding: 50px;">
+<form method="POST" action="/admin/editCategory?name=<%=catData.name %>">
+    <label for="productName">CATEGORY NAME:</label>
+    <input type="text" id="productName" name="name" value="<%=catData.name %>" required><br>
+
+    <label for="description">Description:</label>
+        <input type="text" id="description" name="description" value="<%=catData.description %>" required></input><br>
+
+    <input type="submit" value="Save">
+</form>
+</div>
+
+<style>
+    .container-edit{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px;
+    }
+
+    h3 {
+        margin: 0;
+        margin-right: 15px;
+
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+        padding: 3px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 200%;
+    }
+
+    .textareas {
+        resize: vertical;
+    }
+
+    input[type="submit"] {
+        padding: 10px;
+        background-color: #39943c;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 50%;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #106315;
+    }
+</style>
+<%- include('./layouts/footer') %>

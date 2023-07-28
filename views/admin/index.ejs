@@ -1,0 +1,56 @@
+<%- include('./layouts/header') %>
+
+<section class="content-main">
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="card card-body mb-4">
+        <article class="icontext">
+          <span class="icon icon-sm rounded-circle bg-primary-light"
+            ><i class="text-primary material-icons md-local_shipping"></i
+          ></span>
+          <div class="text">
+            <h6 class="mb-1 card-title">Pending Orders</h6>
+            <span>---</span>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="card card-body mb-4">
+        <article class="icontext">
+          <span class="icon icon-sm rounded-circle bg-primary-light"
+            ><i class="text-primary material-icons md-local_shipping"></i
+          ></span>
+          <div class="text">
+            <h6 class="mb-1 card-title">Earnings</h6>
+            <span>---</span>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="card card-body mb-4">
+        <article class="icontext">
+          <span class="icon icon-sm rounded-circle bg-primary-light"
+            ><i class="text-primary material-icons md-local_shipping"></i
+          ></span>
+          <div class="text">
+            <h6 class="mb-1 card-title">Total users</h6>
+            <span><%= userCount %></span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="row">
+    <div class="col-xl-8 col-lg-12">
+      <div class="card mb-4">
+        <article class="card-body">
+          <h5 class="card-title">Sale statistics</h5>
+          <canvas id="myChart" height="120px"></canvas>
+        </article>
+      </div>
+    </div>
+  </div> -->
+</section>
+<%- include('./layouts/footer') %>

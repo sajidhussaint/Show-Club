@@ -1,0 +1,64 @@
+<%- include('./layouts/header') %>
+                    <!-- card-header end// -->
+                    <div class="card-body" style="padding: 50px;">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">USERS</th>
+                                        <th scope="col">MOBILE</th>
+                                        <th scope="col">EMAIL</th>
+                                        <!-- <th scope="col">DATE JOINED</th> -->
+                                        <th scope="col">STATUS</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% user.forEach(function(user) { %>
+                                        <tr>
+                                            <td style="font-weight: bolder;"><%= user.name %></td>
+                                            <td><%= user.mob %></td>
+                                            <td><%= user.email %></td>
+                                            <td><% if (user.is_verified==1&&user.is_blocked==false) { %>
+                                                <span class="badge rounded-pill alert-success">Unblocked</span>
+                                                
+                                            <% } else { %>
+                                               <span class="badge rounded-pill alert-danger">
+                                                Blocked
+                                               </span> 
+                                            <% } %></td>
+                                            <td class="text-end">
+                                                <% if (user.is_blocked==false) { %>         
+                                                    <a href="/admin/block-user?_id=<%=user._id%>" class="btn btn-md rounded font-sm" style="background-color: blue;">
+                                                    
+                                                <% } else { %>
+                                                   
+                                                
+                                                    <a href="/admin/unblock-user?_id=<%=user._id%>" class="btn btn-md rounded font-sm" style="background-color: blue;">
+                                                <% } %>
+
+
+                                                    <% if (user.is_verified==1&&user.is_blocked==false) { %>
+                                                        Block
+                                                        
+                                                    <% } else { %>
+                                                       
+                                                        Unblock
+                                                       
+                                                    <% } %>
+
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        
+                                    <% }); %>   
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- table-responsive //end -->
+                    </div>
+                    <!-- card-body end// -->
+                </div>
+               
+            </section>
+            <%- include('./layouts/footer') %>

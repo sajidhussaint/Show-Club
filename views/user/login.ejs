@@ -1,0 +1,108 @@
+<%- include('./header') %>
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+  <div class="container">
+    <div
+      class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end"
+    ></div>
+  </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Login Box Area =================-->
+<section class="login_box_area section_gap" style="padding:50px; ">
+      <div class="col-lg-4 " ;">
+        <div class="login_form_inner" style="display: flex; flex-direction: column; justify-content: center;" >
+          <% if (typeof message !== 'undefined') { %>
+          <p style="color: red"><%= message %></p>
+          <% } %> <% if (typeof messageS !== 'undefined') { %>
+          <p style="color: green"><%= messageS %></p>
+          <% } %>
+          <h3>Log in to enter</h3>
+          <form
+            class="row login_form"
+            action="/login"
+            method="post"
+            id="contactForm"
+            novalidate="novalidate"
+          >
+            <div class="col-md-12 form-group">
+              <input
+                type="text"
+                class="form-control"
+                id="email"
+                name="email"
+                placeholder="email"
+                onfocus="this.placeholder = ''"
+                onblur="this.placeholder = 'email'"
+                required
+              />
+              <span class="text-danger" id="Email_error"></span>
+            </div>
+            <div class="col-md-12 form-group">
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Password"
+                onfocus="this.placeholder = ''"
+                onblur="this.placeholder = 'Password'"
+                required
+              />
+              <span class="text-danger" id="Password_error"></span>
+            </div>
+            <div
+              class="col-md-12 form-group"
+              style="display: flex; justify-content: space-evenly"
+            >
+			<a class="primary-btn" href="/register">Sign Up</a>
+			<a href="/forgot">forgot password</a>
+			<br>
+		</div>
+		<button type="submit" value="submit" class="btn btn-dark"  border: none;">
+		  Log In
+		</button>
+          </form>
+        
+      
+    
+  </div>
+</section>
+
+<script>
+  const email = document.getElementById("email");
+  const password = document.getElementById("Password");
+  const Email_error = document.getElementById("Email_error");
+  const Password_error = document.getElementById("Password_error");
+
+  email.addEventListener("input", () => {
+    if (!email.value.match(/^[A-Za-z\._\-0-9][@][A-Za-z][\.][a-z]{2,4}$/)) {
+      name.setCustomValidity("please enter the name");
+      Email_error.innerHTML = "please enter  a valid email";
+      return false;
+    }
+    Email_error.innerHTML = "";
+    return true;
+
+    if (email.value.trim() == "") {
+      email.setCustomValidity("please enter the email");
+      Email_error.innerHTML = "please enter  a valid email";
+      return false;
+    } else {
+      Email_error.innerHTML = "";
+      return true;
+    }
+  });
+  password.addEventListener("input", () => {
+    if (password.value.trim() == "") {
+      Password_error.innerHTML = "please enter the password";
+    } else {
+      Password_error.innerHTML = "";
+      return true;
+    }
+  });
+</script>
+<!--================End Login Box Area =================-->
+
+<%- include('./footer') %>

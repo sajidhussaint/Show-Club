@@ -1,0 +1,24 @@
+<%- include('./layouts/header') %>
+<div class="card-body" style="padding: 50px;">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">CATEGORY</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% category.forEach(function(category) { %>
+                    <tr>
+                        <td><b><%=category.name %></b></td>
+                        <td class="text-start">
+                            <a href="/admin/editCategory?name=<%=category.name %>" class="btn btn-md rounded font-sm" style="background-color: GREEN;">Edit</a>
+                        </td>
+                    </tr>
+                    <% }); %>  
+            </tbody>
+        </table>
+    </div>
+    <!-- table-responsive //end -->
+</div>
+<%- include('./layouts/footer') %>
