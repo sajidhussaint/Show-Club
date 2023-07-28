@@ -10,7 +10,7 @@ const productController = require('../controllers/productController')
 user_Route.set("views", "./views/user");
 
 
-//load pages all
+//load
 user_Route.get("/",userController.loadHome);
 user_Route.get("/men",userController.loadMen);
 user_Route.get("/women",userController.loadWomen);
