@@ -97,8 +97,12 @@
                   	</div>
                   	<div class="row">
 	                  	<div class="col-sm-12 text-center">
-									<p class="addtocart"><a href="/cart" onclick="addToCart('<%=product._id %>')" class="btn btn-primary btn-addtocart"><i class="icon-shopping-cart"></i> Add to Cart</a></p>
-								</div>
+							<form action="/add_to_cart" method="post">
+								<input type="hidden" id="custId" name="product" value="<%=product.id%>">
+									<button type="submit"  class="btn btn-primary btn-addtocart"><i class="icon-shopping-cart"></i> Add to Cart</button>
+								
+								</form>
+							</div>
 							</div>
 						</div>
 					</div>
@@ -277,4 +281,51 @@
 				</div>
 			</div>
 		</div>
+		<script>
+			function addToCart(id){
+				console.log(id);
+				$.ajax({
+					url:'/add_to_cart',
+					method:"post",
+					encoded:true,
+					data:{
+						id:id,
+					},
+				}).done((data)=>{
+					if (data.success){
+						Swal.fire({
+						position: 'center',
+						icon: 'success',
+						title: 'Product added to cart',
+						showConfirmButton: false,
+						timer: 1500
+						})
+					}
+				})
+	
+			}
+	
+		   
+		</script>
+	
+		<script>
+			function buynow(id){
+				console.log(id);
+				$.ajax({
+					url:'/buynow',
+					method:"post",
+					encoded:true,
+					data:{
+						id:id,
+					},
+				}).done((data)=>{
+					if (data.success){
+						location.href = '/checkoutbuy';
+	
+					   
+					}
+				})
+	
+			}
+		</script>
 		<%- include('./footer') %>

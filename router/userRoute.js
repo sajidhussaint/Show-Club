@@ -9,15 +9,15 @@ const productController = require('../controllers/productController')
 
 user_Route.set("views", "./views/user");
 
-
-//load
+//load pages
 user_Route.get("/",userController.loadHome);
 user_Route.get("/men",userController.loadMen);
 user_Route.get("/women",userController.loadWomen);
 user_Route.get("/about",userController.loadAbout);
 user_Route.get("/contact",userController.loadContact);
 user_Route.get("/add-to-wishlist",auth.isLogin,userController.loadWishList);
-user_Route.get("/cart",auth.isLogin,userController.loadCart);
+
+// user_Route.get("/cart",auth.isLogin,userController.loadCart);
 user_Route.get("/checkout",auth.isLogin,userController.loadCheckOut);
 user_Route.get("/order-complete",auth.isLogin,userController.loadOrderComplete);
 
@@ -51,6 +51,9 @@ user_Route.get('/resend',auth.isLogin,userController.resend)
 
 //profile
 user_Route.get("/profile",auth.isLogin,userController.loadProfile)
+
+
+user_Route.post("/add_to_cart",userController.addtoCart)
 
 
 

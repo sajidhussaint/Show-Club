@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 const session = require("express-session");
 const randomstring = require("randomstring");
+const cart = require("../model/cartModel");
 
 dotenv.config();
 
@@ -41,26 +42,25 @@ const sendVerifymail = async (name, email, otp) => {
       subject: "For OTP verification",
 
       html:
-      "<div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>"+
-  "<div style='margin:50px auto;width:70%;padding:20px 0'>"+
-    "<div style='border-bottom:1px solid #eee'>"+
-     "<a href='' style='font-size:1.4em;color: #F6511D;text-decoration:none;font-weight:600'>SHOW<a style='color: #F6511D;'>☰</a>CLUB</a>"+
-    "</div>"+
-    "<p style='font-size:1.1em'>Hi,</p>"+
-    "<p>Thank you for choosing SHOW-CLUB. Use the following OTP to complete your Sign Up procedures. OTP is valid for few minutes</p>"+
-    "<h2 style='background: #F6511D;margin: 0 auto;width: max-content;padding: 0 10px;color: white;border-radius: 4px;'>"+
-    +otp+
-    "</h2>"+
-    "<p style='font-size:0.9em;'>Regards,<br />SHOW-CLUB</p>"+
-    "<hr style='border:none;border-top:1px solid #eee' />"+
-    "<div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>"+
-      "<p>Show Club Eco</p>"+
-      "<p>1600 Ocean Of Heaven</p>"+
-      "<p>Pacific</p>"+
-    "</div>"+
-  "</div>"+
-"</div>"
-
+        "<div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>" +
+        "<div style='margin:50px auto;width:70%;padding:20px 0'>" +
+        "<div style='border-bottom:1px solid #eee'>" +
+        "<a href='' style='font-size:1.4em;color: #F6511D;text-decoration:none;font-weight:600'>SHOW<a style='color: #F6511D;'>☰</a>CLUB</a>" +
+        "</div>" +
+        "<p style='font-size:1.1em'>Hi,</p>" +
+        "<p>Thank you for choosing SHOW-CLUB. Use the following OTP to complete your Sign Up procedures. OTP is valid for few minutes</p>" +
+        "<h2 style='background: #F6511D;margin: 0 auto;width: max-content;padding: 0 10px;color: white;border-radius: 4px;'>" +
+        +otp +
+        "</h2>" +
+        "<p style='font-size:0.9em;'>Regards,<br />SHOW-CLUB</p>" +
+        "<hr style='border:none;border-top:1px solid #eee' />" +
+        "<div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>" +
+        "<p>Show Club Eco</p>" +
+        "<p>1600 Ocean Of Heaven</p>" +
+        "<p>Pacific</p>" +
+        "</div>" +
+        "</div>" +
+        "</div>",
     };
 
     transporter.sendMail(mailOption, (error, info) => {
@@ -118,8 +118,8 @@ const resetsendVerifymail = async (name, email, token) => {
 const loadHome = async (req, res) => {
   try {
     const session = req.session.user_id;
-    console.log(session,"load home session");
-    const product = await Product.find({blocked:false});
+    console.log(session, "load home session");
+    const product = await Product.find({ blocked: false });
     res.render("index", { activePage: "home", product, session });
   } catch (err) {
     console.log(err.message);
@@ -198,8 +198,6 @@ const loadOrderComplete = async (req, res) => {
   }
 };
 
-
-
 //login page
 const loadLogin = async (req, res) => {
   try {
@@ -231,7 +229,7 @@ const verifyLogin = async (req, res) => {
     }
 
     // Check if the user's account is verified
-    if (user.is_verified == 0 ) {
+    if (user.is_verified == 0) {
       return res.render("login", { message: "Account not verified" });
     }
 
@@ -243,8 +241,7 @@ const verifyLogin = async (req, res) => {
     // Set up a session or token for authentication (implement your own logic)
     req.session.user_id = user._id;
     console.log(req.session.user_id, ":session is created");
-    res.render("men")
-  
+    res.render("men");
   } catch (err) {
     console.error("Error during sign in:", err);
     res.render("login", { message: "An error occurred during sign in" });
@@ -301,13 +298,13 @@ const verifyUser = async (req, res) => {
 };
 
 // load OTP
-const loadOtp=async(req,res)=>{
+const loadOtp = async (req, res) => {
   try {
-    res.render('otpReminder')
+    res.render("otpReminder");
   } catch (error) {
     console.log(error.message);
   }
-}
+};
 
 // otpValidation(POST)
 const otpValidation = async (req, res) => {
@@ -324,7 +321,7 @@ const otpValidation = async (req, res) => {
         email2,
         message: "otp verification successfully..!!!",
       });
-    } else res.render("otpReminder",{message:'incorrect otp!!!'});
+    } else res.render("otpReminder", { message: "incorrect otp!!!" });
   } catch (err) {
     console.error("Error during verification:", err);
     res.render("otpReminder", {
@@ -430,8 +427,65 @@ const loadProfile = async (req, res) => {
   }
 };
 
+const addtoCart = async (req, res) => {
+  try {
+    const cartdb = await cart.findOne({});
+    console.log(cartdb);
+    
+    const productId = req.body.product;
+    console.log(productId, "this is product addto cart", req.session.user_id);
 
+    const UserId = await User.findOne({ _id: req.session.user_id });
 
+    //database checking
+    const productData = await Product.findById(productId);
+    const Usercart = await cart.findOne({ user: UserId });
+
+    if (Usercart) {
+      //checking cart prodcut avaliable
+      const productavaliable = await Usercart.product.findIndex(
+        (product) => product.productId == productId
+      );
+      if (productavaliable != -1) {
+        //if have product in cart the qnty increse
+        await cart.findOneAndUpdate(
+          { user: UserId, "product.productId": productId },
+          { $inc: { "product.$.quantity": 1 } }
+        );
+        res.json({ success: true });
+      } else {
+        //if no product in cart add product
+        await cart.findOneAndUpdate(
+          { user: UserId },
+          {
+            $push: {
+              product: { productId: productId, price: productData.price },
+            },
+          }
+        );
+        res.json({ success: true });
+      }
+    } else {
+      const CartData = new cart({
+        user: UserId._id,
+        product: [
+          {
+            productId: productId,
+            price: productData.price,
+          },
+        ],
+      });
+      const cartData = await CartData.save();
+      if (cartData) {
+        res.json({ success: true });
+      } else {
+        res.redirect("/home");
+      }
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 module.exports = {
   loadHome,
@@ -455,5 +509,6 @@ module.exports = {
   forgotSendtoEmail,
   resetpassLoad,
   resetpassverify,
-  resend
+  resend,
+  addtoCart,
 };
