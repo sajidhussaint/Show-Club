@@ -1,4 +1,10 @@
 <%- include('./header') %>
+
+<style>
+	.btn-orange{
+		background-color: orangered;
+	}
+</style>
 		<div class="breadcrumbs">
 			<div class="container">
 				<div class="row">
@@ -97,11 +103,23 @@
                   	</div>
                   	<div class="row">
 	                  	<div class="col-sm-12 text-center">
-							<form action="/add_to_cart" method="post">
+							
 								<input type="hidden" id="custId" name="product" value="<%=product.id%>">
-									<button type="submit"  class="btn btn-primary btn-addtocart"><i class="icon-shopping-cart"></i> Add to Cart</button>
 								
-								</form>
+									
+									<%if(product.quantity> 0){%>
+
+
+										
+										
+										<a class="btn btn-primary btn-addtocart" style="color: white;" onclick="addToCart('<%=product._id%>')"><i class="icon-shopping-cart"></i>Add to Cart</a>
+										
+										
+										<%
+									}else{%>
+										<a class="btn btn-danger mr-2"> out of Stock!!</a>
+									<%}%>
+						
 							</div>
 							</div>
 						</div>
@@ -281,51 +299,93 @@
 				</div>
 			</div>
 		</div>
+
 		<script>
-			function addToCart(id){
-				console.log(id);
-				$.ajax({
-					url:'/add_to_cart',
-					method:"post",
-					encoded:true,
-					data:{
-						id:id,
-					},
-				}).done((data)=>{
-					if (data.success){
-						Swal.fire({
-						position: 'center',
-						icon: 'success',
-						title: 'Product added to cart',
-						showConfirmButton: false,
-						timer: 1500
-						})
-					}
-				})
-	
-			}
-	
 		   
-		</script>
-	
-		<script>
-			function buynow(id){
-				console.log(id);
-				$.ajax({
-					url:'/buynow',
-					method:"post",
-					encoded:true,
-					data:{
-						id:id,
-					},
-				}).done((data)=>{
-					if (data.success){
-						location.href = '/checkoutbuy';
-	
-					   
-					}
-				})
-	
-			}
-		</script>
+		  const addToCart = async (product_Id)=>{   
+	 try {
+		showSwal('success-message');
+		
+	   event.preventDefault();
+	let product_quantity =1
+	   const quantityData = await axios.post('/cart',{product_quantity,product_Id})
+	 } catch (error) {
+	   console.log(error.message);
+	 }
+	 }
+	 (function ($) {
+        showSwal = function (type) {
+          "use strict";
+          if (type === "success-message") {
+            swal({
+              title: "added cart",
+              text: "Thanks",
+              type: "success",
+              button: {
+                text: "Continue",
+                value: true,
+                visible: true,
+                className: "btn btn-primary btn-orange",
+              },
+            });
+          } else {
+            swal("Error occured !");
+          }
+        };
+      })(jQuery);
+
+	</script>
+//
+//  function addToCart(id){
+// 	
+//             $.ajax({
+//                 url:'/add_to_cart',
+//                 method:"post",
+//                 encoded:true,
+//                 data:{
+//                     id:id,
+//                 },
+//             }).done((data)=>{
+//                 if (data.success){
+//                     swal({
+//               title: "Congratulations!",
+//               text: "You entered the correct answer",
+//               type: "success",
+//               button: {
+//                 text: "Continue",
+//                 value: true,
+//                 visible: true,
+//                 className: "btn btn-primary",
+//               },
+//             });
+//                 }
+//             })
+
+//         }
+
+
+
+
+	// 		(function ($) {
+    //     showSwal = function (type) {
+    //       "use strict";
+    //       if (type === "success-message") {
+    //         swal({
+    //           title: "Congratulations!",
+    //           text: "You entered the correct answer",
+    //           type: "success",
+    //           button: {
+    //             text: "Continue",
+    //             value: true,
+    //             visible: true,
+    //             className: "btn btn-primary",
+    //           },
+    //         });
+    //       } else {
+    //         swal("Error occured !");
+    //       }
+    //     };
+    //   })(jQuery);
+			
+		
 		<%- include('./footer') %>
