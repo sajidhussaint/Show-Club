@@ -109,10 +109,18 @@
 									
 									<%if(product.quantity> 0){%>
 
+										<% if (productavaliable != -1) { %>
+
+											
+											<a href="/cart" class="btn btn-primary btn-addtocart" style="color: white;" ><i class="icon-shopping-cart"></i>Go to Cart</a>
+																							   
+										  <% } else { %>
+																							  											  
+											<a class="btn btn-primary btn-addtocart" style="color: white; background-color: #F6511D;" onclick="addToCart('<%=product._id%>')"><i class="icon-shopping-cart"></i>Add to Cart</a>
+										<% } %>
 
 										
 										
-										<a class="btn btn-primary btn-addtocart" style="color: white;" onclick="addToCart('<%=product._id%>')"><i class="icon-shopping-cart"></i>Add to Cart</a>
 										
 										
 										<%

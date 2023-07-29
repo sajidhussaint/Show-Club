@@ -1,6 +1,7 @@
 const ProductDB = require("../model/productModel");
 const UserDB = require("../model/userModel");
 const CategoryDB = require("../model/categoryModel");
+const cartDB = require("../model/cartModel");
 
 // LOAD  PRODUCT LIST(ADMIN)
 const loadproductList = async (req, res) => {
@@ -82,7 +83,20 @@ const loadProductDetail = async (req, res) => {
   try {
     const id = req.query.productid;
     const product = await ProductDB.findById({_id:id})
-    res.render("product-detail", { product });
+    if(req.session.user_id){
+      const carts=await cartDB.findOne({userId:req.session.user_id})
+      if(carts){
+
+        console.log(carts,'this is carts');
+        var productavaliable = await carts.product.findIndex(
+          (product) => product.product_Id == id
+        );
+      }else{
+        var productavaliable=-1
+      }
+    }
+   
+    res.render("product-detail", { product ,productavaliable});
   } catch (error) {
     console.log(error.message);
   }
