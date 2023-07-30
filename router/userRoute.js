@@ -40,7 +40,7 @@ user_Route.post("/otp",userController.otpValidation)
 user_Route.get('/forgot',auth.isLogout,userController.forgotLoad)
 user_Route.post('/forgot',userController.forgotSendtoEmail)
 
-//reset password
+//reset passwords
 user_Route.get('/reset_password',userController.resetpassLoad)
 user_Route.post('/reset_password',userController.resetpassverify)
 
@@ -52,8 +52,7 @@ user_Route.get("/profile",auth.isLogin,userController.loadProfile)
 
 
 //cart
-user_Route.get("/cart",cartController.loadCart);//auth.isLogin,
-// user_Route.post("/add_to_cart",auth.isLogin,userController.addtoCart)
+user_Route.get("/cart",cartController.loadCart);
 user_Route.post('/cart',cartController.addtoCart)
 
 

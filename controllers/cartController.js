@@ -2,89 +2,30 @@ const cart = require("../model/cartModel");
 const Product = require("../model/productModel");
 const User = require("../model/userModel");
 
-
 const loadCart = async (req, res) => {
-    try {
-     const  userId=req.session.user_id
-      const products=await cart.find({userId:userId}).populate("product.product_Id");
-      console.log(products,'this is cart db load cart');
-      res.render("cart", { activePage: "cart" ,products});
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-
+  try {
+    const userId = req.session.user_id;
+    const products = await cart
+      .findOne({ userId: userId })
+      .populate("product.product_Id");
+    console.log(products, "this is cart db load cart");
+    res.render("cart", { activePage: "cart", products });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 const addtoCart = async (req, res) => {
   try {
-    // console.log('start working addtocart');
-    // const { user_id } = req.session;
-    // const { product_Id} = req.body;
-    // const userCart = await cart.findOne({ userId: user_id });
-    // const findPrice = await Product.findOne({ _id: product_Id });
-    // const total = product_quantity * findPrice.price;
-    // if (userCart) {
-    //   const findProduct = await cart.findOne({
-    //     userId: user_id,
-    //     "items.product_Id": new mongoose.Types.ObjectId(product_Id),
-    //   });
-    //   if (findProduct) {
-    //     await cart.findOneAndUpdate(
-    //       {
-    //         userId: user_id,
-    //         "items.product_Id": new mongoose.Types.ObjectId(product_Id),
-    //       },
-    //       {
-    //         $inc: {
-    //           "items.$.quantity": product_quantity,
-    //           "items.$.total": total,
-    //           grandTotal: total,
-    //         },
-    //       },
-    //       { new: true }
-    //     );
-    //   } else {
-    //     await cart.updateOne(
-    //       { userId: user_id },
-    //       {
-    //         $push: {
-    //           items: {
-    //             product_Id: new mongoose.Types.ObjectId(product_Id),
-    //             quantity: product_quantity,
-    //             total: total,
-    //           },
-    //         },
-    //         $inc: { count: 1, grandTotal: total },
-    //       }
-    //     );
-    //   }
-    // } else {
-    //   const makeCart = new cart({
-    //     userId: user_id,
-    //     items: [
-    //       {
-    //         product_Id: new mongoose.Types.ObjectId(product_Id),
-    //         quantity: product_quantity,
-    //         count: 1,
-    //         total: total,
-    //       },
-    //     ],
-    //     grandTotal: total,
-    //   });
-    //   await makeCart.save();
-    // }
-    // const cart = await cart.findOne({ userId: user_id });
-    // res.json({ count: cart.items.length });
-
-
     const productId = req.body.product_Id;
-
-    const UserId = await User.findOne({ _id: req.session.user_id });
-
-    //database checking
+    const quantity = req.body.product_quantity;
     const productData = await Product.findById(productId);
+    const UserId = await User.findOne({ _id: req.session.user_id });
     const Usercart = await cart.findOne({ userId: UserId });
+
+    const total = quantity * productData.price;
+
+    console.log(total, "this is taolityyyyyy");
 
     if (Usercart) {
       //checking cart prodcut avaliable
@@ -95,7 +36,13 @@ const addtoCart = async (req, res) => {
         //if have product in cart the qnty increse
         await cart.findOneAndUpdate(
           { userId: UserId, "product.product_Id": productId },
-          { $inc: { "product.$.quantity": 1 } }
+          {
+            $inc: {
+              "product.$.quantity": 1,
+              "product.$.total": total,
+              grandTotal: total,
+            },
+          }
         );
         res.json({ success: true });
       } else {
@@ -104,8 +51,14 @@ const addtoCart = async (req, res) => {
           { userId: UserId },
           {
             $push: {
-              product: { product_Id: productId, price: productData.price },
+              product: {
+                product_Id: productId,
+                price: productData.price,
+                quantity: quantity,
+                total: total,
+              },
             },
+            $inc: { count: 1, grandTotal: total },
           }
         );
         res.json({ success: true });
@@ -117,15 +70,13 @@ const addtoCart = async (req, res) => {
           {
             product_Id: productId,
             price: productData.price,
+            quantity: quantity,
+            total: total,
           },
         ],
       });
       const cartData = await CartData.save();
-      if (cartData) {
-        res.json({ success: true });
-      } else {
-        res.json("/");
-      }
+      
     }
   } catch (error) {
     console.log(error.message);
@@ -203,7 +154,4 @@ const addtoCart = async (req, res) => {
 // }
 // }
 
-
-
-
-module.exports = { addtoCart ,loadCart};
+module.exports = { addtoCart, loadCart };

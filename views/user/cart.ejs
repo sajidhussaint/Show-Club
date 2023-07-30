@@ -51,117 +51,113 @@
 							</div>
 						</div>
 
-						<% if (products){ %>
+
+						<% if (products&& products.product.length> 0) { %>
+
+							<% products.product.forEach((items)=> { %>
+	
+
+								<div class="product-cart d-flex">
+									<div class="one-forth">
+										<div class="product-img" >
+											<img src="/admin/IMAGES_DB/<%= items.product_Id.image[0] %>" class="img-fluid rounded-top" alt="">
+										</div>
+										<div class="display-tc">
+											<h3><%= items.product_Id.name%></h3>
+										</div>
+									</div>
+									<div class="one-eight text-center">
+										<div class="display-tc">
+											<span class="price">₹<%= items.product_Id.price%></span>
+										</div>
+									</div>
+									<div class="one-eight text-center">
+										<div class="display-tc">
+											<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="<%= items.quantity%>" min="1" max="100">
+										</div>
+									</div>
+									<div class="one-eight text-center">
+										<div class="display-tc">
+											<span class="price">₹<%= items.total%></span>
+										</div>
+									</div>
+									<div class="one-eight text-center">
+										<div class="display-tc">
+											<a href="#" class="closed"></a>
+										</div>
+									</div>
+								</div>
+							
+								<% }); %>  
+							
+														
+							
+							
+
+
+						  <% } else { %>
+																			  
+						
+																			  
+							
+	<h1>your cart is Empty</h1>
+	<p>please add items</p>
+							
+						<% } %>
 
 							
 
-							<div class="product-cart d-flex">
-								<div class="one-forth">
-									<div class="product-img" style="background-image: url(images/item-6.jpg);">
-									</div>
-									<div class="display-tc">
-										<h3>Product Name</h3>
-									</div>
-								</div>
-								<div class="one-eight text-center">
-									<div class="display-tc">
-										<span class="price">$68.00</span>
-									</div>
-								</div>
-								<div class="one-eight text-center">
-									<div class="display-tc">
-										<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100">
-									</div>
-								</div>
-								<div class="one-eight text-center">
-									<div class="display-tc">
-										<span class="price">$120.00</span>
-									</div>
-								</div>
-								<div class="one-eight text-center">
-									<div class="display-tc">
-										<a href="#" class="closed"></a>
-									</div>
-								</div>
-							</div>
-
 																			   
-						  <% } else { %>
-																			  
-						 <h1>your cart is Empty</h1>
-						 <p>please add items</p>
-																			  
-						<% } %>
-
 						
-
-
-						<div class="product-cart d-flex">
-							<div class="one-forth">
-								<div class="product-img" style="background-image: url(images/item-7.jpg);">
-								</div>
-								<div class="display-tc">
-									<h3>Product Name</h3>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<span class="price">$68.00</span>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<form action="#">
-										<input type="text" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100">
-									</form>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<span class="price">$120.00</span>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<a href="#" class="closed"></a>
-								</div>
-							</div>
-						</div>
+					   
+		
 						
 					</div>
 				</div>
-				<div class="row row-pb-lg">
-					<div class="col-md-12">
-						<div class="total-wrap">
-							<div class="row">
-								<div class="col-sm-8">
-									<form action="#">
-										<div class="row form-group">
-											<div class="col-sm-9">
-												<input type="text" name="quantity" class="form-control input-number" placeholder="Your Coupon Number...">
+
+				
+				<% if (products&& products.product.length> 0) { %>
+
+					<div class="row row-pb-lg">
+						<h2></h2>
+						<div class="col-md-12">
+							<div class="total-wrap">
+								<div class="row">
+									<div class="col-sm-8">
+										<form action="#">
+											<div class="row form-group">
+												<div class="col-sm-9">
+													<input type="text" name="quantity" class="form-control input-number" placeholder="Your Coupon Number...">
+												</div>
+												<div class="col-sm-3">
+													<input type="submit" value="Apply Coupon" class="btn btn-primary">
+												</div>
 											</div>
-											<div class="col-sm-3">
-												<input type="submit" value="Apply Coupon" class="btn btn-primary">
+										</form>
+									</div>
+									<div class="col-sm-4 text-center">
+										<div class="total">
+											<div class="sub">
+												<p><span>Subtotal:</span> <span>₹<%=products.grandTotal %></span></p>
+												<p><span>Delivery:</span> <span>₹0</span></p>
+												<p><span>Discount:</span> <span>₹0</span></p>
 											</div>
-										</div>
-									</form>
-								</div>
-								<div class="col-sm-4 text-center">
-									<div class="total">
-										<div class="sub">
-											<p><span>Subtotal:</span> <span>$200.00</span></p>
-											<p><span>Delivery:</span> <span>$0.00</span></p>
-											<p><span>Discount:</span> <span>$45.00</span></p>
-										</div>
-										<div class="grand-total">
-											<p><span><strong>Total:</strong></span> <span>$450.00</span></p>
+											<div class="grand-total">
+												<p><span><strong>Total:</strong></span> <span>₹<%=products.grandTotal  %></span></p>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+																	   
+				  <% } else { %>
+																	  
+				 
+																	  
+				<% } %>
+				
 
 				<div class="row">
 					<div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
@@ -205,7 +201,7 @@
 					<div class="col-md-3 col-lg-3 mb-4 text-center">
 						<div class="product-entry border">
 							<a href="#" class="prod-img">
-								<img src="images/item-4.jpg" class="img-fluid" alt="Free html5 bootstrap 4 template">
+								<img style="border-radius: 20%" src="images/item-4.jpg" class="img-fluid" alt="cart img">
 							</a>
 							<div class="desc">
 								<h2><a href="#">Russ Men's Sneakers</a></h2>
