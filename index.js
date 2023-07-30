@@ -7,7 +7,7 @@ const config = require("./config/config");
 const userRoute = require("./router/userRoute");//userRoutes
 const adminRoute = require("./router/adminRoute");//adminRoute
 
-config.mongoconnect();
+config.mongoconnect();//
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
