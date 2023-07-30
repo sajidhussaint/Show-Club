@@ -1,7 +1,7 @@
 <%- include('./layouts/header') %>
     <h3>Edit Product Details</h3>
     <div class="container-edit">
-    <form  method="POST" action="/admin/editProduct?id=<%=product._id %>">
+    <form  method="POST" action="/admin/editProduct?id=<%=product._id %>"  enctype="multipart/form-data">
         <label for="productName">Product Name:</label>
         <input type="text" id="productName" name="name" value="<%=product.name %>" required><br>
 
@@ -24,6 +24,24 @@
 
         <label for="description">Description:</label>
         <input type="text" id="description" name="description" rows="4" value="<%=product.description  %>" required></input><br>
+
+        <br>
+        <label for="productImage" class="form-label">Image:</label>
+
+        <div class="card-body">
+            <div class="input-upload">
+              <% product.image.forEach((image) => {%>
+              <img style="border-radius: 20%;"
+                id="product_img" width="100" src="/admin/IMAGES_DB/<%= product.image%>" alt=""/>
+              <%}) %>
+
+              <input
+              type="file"  name="Image" class="form-control"  multiple
+                
+                onchange="viewImage(event)"
+              />
+            </div>
+          </div>
 
         <input type="submit" value="Save">
     </form>
@@ -80,5 +98,12 @@
             background-color: #106315;
         }
     </style>
+    <script>
+        function viewImage(event) {
+          document.getElementById("product_img").src = URL.createObjectURL(
+            event.target.files[0]
+          );
+        }
+      </script>
     <%- include('./layouts/footer') %>
 

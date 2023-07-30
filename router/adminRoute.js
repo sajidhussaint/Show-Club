@@ -3,7 +3,7 @@ const admin_Route = express()
 const adminController = require('../controllers/adminController')
 const productController = require('../controllers/productController')
 const auth=require('../middleware/adminAuth')
-
+const upload = require('../middleware/uploadImage')//multer middleware
 
 admin_Route.set("views","./views/admin");
 
@@ -35,9 +35,9 @@ admin_Route.post("/editCategory",auth.isLogin,adminController.editCategory);
 //PRODUCT PAGE
 admin_Route.get("/productlist",auth.isLogin,productController.loadproductList);
 admin_Route.get("/addProduct",auth.isLogin,productController.loadaddProduct);
-admin_Route.post("/addProduct",productController.verifyaddProduct);
+admin_Route.post("/addProduct",upload.array('ProductImage',3),productController.verifyaddProduct);
 admin_Route.get("/editProduct",auth.isLogin,productController.loadeditProduct);
-admin_Route.post("/editProduct",auth.isLogin,productController.editProduct);
+admin_Route.post("/editProduct",auth.isLogin,upload.array('Image',3),productController.editProduct);
 admin_Route.get("/blockProduct",auth.isLogin,productController.blockProduct);
 admin_Route.get("/unblockProduct",auth.isLogin,productController.unblockProduct);
 
