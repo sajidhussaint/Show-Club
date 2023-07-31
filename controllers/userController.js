@@ -172,7 +172,7 @@ const loadWishList = async (req, res) => {
   }
 };
 
-//cart page
+
 
 
 //checkOut page
