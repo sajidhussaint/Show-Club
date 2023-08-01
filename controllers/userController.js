@@ -115,6 +115,12 @@ const resetsendVerifymail = async (name, email, token) => {
   }
 };
 
+
+
+
+
+
+
 //home page
 const loadHome = async (req, res) => {
   try {
@@ -235,7 +241,6 @@ const verifyLogin = async (req, res) => {
     }
     // Set up a session or token for authentication (implement your own logic)
     req.session.user_id = user._id;
-    console.log(req.session.user_id, ":session is created");
     res.render("men");
   } catch (err) {
     console.error("Error during sign in:", err);

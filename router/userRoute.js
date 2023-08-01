@@ -52,7 +52,7 @@ user_Route.get("/profile",auth.isLogin,userController.loadProfile)
 
 
 //cart
-user_Route.get("/cart",cartController.loadCart);
+user_Route.get("/cart",cartController.loadCart);//auth.isLogin,
 user_Route.post('/cart',cartController.addtoCart)
 user_Route.get('/delete_cartitem',cartController.deletecartitem)
 user_Route.post('/changes',cartController.changes)

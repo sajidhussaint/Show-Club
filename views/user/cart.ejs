@@ -1,16 +1,29 @@
 <%- include('./header') %>
 
 <style>
+.apply-btn{
+  width: 140px;
+}
+.c1{
+  width:50%
+}
+.scl:hover{
+  transform: scale(1.1);
+    transition: ease-in 0.3s;
+}
+
   .qty .count {
     color: #000;
     display: inline-block;
     vertical-align: top;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 400;
-    line-height: 18px;
+    line-height: 20px;
     padding: 0 2px;
     min-width: 30px;
     text-align: center;
+    font-weight: 700;
+    cursor:none;
   }
   .qty .plus {
     cursor: pointer;
@@ -38,9 +51,13 @@
   
   .minus:hover {
     background-color: #F6511D !important;
+    transform: scale(1.2);
+    transition: ease-in 0.3s;
   }
   .plus:hover {
     background-color: #F6511D !important;
+    transform: scale(1.2);
+    transition: ease-in 0.3s;
   }
   /*Prevent text selection*/
   
@@ -98,40 +115,41 @@
 		</div> --> 
 		
 		<!-- toogler shoping cart,checkout -->
+    
     <div class="row row-pb-lg" style="color: black; font-weight: 500;"
-      <div class="col-md-12">
-        <div class="product-name d-flex">
-          <div class="one-forth text-left px-4">
-            <span>Product Details</span>
+    <div class="col-md-12">
+        <div class="product-name d-flex" style="box-shadow: 5px 8px 18px #bba383;" >
+          <div class="one-forth text-left px-4" >
+            <span style="color: black; font-weight: 600;">Product Details</span>
           </div>
           <div class="one-eight text-center">
-            <span class="">Price</span>
+            <span style="color: black; font-weight: 600;" class="">Price</span>
           </div>
           <div class="one-eight text-center">
-            <span>Quantity</span>
+            <span style="color: black; font-weight: 600;">Quantity</span>
           </div>
           <div class="one-eight text-center">
-            <span>Total</span>
+            <span style="color: black; font-weight: 600;">Total</span>
           </div>
           <div class="one-eight text-center px-4">
-            <span>Remove</span>
+            <span style="color: black; font-weight: 600;">Remove</span>
           </div>
         </div>
 
         <% if (products&& products.product.length> 0) { %> <%
         products.product.forEach((items)=> { %>
 
-        <div class="product-cart d-flex">
-          <div class="one-forth">
+         <div class="product-cart d-flex " >
+          <div class="one-forth " >
             <div class="product-img">
-              <img
+              <img style="box-shadow: 5px 8px 18px #c7c3c3; border-radius: 5%;"
                 src="/admin/IMAGES_DB/<%= items.product_Id.image[0] %>"
                 class="img-fluid rounded-top"
                 alt=""
               />
             </div>
             <div class="display-tc">
-              <h3 ><%= items.product_Id.name%></h3>
+              <h3><%= items.product_Id.name%></h3>
             </div>
           </div>
           <div class="one-eight text-center">
@@ -140,7 +158,7 @@
             </div>
           </div>
 
-          <div class="one-eight text-center">
+          <div class="one-eight text-center" onmousedown = 'return false' onselectstart = 'return false'>
             <div class="qty mt-5">
               <span
                 type="button"
@@ -173,8 +191,8 @@
           </div>
           <div class="one-eight text-center">
             <div class="display-tc">
-              <a
-                class="btn btn-danger"
+              <a style="box-shadow: 5px 8px 18px #c7c3c3;"
+                class="btn btn-danger scl"
                 href="/delete_cartitem?id=<%= items.product_Id._id%>"
                 >Remove</a
               >
@@ -198,42 +216,44 @@
       <div class="col-md-12">
         <div class="total-wrap">
           <div class="row">
-            <div class="col-sm-8">
-              <form action="#">
-                <div class="row form-group">
-                  <div class="col-sm-9">
-                    <input
-                      type="text"
-                      name="quantity"
-                      class="form-control input-number"
-                      placeholder="Your Coupon Number..."
-                    />
-                  </div>
-                  <div class="col-sm-3">
-                    <input
-                      type="submit"
-                      value="Apply Coupon"
-                      class="btn btn-primary"
-                    />
-                  </div>
-                </div>
-              </form>
+            <div class="col-sm-8 c1">
+
+              <!-- <form action="#">
+      <div class="row form-group">
+        <div class="col-sm-9">
+          <input
+            type="text"
+            name="quantity"
+            class="form-control input-number"
+            placeholder="Your Coupon Number..."
+          />
+        </div>
+        <div class="col-sm-3">
+          <input
+            type="submit"
+            value="Apply Coupon"
+            class="btn btn-primary apply-btn"
+          />
+        </div>
+      </div>
+    </form> --> 
             </div>
-            <div class="col-sm-4 text-center">
-              <div class="total">
+            <div class="col-sm-4 text-center scl" >
+              <div class="total " style="box-shadow: 5px 8px 18px #c7c3c3; border-radius: 5%;">
                 <div class="sub">
                   <p>
-                    <span>Subtotal:</span>
-                    <span>₹<%=products.grandTotal %></span>
+                    <span style="color: black; font-weight: 600;">Subtotal:</span>
+                    <span style="font-weight: 600" >₹<%=products.grandTotal %></span>
                   </p>
-                  <p><span>Delivery:</span> <span>₹0</span></p>
-                  <p><span>Discount:</span> <span>₹0</span></p>
+                  <p><span style="color: black; font-weight: 600;">Delivery:</span> <span >₹0</span></p>
+                  <p><span style="color: black; font-weight: 600;">Discount:</span> <span style="font-weight: 700">₹0</span></p>
                 </div>
                 <div class="grand-total">
                   <p>
-                    <span><strong>Total:</strong></span>
-                    <span>₹<%=products.grandTotal %></span>
+                    <span style="color: black; font-weight: 600;"><strong>Total:</strong></span>
+                    <span style="font-weight: 800; color: black;">₹<%=products.grandTotal %></span>
                   </p>
+                  <button class="btn btn-dark scl">proceed</button>
                 </div>
               </div>
             </div>

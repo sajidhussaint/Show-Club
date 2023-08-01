@@ -22,7 +22,7 @@
 					<div class="col-sm-8">
 						<div class="owl-carousel">
 							<div class="item">
-								<div class="product-entry border">
+								<div class="product-entry border " id="img-container">
 									<a href="#" class="prod-img">
 										<img src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
 									</a>
@@ -88,7 +88,7 @@
 				               </ul>
 				            </div> -->
 							</div>
-                     <div class="input-group mb-4">
+                     <!-- <div class="input-group mb-4">
                      	<span class="input-group-btn">
                         	<button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
                            <i class="icon-minus2"></i>
@@ -100,7 +100,7 @@
                              <i class="icon-plus2"></i>
                          </button>
                      	</span>
-                  	</div>
+                  	</div> -->
                   	<div class="row">
 	                  	<div class="col-sm-12 text-center">
 							
@@ -112,11 +112,11 @@
 										<% if (productavaliable != -1) { %>
 
 											
-											<a href="/cart" class="btn btn-primary btn-addtocart" style="color: white;" ><i class="icon-shopping-cart"></i>Go to Cart</a>
+											<a href="/cart" class="btn btn-primary btn-addtocart text-center" style="color: white;" ><i class="icon-shopping-cart"></i>Go to Cart</a>
 																							   
 										  <% } else { %>
 																							  											  
-											<a class="btn btn-primary btn-addtocart" style="color: white; background-color: #F6511D;" onclick="addToCart('<%=product._id%>')"><i class="icon-shopping-cart"></i>Add to Cart</a>
+											<a class="btn btn-primary btn-addtocart text-center" style="color: white; background-color: #F6511D;" onclick="addToCart('<%=product._id%>')"><i class="icon-shopping-cart"></i>Add to Cart</a>
 										<% } %>
 
 										
@@ -343,57 +343,23 @@
       })(jQuery);
 
 
-	  //  function addToCart(id){
-// 	
-//             $.ajax({
-//                 url:'/add_to_cart',
-//                 method:"post",
-//                 encoded:true,
-//                 data:{
-//                     id:id,
-//                 },
-//             }).done((data)=>{
-//                 if (data.success){
-//                     swal({
-//               title: "Congratulations!",
-//               text: "You entered the correct answer",
-//               type: "success",
-//               button: {
-//                 text: "Continue",
-//                 value: true,
-//                 visible: true,
-//                 className: "btn btn-primary",
-//               },
-//             });
-//                 }
-//             })
 
-//         }
-
-
-
-
-	// 		(function ($) {
-    //     showSwal = function (type) {
-    //       "use strict";
-    //       if (type === "success-message") {
-    //         swal({
-    //           title: "Congratulations!",
-    //           text: "You entered the correct answer",
-    //           type: "success",
-    //           button: {
-    //             text: "Continue",
-    //             value: true,
-    //             visible: true,
-    //             className: "btn btn-primary",
-    //           },
-    //         });
-    //       } else {
-    //         swal("Error occured !");
-    //       }
-    //     };
-    //   })(jQuery);
 	</script>
+	<script>
+var options1 = {
+    width: 400,
+    zoomWidth: 500,
+    offset: {vertical: 0, horizontal: 10}
+};
+
+// If the width and height of the image are not known or to adjust the image to the container of it
+var options2 = {
+    fillContainer: true,
+    offset: {vertical: 0, horizontal: 10}
+};
+new ImageZoom(document.getElementById("img-container"), options2);
+
+</script>
 
 
 			

@@ -67,6 +67,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- ajax snippet -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- sweet2.0 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
@@ -127,7 +129,7 @@
 
     <div class="colorlib-loader"></div>
 
-    <div id="page">
+    <div id="">
       <nav class="colorlib-nav" role="navigation">
         <div class="top-menu">
           <div class="container">
@@ -216,7 +218,9 @@
                     <a href="/cart"
                       ><i
                         class="icon-shopping-cart <%= activePage === 'cart' ? 'active-btn' : 'inactive-btn' %>"
-                      ></i>
+                      >
+
+                    </i>
                       Cart</a
                     >
                   </li>

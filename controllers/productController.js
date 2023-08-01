@@ -94,7 +94,6 @@ const loadProductDetail = async (req, res) => {
     if (req.session.user_id) {
       const carts = await cartDB.findOne({ userId: req.session.user_id });
       if (carts) {
-        console.log(carts, "this is carts");
         var productavaliable = await carts.product.findIndex(
           (product) => product.product_Id == id
         );

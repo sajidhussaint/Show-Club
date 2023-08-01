@@ -8048,7 +8048,7 @@ h1, h2, h3, h4, h5,
     .product-cart .display-tc h3, .product-name .display-tc h3 {
       margin-bottom: 0;
       padding-left: 30px;
-      font-size: 14px; }
+      font-size: 20px; }
     .product-cart .display-tc .closed, .product-name .display-tc .closed {
       display: block;
       margin: 0 auto;
@@ -8721,7 +8721,8 @@ input[type="text"] {
 .btn-primary {
   background: #616161;
   color: #fff;
-  border: 1px solid #616161; }
+  border: 1px solid #616161; 
+}
   .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
     background: #0d0d0d !important;
     border-color: #0d0d0d !important; }

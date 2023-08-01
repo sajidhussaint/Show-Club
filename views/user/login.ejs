@@ -1,5 +1,37 @@
 <%- include('./header') %>
-<!-- Start Banner Area -->
+<head>
+  <title>Login Page</title>
+
+  <style>
+    .login-form {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-top: 100px;
+      box-shadow: 0 2px 5px rgba(134, 58, 28, 0.616);
+    }
+    .btn-dark {
+      background-color: #F6511D;
+      color: #fff;
+      border: none;
+      transition: background-color 0.6s ease-in-out;
+      box-shadow: 0 2px 5px rgba(134, 58, 28, 0.616);
+    }
+
+    .btn-dark:hover {
+      background-color: #e23b08;
+      color: rgb(223, 182, 182);
+      transform: scaleX(1.1);
+      transition: 0.4s ease-in-out;
+
+
+      
+    }
+  </style>
+</head>
 <section class="banner-area organic-breadcrumb">
   <div class="container">
     <div
@@ -7,96 +39,105 @@
     ></div>
   </div>
 </section>
-<!-- End Banner Area -->
 
-<!--================Login Box Area =================-->
-<section class="login_box_area section_gap" style="padding:50px; ">
-      <div class="col-lg-4 " ;">
-        <div class="login_form_inner" style="display: flex; flex-direction: column; justify-content: center;" >
+<section class="login_box_area section_gap">
+  <div class="container">
+    <div class="col-lg-4 mx-auto">
+      <div class="login_form_inner login-form">
+        <h3 class="text-center mt-4">Log in to enter</h3>
+
+        <form
+          action="/login"
+          method="post"
+          id="contactForm"
+          novalidate="novalidate"
+        >
+          <div class="mb-4">
+            <!-- <label for="email">Email</label> -->
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              placeholder="Email"
+              required
+            />
+            <span class="text-danger" id="Email_error"></span>
+          </div>
+          <div class="mb-4">
+            <!-- <label for="password">Password</label> -->
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="Password"
+              required
+            />
+            <span class="text-danger" id="Password_error"></span>
+          </div>
           <% if (typeof message !== 'undefined') { %>
-          <p style="color: red"><%= message %></p>
+          <p class="text-center" style="color: red"><%= message %></p>
           <% } %> <% if (typeof messageS !== 'undefined') { %>
-          <p style="color: green"><%= messageS %></p>
+          <p class="text-center" style="color: green"><%= messageS %></p>
           <% } %>
-          <h3>Log in to enter</h3>
-          <form
-            class="row login_form"
-            action="/login"
-            method="post"
-            id="contactForm"
-            novalidate="novalidate"
-          >
-            <div class="col-md-12 form-group">
-              <input
-                type="text"
-                class="form-control"
-                id="email"
-                name="email"
-                placeholder="email"
-                onfocus="this.placeholder = ''"
-                onblur="this.placeholder = 'email'"
-                required
-              />
-              <span class="text-danger" id="Email_error"></span>
-            </div>
-            <div class="col-md-12 form-group">
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                name="password"
-                placeholder="Password"
-                onfocus="this.placeholder = ''"
-                onblur="this.placeholder = 'Password'"
-                required
-              />
-              <span class="text-danger" id="Password_error"></span>
-            </div>
-            <div
-              class="col-md-12 form-group"
-              style="display: flex; justify-content: space-evenly"
-            >
-			<a class="primary-btn" href="/register">Sign Up</a>
-			<a href="/forgot">forgot password</a>
-			<br>
-		</div>
-		<button type="submit" value="submit" class="btn btn-dark"  border: none;">
-		  Log In
-		</button>
-          </form>
-        
-      
-    
+
+          <div class="text-center mt-3">
+            <button type="submit" class="btn btn-dark">Log In</button>
+          </div>
+        </form>
+
+        <div class="text-center mt-3">
+          <a href="/register">Sign Up</a> |
+          <a href="/forgot">Forgot</a>
+        </div>
+
+        <!-- <form class="row login_form" action="/login" method="post" id="contactForm" novalidate="novalidate">
+                      <div class="col-md-12 form-group">
+                          <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                              required>
+                          <span class="text-danger" id="Email_error"></span>
+                      </div>
+
+
+                      <div class="col-md-12 form-group">
+                          <input type="password" class="form-control" id="password" name="password"
+                              placeholder="Password" required>
+                          <span class="text-danger" id="Password_error"></span>
+                      </div>
+                      <div class="col-md-12 form-group d-flex justify-content-between">
+                          <a class="btn btn-primary" href="/register">Sign Up</a>
+                          <a href="/forgot">Forgot Password</a>
+                      </div>
+                      <div class="col-md-12 form-group">
+                          <button type="submit" class="btn btn-dark">Log In</button>
+                      </div>
+                  </form> -->
+      </div>
+    </div>
   </div>
 </section>
 
+<!-- Bootstrap JS and other scripts -->
 <script>
   const email = document.getElementById("email");
-  const password = document.getElementById("Password");
+  const password = document.getElementById("password");
   const Email_error = document.getElementById("Email_error");
   const Password_error = document.getElementById("Password_error");
 
   email.addEventListener("input", () => {
     if (!email.value.match(/^[A-Za-z\._\-0-9][@][A-Za-z][\.][a-z]{2,4}$/)) {
-      name.setCustomValidity("please enter the name");
-      Email_error.innerHTML = "please enter  a valid email";
+      email.setCustomValidity(""); //Please enter a valid email
+      Email_error.innerHTML = ""; //Please enter a valid email
       return false;
     }
     Email_error.innerHTML = "";
     return true;
-
-    if (email.value.trim() == "") {
-      email.setCustomValidity("please enter the email");
-      Email_error.innerHTML = "please enter  a valid email";
-      return false;
-    } else {
-      Email_error.innerHTML = "";
-      return true;
-    }
   });
+
   password.addEventListener("input", () => {
-    if (password.value.trim() == "") {
-      Password_error.innerHTML = "please enter the password";
+    if (password.value.trim() === "") {
+      Password_error.innerHTML = "Please enter the password";
     } else {
       Password_error.innerHTML = "";
       return true;
