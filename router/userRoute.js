@@ -17,7 +17,7 @@ user_Route.get("/women",userController.loadWomen);
 user_Route.get("/about",userController.loadAbout);
 user_Route.get("/contact",userController.loadContact);
 user_Route.get("/add-to-wishlist",auth.isLogin,userController.loadWishList);
-user_Route.get("/checkout",auth.isLogin,userController.loadCheckOut);
+user_Route.get("/checkout",userController.loadCheckOut);//auth.isLogin,
 user_Route.get("/order-complete",auth.isLogin,userController.loadOrderComplete);
 user_Route.get("/product-detail",productController.loadProductDetail);
 

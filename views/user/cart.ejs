@@ -115,7 +115,7 @@
 		</div> --> 
 		
 		<!-- toogler shoping cart,checkout -->
-    
+    <% if (products&& products.product.length> 0) { %>
     <div class="row row-pb-lg" style="color: black; font-weight: 500;"
     <div class="col-md-12">
         <div class="product-name d-flex" style="box-shadow: 5px 8px 18px #bba383;" >
@@ -136,8 +136,8 @@
           </div>
         </div>
 
-        <% if (products&& products.product.length> 0) { %> <%
-        products.product.forEach((items)=> { %>
+        
+         <%products.product.forEach((items)=> { %>
 
          <div class="product-cart d-flex " >
           <div class="one-forth " >
@@ -202,8 +202,8 @@
 
         <% }); %> <% } else { %>
 
-        <h1>your cart is Empty</h1>
-        <p>please add items</p>
+        <h1 style="color: rgb(99, 94, 94);">Your Cart is Empty</h1>
+        <p>Please Add Items</p>
 
         <% } %>
       </div>
@@ -351,7 +351,7 @@
         } else {
           Swal.fire({
             title: "Error",
-            icon: "error",
+            icon: "warning",
             text: response.message,
             timer: 2000,
           });
@@ -360,7 +360,7 @@
       error: (error) => {
         Swal.fire({
           title: "Error",
-          icon: "error",
+          icon: "warning",
           text: response.message,
           timer: 1500,
         });

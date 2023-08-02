@@ -1,52 +1,148 @@
 <%- include('./header.ejs') %>
 
+<style>
+	body {
+		font-family: Arial, sans-serif;
+		line-height: 1.6;
+		margin: 0;
+		padding: 0;
+		background-color: #f9f9f9;
+	}
 
+	.login_box_area {
+		margin-top: 100px;
+	}
+
+	.login_form_inner {
+		max-width: 400px;
+		margin: 0 auto;
+		padding: 20px;
+		background-color: #fff;
+		border: 1px solid #ddd;
+		border-radius: 5px;
+		box-shadow: 0 2px 5px rgba(134, 58, 28, 0.616);
+	}
+
+	.btn-dark {
+		background-color: #F6511D;
+		color: #fff;
+		border: none;
+		transition: background-color 0.6s ease-in-out;
+		box-shadow: 0 2px 5px rgba(134, 58, 28, 0.616);
+	}
+
+	.btn-dark:hover {
+		background-color: #e23b08;
+		color: rgb(223, 182, 182);
+		transform: scaleX(1.1);
+		transition: 0.4s ease-in-out;
+	}
+
+	.input-icon {
+		position: relative;
+	}
+
+	.input-icon i {
+		position: absolute;
+		top: 10px;
+		right: 25px;
+		color: #999;
+	}
+
+	.error-msg {
+		color: red;
+		font-size: 12px;
+		margin-top: 4px;
+	}
+
+	.login_form_inner h3 {
+		color: #F6511D;
+		font-size: 24px;
+		font-weight: bold;
+		margin-bottom: 20px;
+	}
+
+	.login_form_inner button[type="submit"] {
+		background-color: #F6511D;
+		color: #fff;
+		border: none;
+		border-radius: 4px;
+		padding: 10px 20px;
+		cursor: pointer;
+		transition: background-color 0.6s ease-in-out;
+	}
+
+	.login_form_inner button[type="submit"]:hover {
+		background-color: #e23b08;
+		color: rgb(223, 182, 182);
+		transform: scaleX(1.1);
+		transition: 0.4s ease-in-out;
+	}
+
+	.login_form_inner a {
+		color: #F6511D;
+		text-decoration: none;
+		transition: color 0.3s ease-in-out;
+	}
+
+	.login_form_inner a:hover {
+		color: #e23b08;
+	}
+</style>
 	<!--================Login Box Area =================-->
 	<section class="login_box_area section_gap mt-5">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12  px-5 pb-5">
-					<div class="login_form_inner pb-5">
-					
-						<% if (typeof message !== 'undefined') { %>
-							<p style="color: green;"><%= message %></p>
-						  <% } %>
-						  <% if (typeof messageRed !== 'undefined') { %>
-							<p style="color: red;"><%= messageRed %></p>
-						  <% } %>
-						<h3 draggable="false" class="text-center">sign-up</h3>
-				
-						<form class="row login_form" action="/register" method="post">
-							<div class="col-md-12 form-group text-center">
-								<input type="text" class="form-control"  id="name" name="name" placeholder="Username"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'" required>
-							   <span class="text-danger" id="User_error"></span>
-							</div>
-							<div class="col-lg-12 form-group text-center">
-								<input type="email" class="form-control" id="email" name="email" placeholder="email"   onfocus="this.placeholder = ''" onblur="this.placeholder = 'email'" required>
-							    <span class="text-danger" id="Email_error"></span>
-							</div>
-							<div class="col-md-12 form-group text-center">
-								<input type="text" class="form-control" id="MobileNumber" name="mob" placeholder="MobileNumber" pattern="[0-9]+"  onfocus="this.placeholder = ''" onblur="this.placeholder = 'MobileNumber'" required>
-								<span class="text-danger" id="Number_error"></span>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 px-5 pb-5">
+                    <div class="login_form_inner pb-5">
+                        <% if (typeof message !== 'undefined') { %>
+                        <p style="color: green;"><%= message %></p>
+                        <% } %>
+                        <% if (typeof messageRed !== 'undefined') { %>
+                        <p style="color: red;"><%= messageRed %></p>
+                        <% } %>
+                        <h3 class="text-center">Sign Up</h3>
 
-							</div>
-							<div class="col-md-12 form-group text-center"> 
-								<input type="password" class="form-control" id="Password" name="password" placeholder="Password" minlength="6" maxlength="8" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" required>
-								<span class="text-danger" id="Password_error"></span>
-							</div>
-							<div class="col-md-12 form-group text-center">
-								<button type="submit" value="submit" class="btn btn-dark">sign-up</button>
-							</div>
-							<div class="col-md-12 form-group text-center" style="width: 50%;">
-							<p class="ml-5 ">
-								Already have an account? <a href="/login">sign in</a></p>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+                        <form class="row login_form" action="/register" method="post">
+                            <div class="col-md-12 form-group text-center input-icon">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Username"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'" required>
+                                <i class="fas fa-user"></i>
+                                <span class="error-msg" id="User_error"></span>
+                            </div>
+                            <div class="col-lg-12 form-group text-center input-icon">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'" required>
+                                <i class="fas fa-envelope"></i>
+                                <span class="error-msg" id="Email_error"></span>
+                            </div>
+                            <div class="col-md-12 form-group text-center input-icon">
+                                <input type="text" class="form-control" id="MobileNumber" name="mob"
+                                    placeholder="MobileNumber" pattern="[0-9]+" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'MobileNumber'" required>
+                                <i class="fas fa-phone"></i>
+                                <span class="error-msg" id="Number_error"></span>
+                            </div>
+                            <div class="col-md-12 form-group text-center input-icon">
+                                <input type="password" class="form-control" id="Password" name="password"
+                                    placeholder="Password" minlength="6" maxlength="8" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Password'" required>
+                                <i class="fas fa-lock"></i>
+                                <span class="error-msg" id="Password_error"></span>
+                            </div>
+                            <div class="col-md-12 form-group text-center">
+                                <button type="submit" value="submit" class="btn btn-dark">Sign Up</button>
+                            </div>
+                            <div class="col-md-12 form-group text-center" style="width: 50%;">
+                                <p class="ml-5">
+                                    Already have an account? <a href="/login">Sign In</a></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 	<script>
    const name=document.getElementById('name')
