@@ -7,6 +7,7 @@ const session = require("express-session");
 const randomstring = require("randomstring");
 const cart = require("../model/cartModel");
 const mongoose =require('mongoose')
+const AddressDB = require("../model/addressModel");
 
 dotenv.config();
 
@@ -181,14 +182,7 @@ const loadWishList = async (req, res) => {
 
 
 
-//checkOut page
-const loadCheckOut = async (req, res) => {
-  try {
-    res.render("checkout");
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+
 
 // orderComplete page
 const loadOrderComplete = async (req, res) => {
@@ -434,7 +428,6 @@ module.exports = {
   loadMen,
   loadWomen,
   loadAbout,
-  loadCheckOut,
   loadContact,
   loadOrderComplete,
   loadWishList,

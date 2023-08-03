@@ -7,6 +7,7 @@ const auth=require('../middleware/userAuth')
 const userController = require('../controllers/userController')
 const productController = require('../controllers/productController') 
 const cartController = require('../controllers/cartController') 
+const addressController = require('../controllers/addressController') 
 
 user_Route.set("views", "./views/user");
 
@@ -17,7 +18,9 @@ user_Route.get("/women",userController.loadWomen);
 user_Route.get("/about",userController.loadAbout);
 user_Route.get("/contact",userController.loadContact);
 user_Route.get("/add-to-wishlist",auth.isLogin,userController.loadWishList);
-user_Route.get("/checkout",userController.loadCheckOut);//auth.isLogin,
+
+user_Route.get("/checkout",cartController.loadCheckOut);//auth.isLogin,
+
 user_Route.get("/order-complete",auth.isLogin,userController.loadOrderComplete);
 user_Route.get("/product-detail",productController.loadProductDetail);
 
@@ -56,6 +59,13 @@ user_Route.get("/cart",cartController.loadCart);//auth.isLogin,
 user_Route.post('/cart',cartController.addtoCart)
 user_Route.get('/delete_cartitem',cartController.deletecartitem)
 user_Route.post('/changes',cartController.changes)
+
+
+//adderess
+user_Route.post('/checkout',addressController.addAddress)
+
+
+
 
 
 

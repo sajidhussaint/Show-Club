@@ -1,6 +1,7 @@
 const cart = require("../model/cartModel");
 const Product = require("../model/productModel");
 const User = require("../model/userModel");
+const AddressDB = require("../model/addressModel");
 const mongoose = require("mongoose");
 
 const loadCart = async (req, res) => {
@@ -15,71 +16,19 @@ const loadCart = async (req, res) => {
   }
 };
 
-// const addtoCart2 = async (req, res) => {
-//   try {
-//     const productId = req.body.product_Id;
-//     const quantity = req.body.product_quantity;
-//     const productData = await Product.findById(productId);
-//     const UserId = await User.findOne({ _id: req.session.user_id });
-//     const Usercart = await cart.findOne({ userId: UserId });
 
-//     const total = quantity * productData.price;
+//checkOut page
+const loadCheckOut = async (req, res) => {
+  try {
+    const userId = req.session.user_id;
+    const address = await AddressDB.findOne({ user: userId });
+    res.render("checkout",{address});
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
-//     if (Usercart) {
-//       //checking cart prodcut avaliable
-//       const productavaliable = await Usercart.product.findIndex(
-//         (product) => product.product_Id == productId
-//       );
-//       if (productavaliable != -1) {
-//         //if have product in cart the qnty increse
-//         await cart.findOneAndUpdate(
-//           { userId: UserId, "product.product_Id": productId },
-//           {
-//             $inc: {
-//               "product.$.quantity": 1,
-//               "product.$.total": total,
-//               grandTotal: total,
-//             },
-//           }
-//         );
-//         res.json({ success: true });
-//       } else {
-//         //if no product in cart add product
-//         await cart.findOneAndUpdate(
-//           { userId: UserId },
-//           {
-//             $push: {
-//               product: {
-//                 product_Id: productId,
-//                 price: productData.price,
-//                 quantity: quantity,
-//                 total: total,
-//               },
-//             },
-//             $inc: { count: 1, grandTotal: total },
-//           }
-//         );
-//         res.json({ success: true });
-//       }
-//     } else {
-//       const CartData = new cart({
-//         userId: UserId._id,
-//         product: [
-//           {
-//             product_Id: productId,
-//             price: productData.price,
-//             quantity: quantity,
-//             total: total,
-//           },
-//         ],
-//       });
-//       const cartData = await CartData.save();
-//     }
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// };
-
+  
 // abd jun
 const addtoCart = async (req, res) => {
   try {
@@ -237,4 +186,4 @@ const changes = async (req, res) => {
   }
 };
 
-module.exports = { addtoCart, loadCart, deletecartitem, changes };
+module.exports = { addtoCart, loadCart, deletecartitem, changes,loadCheckOut };
