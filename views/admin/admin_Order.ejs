@@ -9,15 +9,15 @@
 
 <body>
 
-  <div class="container mt-5">
+  <div class="container mt-5" id="reloadData">
     <h2 class="mb-4">Order List</h2>
     <% if (order && order.length > 0) { %>
       <% for (let i = 0; i < order.length; i++) { %>
         <p><strong>User Name:</strong> <%= order[i].userName %>|<strong>Date:</strong><%= order[i].date.toLocaleString() %></p>
         <% if (order[i] && order[i].products && order[i].products.length > 0) { %>
-          <div class="row" id="reloadData">
+          <div class="row" >
             <div  class="col-md-12 col-lg-12 col-sm-12 " >
-              <table class="table table-hover " >
+              <table class="table table-hover"  >
                 <thead class="" style="background-color: #f14d1a ; color: white; border-radius: 10px;" >
                   <tr>
                     <th>num</th>
@@ -29,7 +29,7 @@
                     <th>Action</th> <!-- Add a new column for the cancel button -->
                   </tr>
                 </thead>
-                <tbody>
+                <tbody >
                   <% for (let index = 0; index < order[i].products.length; index++) { %>
                     <tr>
                       <td><%= index + 1 %></td>
