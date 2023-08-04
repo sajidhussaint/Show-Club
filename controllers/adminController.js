@@ -1,6 +1,7 @@
 const ProductDB = require("../model/productModel");
 const UserDB = require("../model/userModel");
 const CategoryDB = require("../model/categoryModel");
+const orderDB = require("../model/orderModel");
 const bcrypt = require("bcrypt");
 
 const loadHome = async (req, res) => {
@@ -60,9 +61,9 @@ const insertCategory = async (req, res) => {
 //EDIT CATEGORY LOAD(GET)
 const loadeditCategory = async (req, res) => {
   try {
-    const name=req.query.name;
-    const catData=await CategoryDB.findOne({name:name})
-    res.render("editCategory",{catData});
+    const name = req.query.name;
+    const catData = await CategoryDB.findOne({ name: name });
+    res.render("editCategory", { catData });
   } catch (error) {
     console.log(error.message);
   }
@@ -71,20 +72,19 @@ const loadeditCategory = async (req, res) => {
 //EDIT CATEGORY LOAD(POST)
 const editCategory = async (req, res) => {
   try {
-    const qname=req.query.name
+    const qname = req.query.name;
 
     const { name, description } = req.body;
 
-    await CategoryDB.updateOne({name:qname},{ $set: { name:name,description:description} })
+    await CategoryDB.updateOne(
+      { name: qname },
+      { $set: { name: name, description: description } }
+    );
     res.redirect("/admin/category");
-    
   } catch (error) {
     console.log(error.message);
   }
 };
-
-
-
 // LOAD LOGIN PAGE
 const loadLogin = async (req, res) => {
   try {
@@ -97,8 +97,11 @@ const loadLogin = async (req, res) => {
 // LOAD LOGIN PAGE
 const blockUser = async (req, res) => {
   try {
-    const userId=req.query._id
-    await UserDB.updateOne({ _id:userId }, { $set: { is_blocked:true,is_verified:0 } });
+    const userId = req.query._id;
+    await UserDB.updateOne(
+      { _id: userId },
+      { $set: { is_blocked: true, is_verified: 0 } }
+    );
     res.redirect("/admin/userDetails");
   } catch (error) {
     console.log(error.message);
@@ -106,8 +109,11 @@ const blockUser = async (req, res) => {
 };
 const unblockUser = async (req, res) => {
   try {
-    const userId=req.query._id
-    await UserDB.updateOne({ _id:userId }, { $set: { is_blocked:false ,is_verified:1} });
+    const userId = req.query._id;
+    await UserDB.updateOne(
+      { _id: userId },
+      { $set: { is_blocked: false, is_verified: 1 } }
+    );
     res.redirect("/admin/userDetails");
   } catch (error) {
     console.log(error.message);
@@ -159,6 +165,34 @@ const adminLogout = async (req, res) => {
   }
 };
 
+const loadOrder = async (req, res) => {
+  try {
+    const order = await orderDB.find().populate("products.product_Id");
+
+    res.render("Admin_Order", { order });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+const OrderCancel = async (req, res) => {
+  try {
+    const product = req.body.productID;
+
+
+    const datas = await orderDB.findOneAndUpdate(
+      { "products._id": product },
+      { $set: { "products.$.status":"canceled" } }
+    );
+    
+
+    res.json({ success: true });
+    
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   loadHome,
   loadCategory,
@@ -166,11 +200,12 @@ module.exports = {
   loadaddCategory,
   loadeditCategory,
   loadLogin,
+  loadOrder,
   adminLoginVerify,
   adminLogout,
   insertCategory,
   blockUser,
   unblockUser,
-  editCategory
-
+  editCategory,
+  OrderCancel,
 };

@@ -1,0 +1,107 @@
+<%- include('./layouts/header') %>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order List</title>
+
+  
+</head>
+
+<body>
+
+  <div class="container mt-5">
+    <h2 class="mb-4">Order List</h2>
+    <% if (order && order.length > 0) { %>
+      <% for (let i = 0; i < order.length; i++) { %>
+        <p><strong>User Name:</strong> <%= order[i].userName %>|<strong>Date:</strong><%= order[i].date.toLocaleString() %></p>
+        <% if (order[i] && order[i].products && order[i].products.length > 0) { %>
+          <div class="row" id="reloadData">
+            <div  class="col-md-12 col-lg-12 col-sm-12 " >
+              <table class="table table-hover " >
+                <thead class="" style="background-color: #f14d1a ; color: white; border-radius: 10px;" >
+                  <tr>
+                    <th>num</th>
+                    <th>Product Name</th>
+                    <th>Status</th>
+                    <th>Quantity</th>
+                    <th>Price per Unit</th>
+                    <th>Total Price</th>
+                    <th>Action</th> <!-- Add a new column for the cancel button -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for (let index = 0; index < order[i].products.length; index++) { %>
+                    <tr>
+                      <td><%= index + 1 %></td>
+                      <td><%= order[i].products[index].product_Id.name %></td>
+                      <td >
+                        <select  class="form-select" onchange="updateStatus('<%= order[i].products[index]._id %>', this.value)">
+                          <option  value="On the way" <% if (order[i].products[index].status == 'On the way') { %> selected <% } %>>On the way</option>
+                          <option value="Pending"  <% if (order[i].products[index].status == 'Pending') { %> selected <% } %>>Pending</option>
+                          <option value="Processing" <% if (order[i].products[index].status == 'Processing') { %> selected <% } %>>Processing</option>
+                          <option value="delivered" <% if (order[i].products[index].status == 'delivered') { %> selected <% } %>>delivered</option>
+                          <option value="canceled" <% if (order[i].products[index].status == 'canceled') { %> selected <% } %>>canceled</option>
+                        </select>
+                      </td>
+                      <td><%= order[i].products[index].quantity %></td>
+                      <td>₹<%= order[i].products[index].product_Id.price %></td>
+                      <td>₹<%= order[i].products[index].total %></td>
+                      <td><button  class="btn btn-danger" onclick="cancelOrderItem('<%= order[i].products[index]._id%>')">Cancel</button></td>
+                    </tr>
+                  <% } %>
+                  <tr>
+                    <td colspan="5" class="text-right">Grand Total:</td>
+                    <td>₹<%= order[i].totalAmount %></td>
+                    <td></td> <!-- Empty cell to align with the cancel button column -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        
+        <% } else { %>
+          <p>No order</p>
+        <% } %>
+      <% } %>
+    <% } else { %>
+      <p>No order</p>
+    <% } %>
+    <a href="/admin/Orders" class="btn btn-dark mb-4">Save</a>
+  </div>
+
+
+
+</body>
+
+</html>
+
+<script>
+  function updateStatus(productID,value){
+    $.ajax({
+  url:'/admin/OrderUpdate',
+  method:'post',
+  data:{
+    productID,value
+  }
+})
+  }
+
+  function cancelOrderItem(productID){
+    event.preventDefault()
+    $.ajax({
+
+  url:'/admin/OrderCancel',
+  method:'post',
+  data:{
+    productID
+  },
+  success:(response) => {
+        if (response.success) {
+          $("#reloadData").load("/admin/Orders #reloadData");
+        }
+      }
+})
+  }
+
+</script>
+<%- include('./layouts/footer') %>
