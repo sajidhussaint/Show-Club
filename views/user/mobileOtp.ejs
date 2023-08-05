@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Otp-Verification</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    body {
+      background-color: #f5edeb;
+      color: #727070;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      height: 100vh;
+    }
+
+    .card {
+      width: 320px;
+      padding: 40px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      background-color: #fff;
+    }
+
+    h5 {
+      margin: 0;
+      font-size: 24px;
+      color: #F6511D;
+    }
+
+    .mobile-text {
+      display: block;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .text-color {
+      color: #F6511D;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid grey;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+      color: #5c5c5c;
+      font-size: 16px;
+    }
+
+    input[type="number"]::placeholder {
+      color: #ddd;
+    }
+
+    .btn-success {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background-color: #F6511D;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-success:hover {
+      background-color: #e23b08;
+    }
+
+    #countdown-timer {
+      color: #080808;
+    }
+  </style>
+</head>
+<body>
+  <br><br><br><br>
+  <div class="d-flex justify-content-center align-items-center container">
+    <div class="card">
+      <h5>OTP</h5>
+      <span class="mobile-text">
+        <b>Enter the code we just sent on your Email</b>
+        <b class="text-color"></b>
+      </span>
+
+
+      
+      <form action="/mobileotpVerify?mobOtp=<%=mobOtp%>&user=<%=user%>" method="post">
+        <div class="d-flex flex-row mt-5">
+          <i class="fas fa-key mr-2" style="color: #F6511D;"></i>
+          <input type="number" name="otp" id="otp" placeholder="OTP here">
+        </div>
+        <br>
+        <% if(typeof message !== 'undefined'){ %>
+            <span id="er1" style="color: rgb(241, 7, 7); text-align: center;"><%= message%></span>
+            <% } %>
+        <br><br>
+        <button type="submit" onclick="validate()" class="btn btn-success">Enter</button>
+      </form>
+      <!-- <div class="text-center mt-5">
+        <p id="countdown-timer">OTP will expire in <span id="countdown">30</span> seconds.</p>
+      </div> -->
+    </div>
+  </div>
+
+  <script>
+    // function startTimer(duration, display) {
+    //   var timer = duration, minutes, seconds;
+    //   setInterval(function () {
+    //     minutes = parseInt(timer / 60, 10)
+    //     seconds = parseInt(timer % 60, 10);
+
+    //     minutes = minutes < 10 ? "0" + minutes : minutes;
+    //     seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    //     display.textContent = minutes + ":" + seconds;
+
+    //     if (--timer < 0) {
+    //       timer = duration;
+    //     }
+    //   }, 1000);
+    // }
+
+    // var countdown = document.getElementById("countdown");
+    // var countdownTimer = document.getElementById("countdown-timer");
+
+    // startTimer(30, countdown);
+
+    // // Update timer element and display message when OTP expires
+    // function countdownExpired() {
+    //   countdownTimer.innerHTML = 'OTP has expired. Resend the OTP <a href="/resend">here</a>.';
+    // }
+
+    // setTimeout(countdownExpired, 30000);
+  </script>
+
+  <script>
+    function validate() {
+      const otp = document.getElementById('otp').value;
+      if (otp == '') {
+        document.getElementById('er1').innerText = 'Must fill out this field';
+      }
+    }
+  </script>
+</body>
+</html>

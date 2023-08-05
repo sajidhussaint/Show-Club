@@ -28,12 +28,24 @@
         border: none;
         transition: background-color 0.6s ease-in-out;
         box-shadow: 0 2px 5px rgba(134, 58, 28, 0.616);
+
+
+    }
+    
+    .btn-secondary{
+        box-shadow: 0 2px 5px rgba(63, 27, 13, 0.616);
+
     }
 
     .btn-dark:hover {
         background-color: #e23b08;
-        color: rgb(223, 182, 182);
-        transform: scaleX(1.1);
+        transform: scaleX(1.05);
+        transition: 0.4s ease-in-out;
+    }
+    .btn-secondary:hover {
+        background-color: #3a3838;
+        
+        transform: scaleX(1.05);
         transition: 0.4s ease-in-out;
     }
 
@@ -71,8 +83,9 @@
 
                 <form action="/login" method="post" id="loginForm" novalidate="novalidate">
                     <div class="mb-4 input-icon">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
-                        <i class="fas fa-envelope"></i>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email or Mobile" required>
+                        <!-- <i class="fa-solid fa-pen-to-square"></i> -->
+                        <i class="fas fa-solid fa-user"></i>
                         <span class="error-msg" id="emailError"></span>
                     </div>
 
@@ -89,14 +102,16 @@
                     <% } %>
 
                     <div class="text-center mt-3">
-                        <button type="submit" class="btn btn-dark">Log In</button>
+                        <button type="submit" class="btn btn-dark" style="width: 100%; border-radius: 2px;">Log In Email</button>
                     </div>
+                    
                 </form>
-
-                <div class="text-center mt-3">
-                    <a href="/register">Sign Up</a> |
-                    <a href="/forgot">Forgot</a>
-                </div>
+                    <button type="button" class="btn btn-secondary mt-2" onclick="mobileOtp()" style="width: 100%; border-radius: 2px;">Log In Mobile</button>
+                    <div class="text-center mt-3">
+                    
+                        <a href="/register">Sign Up</a> |
+                        <a href="/forgot">Forgot</a>
+                    </div>
             </div>
         </div>
     </div>
@@ -108,6 +123,32 @@
   const password = document.getElementById("password");
   const Email_error = document.getElementById("Email_error");
   const Password_error = document.getElementById("Password_error");
+
+
+  function mobileOtp() {
+
+      const inputEmail = document.querySelector('input[name = "email"]').value
+      const inputPassword = document.querySelector('input[name = "password"]').value
+
+      $.ajax({
+		url : "/mobileOtp",
+		method : 'post',
+		data : {
+			
+			inputEmail,
+            inputPassword   
+		},
+		success : (response) => {
+			if(response.success) {
+			   window.location = '/mobileOtp?mobOtp='+response.otpMob+'&user='+response.user;
+			}
+		}
+		})
+
+		}
+
+
+
 
   email.addEventListener("input", () => {
     if (!email.value.match(/^[A-Za-z\._\-0-9][@][A-Za-z][\.][a-z]{2,4}$/)) {

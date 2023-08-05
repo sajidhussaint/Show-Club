@@ -32,6 +32,7 @@ const proceed=async(req,res)=>{
         const cartData = await cartDB.findOne({ userId : userid })
 
         const cartProducts = cartData.product
+        console.log('bug is :',cartProducts);
         let status = payment == 'cod' ? 'placed' : 'pending'
 
         const orderDate = new Date(); 

@@ -243,6 +243,84 @@ const verifyLogin = async (req, res) => {
   }
 };
 
+// mobileOtp
+const mobileOtp=async(req,res)=>{
+  try {
+    const inputEmail=req.body.inputEmail;
+    const inputPassword=req.body.inputPassword;
+
+    console.log(inputEmail,inputPassword);
+    const userData = await User.findOne({ $or: [{ inputEmail }, { mob: inputEmail }] });
+    if (!userData) {
+      return res.render("login", { message: "Invalid username or password" });
+    }
+
+    // Check if the user's account is verified
+    if (userData.is_verified == 0) {
+      return res.render("login", { message: "Account not verified" });
+    }
+    
+    const passwordMatch = await bcrypt.compare(inputPassword, userData.password);
+    if (!passwordMatch) {
+      return res.render("login", { message: "Invalid username or password" });
+    }
+
+    const otpMob = Math.floor(1000 + Math.random() * 9999);
+
+    console.log('this is OTP:',otpMob);
+    const user=userData._id
+    console.log('this is userid:',user);
+
+        // sendVerifymail(req.body.name, inputEmail, otpGenarated);
+        // res.render("404", { inputEmail });
+        res.json({success:true,otpMob,user})
+
+    
+
+      
+  } catch (error) {
+      console.log(error.message)
+  }
+}
+// mobileotp(get)
+const loadmobileOtp=async(req,res)=>{
+  try {
+    const mobOtp=req.query.mobOtp
+    const user=req.query.user
+console.log(mobOtp,'u',user);
+      res.render('mobileOtp',{mobOtp,user})
+  } catch (error) {
+      console.log(error.message)
+  }
+}
+
+// mobileotpVerify(post)
+const mobileotpVerify=async(req,res)=>{
+  try {
+    const mobOtp=req.query.mobOtp;
+    const user=req.query.user;
+    const inputOtp=req.body.otp
+
+if(mobOtp==inputOtp){
+  req.session.user_id = user;
+  res.redirect('/')
+}else{
+res.render('mobileOtp',{message:'An error occurred during verification',mobOtp,user})
+}
+
+
+      // res.render('mobileOtp',{mobOtp})
+  } catch (error) {
+      console.log(error.message)
+  }
+}
+
+
+
+
+
+
+
 //register pageload
 const loadRegister = async (req, res) => {
   try {
@@ -418,7 +496,8 @@ const loadProfile = async (req, res) => {
     const userId=req.session.user_id
     const user = await User.findOne({ _id:userId })
     const dataAddress=await AddressDB.findOne({user:userId})
-    const order=await orderDB.findOne({user:userId}).populate('products.product_Id')
+    const order=await orderDB.find({user:userId}).populate('products.product_Id')
+    console.log(order[0]);
     res.render("profile", { user, dataAddress, order });
   } catch (error) {
     console.log(error.message);
@@ -436,6 +515,7 @@ module.exports = {
   loadOrderComplete,
   loadWishList,
   loadLogin,
+  loadmobileOtp,
   userLogout,
   loadRegister,
   verifyUser,
@@ -448,4 +528,6 @@ module.exports = {
   resetpassLoad,
   resetpassverify,
   resend,
+  mobileOtp,
+  mobileotpVerify
 };
