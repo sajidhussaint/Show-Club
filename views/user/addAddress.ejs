@@ -1,0 +1,133 @@
+<%- include('./header.ejs') %>
+  <style>
+   
+
+
+    .form-group label {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .form-control {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid black;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .form-control::placeholder {
+      color: #ddd;
+    }
+
+    .btn-success {
+      background-color: #F6511D;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-success:hover {
+      background-color: #e23b08;
+    }
+
+    .icon {
+      color: #b67e6e;
+    }
+  </style>
+
+  <div class="container col-md-7 mt-5" >
+    <h2 style="color: #F6511D;">Add Address</h2>
+    <form method="post" action="/addAddress" class="colorlib-form" style="box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+      <div class="row col-md-12">
+        <div class="col-md-12">
+
+          <div class="form-group">
+            <label for="country">Select Country</label>
+             <div class="form-field">
+               <i class="icon icon-arrow-down3"></i>
+              <select name="country" id="people" class="form-control" >
+                <option value="#">Select country</option>
+                <option value="india" selected>india</option>
+                <option value="#">japan</option>
+               
+              </select>
+             </div>
+          </div>
+         </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="fname">First Name</label>
+                <input type="text" name="fname" id="fname" class="form-control" placeholder="Your firstname">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="lname">SName</label>
+                <input type="text" id="sname"  name="sname" class="form-control" placeholder="Your Sname">
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              
+         </div>
+
+         <div class="col-md-12">
+              <div class="form-group">
+                <label for="fname">Address</label>
+              <input  name="housename" type="text" id="address" class="form-control" placeholder="Enter Your Address">
+          </div>
+         </div>
+        
+         <div class="col-md-12">
+              <div class="form-group">
+                <label for="companyname">Town/City</label>
+              <input  name="city" type="text" id="towncity" class="form-control" placeholder="Town or City">
+          </div>
+         </div>
+         <div class="col-md-12">
+              <div class="form-group">
+                <label for="companyname">District</label>
+              <input  name="district" type="text" id="District" class="form-control" placeholder="District">
+          </div>
+         </div>
+
+        
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="stateprovince">State/Province</label>
+                <input  name="state" type="text" id="fname" class="form-control" placeholder="State Province">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="lname">Zip/Postal Code</label>
+                <input  name="pin" type="text" id="zippostalcode" class="form-control" placeholder="Zip / Postal">
+              </div>
+            </div>
+          
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="email">E-mail Address</label>
+                <input  name="email" type="text" id="email" class="form-control" placeholder="State Province">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="Phone">Phone Number</label>
+                <input  name="mobile" type="text" id="zippostalcode" class="form-control" placeholder="">
+              </div>
+            </div>
+            <input type="submit" value="Submit" class="btn btn-dark ">
+
+            
+       </div>
+       </form>
+      
+    </form>
+  </div>
+  <%- include('./footer.ejs') %>

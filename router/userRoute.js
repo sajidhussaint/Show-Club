@@ -57,6 +57,8 @@ user_Route.get('/resend',auth.isLogin,userController.resend)
 
 //profile
 user_Route.get("/profile",auth.isLogin,userController.loadProfile)
+user_Route.get("/orderDetails",orderController.loadOrderDetails)
+
 
 
 //cart
@@ -69,6 +71,13 @@ user_Route.post('/changes',cartController.changes)
 //adderess
 user_Route.get("/checkout",cartController.loadCheckOut);//auth.isLogin,
 user_Route.post('/checkout',addressController.addAddress)
+
+user_Route.post('/addAddress',addressController.addAddressPage)//in profile section
+user_Route.get('/addAddress',addressController.loadAddAddress)//in profile section
+user_Route.get('/editAddress',addressController.loadeditAddress)//in profile section
+
+
+
 
 
 // order

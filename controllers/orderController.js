@@ -18,6 +18,23 @@ const test=async(req,res)=>{
   }
 
 
+  const loadOrderDetails=async(req,res)=>{
+    try {
+
+        const orderId=req.query.orderId
+        const order = await orderDB.findOne({_id:orderId}).populate("products.product_Id");
+
+
+        
+        res.render('orderDetails',{order})
+
+
+    } catch (error) {
+        console.log(error.message)
+    }
+  }
+
+
 
 const proceed=async(req,res)=>{
     try {
@@ -26,13 +43,11 @@ const proceed=async(req,res)=>{
         const payment=req.body.payment
         const grandTotal=req.body.total
 
-        console.log('this is show club',userid,address,payment,grandTotal ,'finished.........');
 
         const user=await UserDB.findOne({ _id : userid })
         const cartData = await cartDB.findOne({ userId : userid })
 
         const cartProducts = cartData.product
-        console.log('bug is :',cartProducts);
         let status = payment == 'cod' ? 'placed' : 'pending'
 
         const orderDate = new Date(); 
@@ -84,4 +99,4 @@ const loadOrderPlaced=async(req,res)=>{
 
 
 
-module.exports={loadOrderPlaced,proceed,test}
+module.exports={loadOrderPlaced,loadOrderDetails,proceed,test}

@@ -497,7 +497,6 @@ const loadProfile = async (req, res) => {
     const user = await User.findOne({ _id:userId })
     const dataAddress=await AddressDB.findOne({user:userId})
     const order=await orderDB.find({user:userId}).populate('products.product_Id')
-    console.log(order[0]);
     res.render("profile", { user, dataAddress, order });
   } catch (error) {
     console.log(error.message);

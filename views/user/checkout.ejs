@@ -22,6 +22,7 @@
             color: white;
         }
 </style>
+
 		<div class="breadcrumbs">
 			<div class="container">
 				<div class="row">
@@ -39,7 +40,7 @@
 					<div class="col-lg-8">
 
 						<%if(address){%>
-							<form  class=" colorlib-form"style=" padding: 50px;"  >
+							<div class="colorlib-form">
 								<h3 class="">Address Deatils </h3>
 								
 								<div class="row" style=" display: flex; justify-content:flex-start;">
@@ -77,14 +78,8 @@
 
 													checked="true" 
 													
-													<% } else { %>
-														
-																									  
-											
-																									  
-												<% } %>
-												 
-												 name="selectedAddress" value="  <%= address.fname %> <%= address.lname %>, <%= address.housename %>, <%= address.city %>, <%= address.state %>, <%= address.district %>, <%= address.country %>" id="address<%= i %>" />
+													<% } %>
+							 name="selectedAddress" value=" <%= address.fname %> <%= address.sname %> , <%= address.housename %> , <%= address.city %> , <%= address.state %> , <%= address.district %> , <%= address.country %> " id="address<%= i %>" />
 												<label >Address: <%=i+1 %></label>
 											</div>
 										</div>
@@ -115,7 +110,7 @@
 										<!-- cardearea -->
 										<% }); %>  
 									 
-									 
+									</div>
 	  
 									  
 							 </div>
@@ -348,7 +343,7 @@ const pin=document.getElementById('zippostalcode')
 		
 		$.ajax({
 		url : "/orderPlace",
-		method : 'post',
+		method :'post',
 		data : {
 			payment,
 			address,
@@ -356,7 +351,10 @@ const pin=document.getElementById('zippostalcode')
 		},
 		success : (response) => {
 			if(response.success) {
-			   window.location = '/order_Placed'
+			   window.location ='/order_Placed'
+			}else{
+				alert('expected order placed')
+
 			}
 		}
 		})
