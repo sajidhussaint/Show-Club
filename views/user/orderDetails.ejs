@@ -68,7 +68,7 @@
             background-color: #FF6347;
         }
     </style>
-    <div style="padding: 20px 200px;">
+    <div style="padding: 20px 200px;" >
         <section class="order-section" >
             <h2>Order Information</h2>
             <table>
@@ -97,7 +97,7 @@
                 </tr>
             </table>
         </section>
-        <section class="product-section">
+        <section class="product-section" id="reloadData">
             <h2>Product Ordered</h2>
             <table>
                 <thead>
@@ -119,8 +119,12 @@
                             <td>₹<%= value.product_Id.price%></td>
                             <td>₹<%= value.total%></td>
                             <td>
-                                <button class="edit-button"><i class="fas fa-edit"></i> Edit</button>
-                                <button class="delete-button"><i class="fas fa-trash-alt"></i> Delete</button>
+                                <!-- <button class="edit-button"><i class="fas fa-edit"></i> Edit</button> -->
+                                <% if(value.status=='canceled'){%>
+                                    <button disabled  class="btn btn-danger"><i class="fas fa-trash-alt"></i>Canceled</button>
+                                    <% }else{ %>
+                                        <button onclick="cancelOrderItem('<%= value._id %>','<%= value.quantity %>','<%= value.product_Id._id%>')" class="delete-button"><i class="fas fa-trash-alt"></i>Cancel</button>
+                                        <% } %>
                             </td>
                         </tr>
                         <% }); %>  
@@ -128,5 +132,29 @@
             </table>
         </section>
     </div>
+    <script>
+    function cancelOrderItem(productID,quantity,proId){
+    event.preventDefault()
+    $.ajax({
+
+  url:'/OrderCancel',
+  method:'post',
+  data:{
+    productID,quantity,proId
+  },
+  success:(response) => {
+        if (response.success) {
+          $("#reloadData").load("/orderDetails?orderId=<%=order._id%> #reloadData");
+          Swal.fire({
+        title: "Canceled",
+        icon: "success",
+        text: "Order item has been updated.",
+        timer: 2000,
+      });
+        }
+      }
+})
+  }
+    </script>
 
     <%- include('./footer.ejs') %>

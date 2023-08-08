@@ -178,16 +178,21 @@ const loadOrder = async (req, res) => {
 const OrderCancel = async (req, res) => {
   try {
     const product = req.body.productID;
-
+    const quantity = req.body.quantity;
+    const ProId = req.body.proId;
+    console.log(ProId);
 
     const datas = await orderDB.findOneAndUpdate(
       { "products._id": product },
-      { $set: { "products.$.status":"canceled" } }
+      { $set: { "products.$.status": "canceled" } }
     );
-    
+
+    const incProduct = await ProductDB.findOneAndUpdate(
+      { _id: ProId },
+      { $inc: { quantity: quantity } }
+    );
 
     res.json({ success: true });
-    
   } catch (error) {
     console.log(error.message);
   }

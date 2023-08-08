@@ -5,6 +5,7 @@ const auth=require('../middleware/userAuth')
 
 //controllers
 const userController = require('../controllers/userController')
+const adminController = require('../controllers/adminController')
 const productController = require('../controllers/productController') 
 const cartController = require('../controllers/cartController') 
 const addressController = require('../controllers/addressController') 
@@ -13,7 +14,7 @@ const orderController = require('../controllers/orderController')
 user_Route.set("views", "./views/user");
 
 //load pages
-user_Route.get("/",auth.isLogin,userController.loadHome);
+user_Route.get("/",userController.loadHome);
 user_Route.get("/men",userController.loadMen);
 user_Route.get("/women",userController.loadWomen);
 user_Route.get("/about",userController.loadAbout);
@@ -58,6 +59,7 @@ user_Route.get('/resend',auth.isLogin,userController.resend)
 //profile
 user_Route.get("/profile",auth.isLogin,userController.loadProfile)
 user_Route.get("/orderDetails",orderController.loadOrderDetails)
+user_Route.post("/OrderCancel",adminController.OrderCancel)
 
 
 

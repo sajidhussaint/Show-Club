@@ -70,7 +70,7 @@
 									  <% address.address.forEach(function(address,i) { %>
 										 <!-- cardearea -->
 								  
-										 <div class="col-md-4" style="background-color: yellow; margin-bottom:25px;">
+										 <div class="col-md-4"  margin-bottom:25px;">
 											<div class="form-group">
 												<input type="radio" id="selectedAddress" name="selectedAddress"
 
@@ -83,7 +83,7 @@
 												<label >Address: <%=i+1 %></label>
 											</div>
 										</div>
-										<div class="col-md-8" style="background-color: yellow;  margin-bottom:25px;">
+										<div class="col-md-8"  margin-bottom:25px;">
 											<div class="form-group">
 												<h6>Name: <%=address.fname %> <%=address.sname %></h6>
 												<h6>HouseName: <%=address.housename%> </h6>
@@ -95,17 +95,18 @@
 												<h6>Mobile: <%=address.mobile%></h6>
 												<h6>Pin code: <%=address.pin%></h6>
 												<br>
-												<div style="display: flex; gap: 10px;">
+												<!-- <div style="display: flex; gap: 10px;">
 												  <button class="addressBlocks-base-edit" data-action="showModal">
 													  <i class="fas fa-edit"></i> Edit
 													</button>
 													<button class="addressBlocks-base-remove" data-action="remove">
 													  <i class="fas fa-trash-alt"></i> Remove
 													</button>
-												</div>
+												</div> -->
 												
 											</div>
 										</div>
+									
   
 										<!-- cardearea -->
 										<% }); %>  

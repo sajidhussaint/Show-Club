@@ -46,8 +46,19 @@
                       <td><%= order[i].products[index].quantity %></td>
                       <td>₹<%= order[i].products[index].product_Id.price %></td>
                       <td>₹<%= order[i].products[index].total %></td>
-                      <td><button  class="btn btn-danger" onclick="cancelOrderItem('<%= order[i].products[index]._id%>')">Cancel</button></td>
+                      <td>
+                      <% if(order[i].products[index].status=='canceled'){%>
+                        <button disabled  class="btn btn-danger"><i class="fas fa-trash-alt"></i>Canceled</button>
+                        <% }else{ %>
+
+                          <button  class="btn btn-danger" onclick="cancelOrderItem('<%= order[i].products[index]._id%>','<%= order[i].products[index].quantity%>','<%= order[i].products[index].product_Id._id%>')">Cancel</button>
+                            <% } %>
+                     
+                     
+                    
+                    </td>
                     </tr>
+
                   <% } %>
                   <tr>
                     <td colspan="5" class="text-right">Grand Total:</td>
@@ -76,24 +87,25 @@
 </html>
 
 <script>
-  function updateStatus(productID,value){
+  function updateStatus(productID){
     $.ajax({
   url:'/admin/OrderUpdate',
   method:'post',
   data:{
-    productID,value
+    productID
   }
 })
   }
 
-  function cancelOrderItem(productID){
+  function cancelOrderItem(productID,quantity,proId){
     event.preventDefault()
     $.ajax({
 
   url:'/admin/OrderCancel',
   method:'post',
   data:{
-    productID
+    productID,
+    quantity,proId
   },
   success:(response) => {
         if (response.success) {

@@ -9,8 +9,10 @@ const cart = require("../model/cartModel");
 const mongoose =require('mongoose')
 const AddressDB = require("../model/addressModel");
 const orderDB=require("../model/orderModel")
+const twilio = require('twilio');
 
 dotenv.config();
+const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID,process.env.TWILIO_AUTH_TOKEN);
 
 let otp;
 let email2;
@@ -117,12 +119,6 @@ const resetsendVerifymail = async (name, email, token) => {
   }
 };
 
-
-
-
-
-
-
 //home page
 const loadHome = async (req, res) => {
   try {
@@ -179,11 +175,6 @@ const loadWishList = async (req, res) => {
     console.log(error.message);
   }
 };
-
-
-
-
-
 
 // orderComplete page
 const loadOrderComplete = async (req, res) => {
@@ -288,11 +279,33 @@ const loadmobileOtp=async(req,res)=>{
     const mobOtp=req.query.mobOtp
     const user=req.query.user
 console.log(mobOtp,'u',user);
-      res.render('mobileOtp',{mobOtp,user})
+
+const message = `Your OTP is: ${mobOtp}`;
+
+twilioClient.messages
+.create({
+  body: message,
+  from: process.env.TWILIO_PHONE_NUMBER,
+  to: '+918089555859',
+})
+.then((message) => {
+  console.log(message.sid);
+  res.render('mobileOtp',{mobOtp,user})
+  // res.json({ success: true, message: 'OTP sent successfully!' });
+})
+.catch((error) => {
+  console.error(error);
+  res.status(500).json({ success: false, message: 'Failed to send OTP.' });
+});
+
+
+
+      
   } catch (error) {
       console.log(error.message)
   }
 }
+
 
 // mobileotpVerify(post)
 const mobileotpVerify=async(req,res)=>{
@@ -314,12 +327,6 @@ res.render('mobileOtp',{message:'An error occurred during verification',mobOtp,u
       console.log(error.message)
   }
 }
-
-
-
-
-
-
 
 //register pageload
 const loadRegister = async (req, res) => {

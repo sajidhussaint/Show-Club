@@ -7190,7 +7190,9 @@ a.text-dark:hover, a.text-dark:focus {
   color: #212529 !important; }
 
 .text-muted {
-  color: #6c757d !important; }
+  color: black !important;
+  font-weight: 00;
+ }
 
 .text-black-50 {
   color: rgba(0, 0, 0, 0.5) !important; }
