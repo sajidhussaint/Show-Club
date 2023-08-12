@@ -41,6 +41,9 @@
 
   <div class="container col-md-7 mt-5" >
     <h2 style="color: #F6511D;">Add Address</h2>
+    <% if(url=='/profile'){ %>
+      <form method="post" action="/addAddressPage" class="colorlib-form" style="box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
+    <% } %>
     <form method="post" action="/addAddress" class="colorlib-form" style="box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">
       <div class="row col-md-12">
         <div class="col-md-12">

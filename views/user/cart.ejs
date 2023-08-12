@@ -218,9 +218,13 @@
           <div class="row">
             <div class="col-sm-8 c1">
 
-              <!-- <form action="#">
-      <div class="row form-group">
-        <div class="col-sm-9">
+              <form action="#"  class="col-md-12">
+      <div class="row form-group p-5">
+        <div class="d-flex" style="justify-content:space-between;">
+        <h3 class="mr-4">Discound coupons</h3>
+        <button data-toggle="modal" data-target="#discountModal" class="btn btn-primary " style="position: relative; right: 217px; border-radius: 2px; background-color: #F6511D; border: none;" >show coupons</button>
+      </div>
+        <div class="col-sm-9 pt-3">
           <input
             type="text"
             name="quantity"
@@ -236,7 +240,7 @@
           />
         </div>
       </div>
-    </form> --> 
+    </form> 
             </div>
             <div class="col-sm-4 text-center scl" >
               <div class="total " style="box-shadow: 5px 8px 18px #c7c3c3; border-radius: 5%;">
@@ -273,70 +277,54 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-3 col-lg-3 mb-4 text-center">
-        <div class="product-entry border">
-          <a href="#" class="prod-img">
-            <img
-              src="images/item-1.jpg"
-              class="img-fluid"
-              alt="Free html5 bootstrap 4 template"
-            />
-          </a>
-          <div class="desc">
-            <h2><a href="#">Women's Boots Shoes Maca</a></h2>
-            <span class="price">$139.00</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-lg-3 mb-4 text-center">
-        <div class="product-entry border">
-          <a href="#" class="prod-img">
-            <img
-              src="images/item-2.jpg"
-              class="img-fluid"
-              alt="Free html5 bootstrap 4 template"
-            />
-          </a>
-          <div class="desc">
-            <h2><a href="#">Women's Minam Meaghan</a></h2>
-            <span class="price">$139.00</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-lg-3 mb-4 text-center">
-        <div class="product-entry border">
-          <a href="#" class="prod-img">
-            <img
-              src="images/item-3.jpg"
-              class="img-fluid"
-              alt="Free html5 bootstrap 4 template"
-            />
-          </a>
-          <div class="desc">
-            <h2><a href="#">Men's Taja Commissioner</a></h2>
-            <span class="price">$139.00</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-lg-3 mb-4 text-center">
-        <div class="product-entry border">
-          <a href="#" class="prod-img">
-            <img
-              style="border-radius: 20%"
-              src="images/item-4.jpg"
-              class="img-fluid"
-              alt="cart img"
-            />
-          </a>
-          <div class="desc">
-            <h2><a href="#">Russ Men's Sneakers</a></h2>
-            <span class="price">$139.00</span>
-          </div>
-        </div>
-      </div>
+      <% product.forEach(function(product,index) { %>
+						<div class="col-lg-3 mb-4 text-center main-cont">
+						  <div class="product-entry border">
+							<a href="/product-detail?productid=<%=product._id %>" class="prod-img">
+							  <img src="/admin/IMAGES_DB/<%= product.image[0] %>"
+								class="img-fluid"
+								alt="Free html5 bootstrap 4 template"
+							  />
+							</a>
+							<div class="desc">
+							  <h2><a href="#"><%=product.name %></a></h2>
+							  <span class="price">₹<%=product.price %></span>
+							</div>
+						  </div>
+						</div>
+						<% }); %>
     </div>
   </div>
 </div>
+
+<!-- Coupon modal -->
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<div class="modal fade" id="discountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+            <div class="modal-content rounded-0">
+                <div class="modal-body text-center">
+                    <div class="icon text-danger">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <div class="notice">
+                        
+                            <h4>Get 50% Discount</h4>
+                       
+                        
+                        <p>This coupon only available for purchase above ₹ 500</p>
+                        <p>And valid from </p>
+                        <p>Use promo code <spans style="font-size: medium; background-color: #F6511D; color: white;" class="badge ">name</span></p>
+                    </div>
+                    <div class="code"></div>
+                </div>
+            </div>
+      
+    </div>
+  </div>
+  
+
+
 <script>
   function increaseQuantity(productId, count) {
     $.ajax({
@@ -369,6 +357,9 @@
     });
   }
 
+  $(document).ready(function() {  
+              $('#discountModal').modal('show');
+            });
 
 </script>
 

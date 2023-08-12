@@ -1,5 +1,7 @@
 <%- include('./header') %>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="/js/jquery-zoom/jquery.ez-plus.js"></script>
+<script src="/js/jquery-zoom/jquery.mousewheel.js"></script>
 <style>
 .btn-orange{
 		background-color: orangered;
@@ -42,36 +44,26 @@
 			<div class="container">
 				<div class="row row-pb-lg product-detail-wrap">
 					<div class="col-sm-8">
-						 <div > <!-- class="owl-carousel" -->
-							<div class="item">
-								<div class="product-entry border product-image-container" ><!--   id="img-container" -->
-									
-										<img id="main-image" src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+						<div class="owl-carousel" >
+						<% product.image.forEach(function(image) { %>
+								<div class="item">
+									<div class="product-entry border product-image-container product__details__pic__item" ><!--   id="img-container" -->
+											<img  class="zoom-img-n" src="/admin/IMAGES_DB/<%=image%>" class="img-fluid" alt="Free html5 bootstrap 4 template"><!--id="main-image"-->
+										
+									</div>
 									
 								</div>
-								
+								<% }); %>  
+
+
+							<div class="item" >
+								<div class="product-entry border product-image-container">
+									
+										<img  class="zoom-img-n" src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+									
+								</div>
 							</div>
-							<!-- <div class="item">
-								<div class="product-entry border">
-									<a href="#" class="prod-img">
-										<img src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
-									</a>
-								</div>
-							</div> -->
-							<!-- <div class="item">
-								<div class="product-entry border">
-									<a href="#" class="prod-img">
-										<img src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
-									</a>
-								</div>
-							</div> -->
-							<!-- <div class="item">
-								<div class="product-entry border">
-									<a href="#" class="prod-img">
-										<img src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
-									</a>
-								</div>
-							</div> -->
+							
 						</div>
 					</div>
 					<div class="col-sm-4">
@@ -79,6 +71,7 @@
 							<h3><%=product.name %></h3>
 							<p class="price">
 								<span>₹<%=product.price %></span> 
+								<span>stock(<%=product.quantity %>) </span>
 								<!-- <span class="rate">
 									<i class="icon-star-full"></i>
 									<i class="icon-star-full"></i>
@@ -217,6 +210,104 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- old sweet alert -->
 
+
+
+
+
+
+<script>
+
+$(`.zoom-img-n`).ezPlus({
+
+container: 'ZoomContainer',
+attrImageZoomSrc: 'zoom-image', // attribute to plugin use for zoom
+borderColour: '#888',
+borderSize: 0,
+constrainSize: true,  //in pixels the dimensions you want to constrain on
+constrainType: false,  //width or height
+containLensZoom: true,
+cursor: 'inherit', // user should set to what they want the cursor as, if they have set a click function
+debug: false,
+easing: true, // easing effects
+easingAmount: 10,
+enabled: true,
+
+// gallery options
+gallery: false,
+galleryActiveClass: 'zoomGalleryActive',
+gallerySelector: false,
+galleryItem: 'a',
+galleryEvent: 'click',
+
+// enable cross-fade effect
+imageCrossfade: false,
+
+// lens options
+lensBorderColour: '#000',
+lensBorderSize: 1,
+lensColour: 'white', //colour of the lens background
+lensFadeIn: false,
+lensFadeOut: false,
+lensOpacity: 0.4, //opacity of the lens
+lensShape: 'square', //can be 'round'
+lensSize: 100,
+lenszoom: false,
+
+// image loading spinner
+loadingIcon: false, //http://www.example.com/spinner.gif
+
+// This change will allow to decide if you want to decrease
+// zoom of one of the dimensions once the other reached it's top value,
+// or keep the aspect ratio, default behaviour still being as always,
+// allow to continue zooming out, so it keeps retrocompatibility.
+mantainZoomAspectRatio: true,
+maxZoomLevel: false,
+minZoomLevel: 2,
+
+// callbacks
+onComplete: $.noop,
+onDestroy: $.noop,
+onImageClick: $.noop,
+onImageSwap: $.noop,
+onImageSwapComplete: $.noop,
+onShow: $.noop,
+onHide: $.noop,
+onZoomedImageLoaded: $.noop,
+
+preloading: 1, //by default, load all the images, if 0, then only load images after activated (PLACEHOLDER FOR NEXT VERSION)
+respond: [],
+responsive: true,
+scrollZoom: false, //allow zoom on mousewheel, true to activate
+scrollZoomIncrement: 0.1,  //steps of the scrollzoom
+showLens: true,
+tint: false, //enable the tinting
+tintColour: '#333', //default tint color, can be anything, red, #ccc, rgb(0,0,0)
+tintOpacity: 0.4, //opacity of the tint
+touchEnabled: true,
+
+// zoom options
+zoomActivation: 'hover', // Can also be click (PLACEHOLDER FOR NEXT VERSION)
+zoomContainerAppendTo: 'body', //zoom container parent selector
+zoomId: -1, // identifier for the zoom container
+zoomLevel: 1, //default zoom level of image
+zoomTintFadeIn: false,
+zoomTintFadeOut: false,
+zoomType: 'window', //window is default,  also 'lens' available -
+zoomWindowAlwaysShow: false,
+zoomWindowBgColour: '#fff',
+zoomWindowFadeIn: false,
+zoomWindowFadeOut: false,
+zoomWindowHeight: 300,
+zoomWindowOffsetX: 0,
+zoomWindowOffsetY: 0,
+zoomWindowPosition: 1, //Possible values: 1-16, but we can also position with a selector string.
+zoomWindowWidth: 300,
+zoomEnabled: true, //false disables zoomwindow from showing
+zIndex: 999
+
+});
+
+</script>
 
 
 		<script>

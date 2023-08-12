@@ -267,10 +267,10 @@
                                     <p class="mb-0 mt-2">Actions:</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <a href="/passwordChange?id=64b7b41173284943fc15df2b" class="btn btn-primary mr-2"><i
+                                    <!-- <a href="/passwordChange?id=64b7b41173284943fc15df2b" class="btn btn-primary mr-2"><i
                                             class="fas fa-key"></i> Change
-                                        Password</a>
-                                    <a href="/addAddress" class="btn btn-primary"><i class="fas fa-plus"></i> Add
+                                        Password</a> -->
+                                    <a href="/addnewAddress" class="btn btn-primary"><i class="fas fa-plus"></i> Add
                                         Address</a>
                                 </div>
                             </div>
@@ -307,7 +307,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Address Details</h5>
                             <div class="d-flex justify-content-end">
-                                <a href="/addAddress" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add
+                                <a href="/addnewAddress" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add
                                     New Address</a>
                             </div>
                             <% if (dataAddress && dataAddress.address ) { %>
@@ -332,9 +332,10 @@
                                 <div class="row mt-3">
                                   <div class="col-sm-9 offset-sm-3">
                                     <a href="/editAddress?addressId=<%=value._id%>&&index=<%=index%>" class="btn btn-primary btn-sm mr-2"><i class="fas fa-edit"></i> Edit</a>
-                                    <a href="/remove_address?id=7777" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Remove</a>
+                                    <a href="/remove_address?id=<%=value._id%>" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Remove</a>
                                   </div>
                                 </div>
+
                                 <hr />
                               <% })%>
                               <% } else { %>
@@ -388,7 +389,9 @@
                                             <span class="info-value status-orange">
                                                 <% if (value.payment=='cod') { %>                                                  
                                                     Cash On Delivery
-                                                  <% }%>
+                                                  <% }else{%>
+                                                    Razorpay
+                                                    <% } %>
                                                                                                                                                   
                                             </span>
                                         </div>

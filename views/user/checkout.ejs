@@ -42,6 +42,10 @@
 						<%if(address){%>
 							<div class="colorlib-form">
 								<h3 class="">Address Deatils </h3>
+								<div class="d-flex justify-content-end">
+									<a href="/addAddress" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add
+										New Address</a>
+								</div>
 								
 								<div class="row" style=" display: flex; justify-content:flex-start;">
 								 <div class="col-md-12">
@@ -79,9 +83,12 @@
 													checked="true" 
 													
 													<% } %>
+													
 							 name="selectedAddress" value=" <%= address.fname %> <%= address.sname %> , <%= address.housename %> , <%= address.city %> , <%= address.state %> , <%= address.district %> , <%= address.country %> " id="address<%= i %>" />
-												<label >Address: <%=i+1 %></label>
-											</div>
+							 <label >Address: <%=i+1 %></label>
+							</div>
+							
+						
 										</div>
 										<div class="col-md-8"  margin-bottom:25px;">
 											<div class="form-group">
@@ -94,6 +101,8 @@
 												<h6>Email: <%=address.email%></h6>
 												<h6>Mobile: <%=address.mobile%></h6>
 												<h6>Pin code: <%=address.pin%></h6>
+												<input type="hidden" value="<%=address.email%>" id="addressEmail">
+												<input type="hidden" value="<%=address.mobile%>" id="addressMobile">
 												<br>
 												<!-- <div style="display: flex; gap: 10px;">
 												  <button class="addressBlocks-base-edit" data-action="showModal">
@@ -105,6 +114,7 @@
 												</div> -->
 												
 											</div>
+											<hr>
 										</div>
 									
   
@@ -261,6 +271,8 @@
 										<div class="col-md-12">
 											<div class="radio">
 											   <label><input type="radio" name="payment" id="cashOnDelivery" value="cod" checked="true"> Cash On Delivery</label>
+											   <br>
+											   <label><input type="radio" name="payment" id="cashOnDelivery" value="razorpay" > RazorPay</label>
 											</div>
 										</div>
 									</div>
@@ -293,6 +305,8 @@
 					</div>
 				</div>
 			</div>
+			<button id="razorpayBtn">Pay with Razorpay</button>
+
 		</div>
 		
 		<script>
@@ -331,36 +345,127 @@ const pin=document.getElementById('zippostalcode')
 			
         })
 		</script>
+
+<!-- <script>
+	document.getElementById('razorpayBtn').addEventListener('click', function() {
+	  var options = {
+		key: 'YOUR_RAZORPAY_KEY', // Your Razorpay API Key
+		amount: 10000, // Amount in paise (example: 10000 paise = ₹100)
+		currency: 'INR', // Currency code
+		name: 'Your Company Name', // Your company name
+		description: 'Test Payment', // Payment description
+		handler: function(response) {
+		  // Handle the payment success response here
+		  alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+		},
+		prefill: {
+		  name: 'John Doe',
+		  email: 'john@example.com',
+		  contact: '+919876543210'
+		}
+	  };
+	  var rzp = new Razorpay(options);
+	  rzp.open();
+	});
+  </script> -->
+  
 		<script>
 		
-		
-			function placeOrder() {
-		
-			const address = document.querySelector('input[name = "selectedAddress"]:checked').value
-			 const payment = document.querySelector('input[name = "payment"]:checked').value
-			 const total = document.getElementById('grandTotal').value
-			 
-		
-		
-		$.ajax({
-		url : "/orderPlace",
-		method :'post',
-		data : {
-			payment,
-			address,
-			total
-		},
-		success : (response) => {
-			if(response.success) {
-			   window.location ='/order_Placed'
-			}else{
-				alert('expected order placed')
+		function placeOrder() {
+  const address = document.querySelector(
+    'input[name = "selectedAddress"]:checked'
+  ).value;
+  const payment = document.querySelector(
+    'input[name = "payment"]:checked'
+  ).value;
+  const total = document.getElementById("grandTotal").value;
+  const email = document.getElementById("addressEmail").value;
+  const mobile = document.getElementById("addressMobile").value;
 
-			}
-		}
-		})
-		}
-		
+  if (payment == "razorpay") {
+    $.ajax({
+      url: "/orderPlace",
+      method: "post",
+      data: {
+        payment,
+        address,
+        total,
+        email,
+      },
+
+      success: (response) => {
+        if (response.success) {
+          $.ajax({
+            url: "/orderEpay",
+            method: "post",
+            data: {
+              payment,
+              address,
+              total,
+              email,
+              mobile,
+            },
+            success: (response) => {
+              if (response.success) {
+                var options = {
+                  key: "" + response.key_id + "",
+                  amount: "" + response.amount + "", // Amount in paise (example: 10000 paise = ₹100)
+                  currency: "INR", // Currency code
+                  name: "SHOW CLUB", // Your company name
+                  order_id: "" + response.order_id + "", // Your company name
+                  description: "" + response.description + "", // Payment description
+                  handler: function (response) {
+                    // Handle the payment success response here
+                    window.location = "/order_Placed";
+                    // alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+                  },
+                  prefill: {
+                    name: "John Doe",
+                    email: "" + response.email + "",
+                    contact: "" + response.mobile + "",
+                  },
+                };
+                var rzp = new Razorpay(options);
+                rzp.open();
+              }else{
+				Swal.fire({
+        title: "Error",
+        icon: "error",
+        text: "Failed .",
+        timer: 2000,
+      });
+			  }
+            },
+          });
+        } else {
+          alert("expected order placed");
+        }
+      },
+    });
+  } 
+  
+  
+  
+  else {
+    $.ajax({
+      url: "/orderPlace",
+      method: "post",
+      data: {
+        payment,
+        address,
+        total,
+      },
+      success: (response) => {
+        if (response.success) {
+          window.location = "/order_Placed";
+        } else {
+          alert("expected order placed");
+        }
+      },
+    });
+  }
+}
+
 		
 		</script>
 		<%- include('./footer') %>

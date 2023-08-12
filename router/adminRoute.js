@@ -39,11 +39,13 @@ admin_Route.post("/OrderCancel",adminController.OrderCancel);
 //PRODUCT PAGE
 admin_Route.get("/productlist",auth.isLogin,productController.loadproductList);
 admin_Route.get("/addProduct",auth.isLogin,productController.loadaddProduct);
-admin_Route.post("/addProduct",upload.array('ProductImage',3),productController.verifyaddProduct);
+admin_Route.post("/addProduct",upload.array('ProductImage',5),productController.verifyaddProduct);
 admin_Route.get("/editProduct",auth.isLogin,productController.loadeditProduct);
-admin_Route.post("/editProduct",auth.isLogin,upload.array('Image',3),productController.editProduct);
+admin_Route.post("/editProduct",auth.isLogin,upload.array('Image',5),productController.editProduct);
 admin_Route.get("/blockProduct",auth.isLogin,productController.blockProduct);
 admin_Route.get("/unblockProduct",auth.isLogin,productController.unblockProduct);
+admin_Route.post("/deleteImage",productController.deleteImage);
+
 
 
 

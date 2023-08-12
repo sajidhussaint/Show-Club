@@ -3,11 +3,24 @@ const AddressDB = require("../model/addressModel");
 
 const loadAddAddress=async(req,res)=>{
   try {
-      res.render('addAddress')
+    const url=req.query.url
+    console.log(url);
+      res.render('addAddress',{url})
   } catch (error) {
       console.log(error.message)
   }
 }
+const loadnewAddress=async(req,res)=>{
+  try {
+      res.render('addnewAddress')
+  } catch (error) {
+      console.log(error.message)
+  }
+}
+
+
+
+
 const loadeditAddress=async(req,res)=>{
   try {
    
@@ -24,6 +37,8 @@ const loadeditAddress=async(req,res)=>{
 
 const addAddress = async (req, res) => {
   try {
+    
+    
     const userId = req.session.user_id;
     const address = await AddressDB.findOne({ user: userId });
     const {
@@ -81,6 +96,76 @@ const addAddress = async (req, res) => {
           const Adata = await data.save();
     }
 res.redirect('/checkout')
+    
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
+
+
+const addnewAddress = async (req, res) => {
+  try {
+    
+    
+    const userId = req.session.user_id;
+    const address = await AddressDB.findOne({ user: userId });
+    const {
+      country,
+      sname,
+      housename,
+      city,
+      district,
+      state,
+      pin,
+      email,
+      mobile,
+      fname,
+    } = req.body;
+
+    if (address) {
+      await AddressDB.updateOne(
+        { user: userId },
+        {
+          $push: {
+            address: {
+              fname: fname,
+              sname: sname,
+              mobile: mobile,
+              email: email,
+              housename: housename,
+              city: city,
+              state: state,
+              district: district,
+              country: country,
+              pin: pin,
+            },
+          },
+        }
+      );
+    }else{
+        const data = new AddressDB({
+            user: userId,
+            address: [
+              {
+                fname: fname,
+                sname: sname,
+                mobile: mobile,
+                email: email,
+                housename: housename,
+                city: city,
+                state: state,
+                district: district,
+                country: country,
+                pin: pin,
+              }
+            ]
+          });
+      
+          const Adata = await data.save();
+    }
+res.redirect('/profile')
     
   } catch (error) {
     console.log(error.message);
@@ -146,6 +231,7 @@ const addAddressPage = async (req, res) => {
           });
       
           const Adata = await data.save();
+          
     }
 res.redirect('/profile')
     
@@ -154,4 +240,18 @@ res.redirect('/profile')
   }
 };
 
-module.exports = { addAddress,loadAddAddress,addAddressPage ,loadeditAddress};
+
+
+const remove_address=async(req,res)=>{
+  try {
+       const id=req.session.user_id
+       const Dataid= req.query.id
+       console.log(Dataid);
+       await AddressDB.findOneAndUpdate({user:id},{$pull:{'address':{_id:Dataid}}})
+       res.redirect('/profile')
+
+  } catch (err) {
+      console.log(err.message);
+  }
+}
+module.exports = { addAddress,loadAddAddress,addAddressPage ,loadeditAddress,remove_address,loadnewAddress,addnewAddress};

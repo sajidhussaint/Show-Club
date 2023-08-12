@@ -12,8 +12,9 @@
   <div class="container mt-5" id="reloadData">
     <h2 class="mb-4">Order List</h2>
     <% if (order && order.length > 0) { %>
-      <% for (let i = 0; i < order.length; i++) { %>
+      <% for (let i = order.length-1; i >= 0; i--) { %>
         <p><strong style="font-weight: 800 ; color: black;">User Name:</strong> <%= order[i].userName %> | <strong style="font-weight: 800 ; color: black;">Date:</strong><%= order[i].date.toLocaleString() %></p>
+        <p><strong style="font-weight: 800 ; color: black;">Address:</strong><%=order[i].deliveryAddress%></p>
         <% if (order[i] && order[i].products && order[i].products.length > 0) { %>
           <div class="row" >
             <div  class="col-md-12 col-lg-12 col-sm-12 " >

@@ -64,19 +64,27 @@ user_Route.post("/OrderCancel",adminController.OrderCancel)
 
 
 //cart
-user_Route.get("/cart",cartController.loadCart);//auth.isLogin,
+user_Route.get("/cart",auth.isLogin,cartController.loadCart);//auth.isLogin,
 user_Route.post('/cart',cartController.addtoCart)
 user_Route.get('/delete_cartitem',cartController.deletecartitem)
 user_Route.post('/changes',cartController.changes)
 
 
 //adderess
-user_Route.get("/checkout",cartController.loadCheckOut);//auth.isLogin,
+user_Route.get("/checkout",auth.isLogin,cartController.loadCheckOut);//auth.isLogin,
 user_Route.post('/checkout',addressController.addAddress)
 
-user_Route.post('/addAddress',addressController.addAddressPage)//in profile section
-user_Route.get('/addAddress',addressController.loadAddAddress)//in profile section
-user_Route.get('/editAddress',addressController.loadeditAddress)//in profile section
+user_Route.post('/addAddress',addressController.addAddress)
+
+user_Route.get('/addAddress',auth.isLogin,addressController.loadAddAddress)//in profile section
+user_Route.get('/editAddress',auth.isLogin,addressController.loadeditAddress)//in profile section
+
+user_Route.get('/remove_address',addressController.remove_address)
+user_Route.post('/addAddressPage',addressController.addAddressPage)//in profile section
+
+
+user_Route.get('/addnewAddress',auth.isLogin,addressController.loadnewAddress)//in profile section
+user_Route.post('/addnewAddress',addressController.addnewAddress)//in profile section
 
 
 
@@ -84,9 +92,14 @@ user_Route.get('/editAddress',addressController.loadeditAddress)//in profile sec
 
 // order
 user_Route.post('/orderPlace',orderController.proceed)
-user_Route.get('/order_Placed',orderController.loadOrderPlaced)
+user_Route.get('/order_Placed',auth.isLogin,orderController.loadOrderPlaced)
 
+user_Route.post('/orderEpay',orderController.orderEpay)
 user_Route.get('/test',orderController.test)
+
+//search
+user_Route.get('/search',userController.loadsearch)
+
 
 
 // user_Route.get('/Proceed',cartController.loadProceed)

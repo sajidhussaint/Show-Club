@@ -134,7 +134,8 @@ const loadHome = async (req, res) => {
 //men page
 const loadMen = async (req, res) => {
   try {
-    res.render("men", { activePage: "men" });
+    const product = await Product.find({ blocked: false });
+    res.render("men", { activePage: "men",product });
   } catch (error) {
     console.log(error.message);
   }
@@ -143,11 +144,25 @@ const loadMen = async (req, res) => {
 //women page
 const loadWomen = async (req, res) => {
   try {
-    res.render("women", { activePage: "women" });
+    const product = await Product.find({ blocked: false });
+    res.render("women", { activePage: "women" ,product});
   } catch (error) {
     console.log(error.message);
   }
 };
+
+
+
+//search page
+const loadsearch=async(req,res)=>{
+  try {
+    const product = await Product.find({ blocked: false });
+    res.render("search", {product});
+  } catch (error) {
+      console.log(error.message)
+  }
+}
+
 
 //about page
 const loadAbout = async (req, res) => {
@@ -227,7 +242,8 @@ const verifyLogin = async (req, res) => {
     }
     // Set up a session or token for authentication (implement your own logic)
     req.session.user_id = user._id;
-    res.render("men");
+    // res.render("men");
+    res.redirect('/')
   } catch (err) {
     console.error("Error during sign in:", err);
     res.render("login", { message: "An error occurred during sign in" });
@@ -500,11 +516,12 @@ const resend = async (req, res) => {
 //profile page
 const loadProfile = async (req, res) => {
   try {
+    const url=req.url
     const userId=req.session.user_id
     const user = await User.findOne({ _id:userId })
     const dataAddress=await AddressDB.findOne({user:userId})
     const order=await orderDB.find({user:userId}).populate('products.product_Id')
-    res.render("profile", { user, dataAddress, order });
+    res.render("profile", { user, dataAddress, order,url });
   } catch (error) {
     console.log(error.message);
   }
@@ -522,13 +539,14 @@ module.exports = {
   loadWishList,
   loadLogin,
   loadmobileOtp,
-  userLogout,
   loadRegister,
+  loadProfile,
+  loadOtp,
+  loadsearch,
+  userLogout,
   verifyUser,
   verifyLogin,
-  loadOtp,
   otpValidation,
-  loadProfile,
   forgotLoad,
   forgotSendtoEmail,
   resetpassLoad,

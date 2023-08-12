@@ -3,6 +3,8 @@ const UserDB = require("../model/userModel");
 const CategoryDB = require("../model/categoryModel");
 const cartDB = require("../model/cartModel");
 
+//``````````````````````````ADMIN``````````````````````````````//
+
 // LOAD  PRODUCT LIST(ADMIN)
 const loadproductList = async (req, res) => {
   try {
@@ -35,9 +37,9 @@ const loadeditProduct = async (req, res) => {
 //VERIFY ADD PRODUCT(POST)(ADMIN)
 const verifyaddProduct = async (req, res) => {
   try {
-    let arrimage = [];
+    var arrimage = [];
 
-    if (req.files && req.files.length) {
+    if (req.files && req.files.length > 0) {
       for (let i = 0; i < req.files.length; i++) {
         arrimage.push(req.files[i].filename);
       }
@@ -45,20 +47,31 @@ const verifyaddProduct = async (req, res) => {
 
     const { name, category, price, quantity, description } = req.body;
 
-    const productData = new ProductDB({
-      name: name,
-      category: category,
-      price: price,
-      quantity: quantity,
-      description: description,
-      image: arrimage,
-    });
+    if (price && quantity > 0) {
+      const existProduct = await ProductDB.findOne({ name: name });
 
-    const addproductdata = await productData.save();
-    if (addproductdata) {
-      res.redirect("/admin/productList");
+      if (existProduct) {
+        res.render("addProduct", { message: "product exists" });
+      } else {
+        const productData = new ProductDB({
+          name: name,
+          category: category,
+          price: price,
+          quantity: quantity,
+          description: description,
+          image: arrimage,
+        });
+
+        const newProduct = productData.save();
+
+        if (newProduct) {
+          res.redirect("/admin/productlist");
+        } else {
+          res.render("addProduct", { message: "something went wrong" });
+        }
+      }
     } else {
-      res.render("addProduct", { message: "something wrong!!" });
+      res.render("addProduct", { message: "cannot give a negative value" }); //, categories: category
     }
   } catch (error) {
     console.log(error.message);
@@ -86,28 +99,6 @@ const unblockProduct = async (req, res) => {
   }
 };
 
-// productDetail page
-const loadProductDetail = async (req, res) => {
-  try {
-    const id = req.query.productid;
-    const product = await ProductDB.findById({ _id: id });
-    if (req.session.user_id) {
-      const carts = await cartDB.findOne({ userId: req.session.user_id });
-      if (carts) {
-        var productavaliable = await carts.product.findIndex(
-          (product) => product.product_Id == id
-        );
-      } else {
-        var productavaliable = -1;
-      }
-    }
-
-    res.render("product-detail", { product, productavaliable });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
 //EDIT CATEGORY LOAD(POST)
 const editProduct = async (req, res) => {
   try {
@@ -125,7 +116,6 @@ const editProduct = async (req, res) => {
     console.log(imageArr);
 
     if (req.files && req.files.length > 0) {
-      console.log('file unde');
       await ProductDB.updateOne(
         { _id: qid },
         {
@@ -160,6 +150,48 @@ const editProduct = async (req, res) => {
   }
 };
 
+//DELETE IMAGE PRODUCT EDIT
+const deleteImage = async (req, res) => {
+  try {
+    const id = req.body.productId;
+    const image = req.body.image;
+
+    const productDeleted = await ProductDB.findOneAndUpdate(
+      {_id:id },
+      { $pull: { image: image } }
+    );
+
+    res.json({ success: true });
+
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+//``````````````````````````ADMIN``````````````````````````````//
+
+// productDetail page
+const loadProductDetail = async (req, res) => {
+  try {
+    const id = req.query.productid;
+    const product = await ProductDB.findById({ _id: id });
+    if (req.session.user_id) {
+      const carts = await cartDB.findOne({ userId: req.session.user_id });
+      if (carts) {
+        var productavaliable = await carts.product.findIndex(
+          (product) => product.product_Id == id
+        );
+      } else {
+        var productavaliable = -1;
+      }
+    }
+
+    res.render("product-detail", { product, productavaliable });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   loadproductList,
   loadaddProduct,
@@ -169,4 +201,6 @@ module.exports = {
   blockProduct,
   unblockProduct,
   loadProductDetail,
+
+  deleteImage,
 };

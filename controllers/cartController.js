@@ -7,18 +7,14 @@ const mongoose = require("mongoose");
  
 
 
-
-
-
-
-
 const loadCart = async (req, res) => {
   try {
     const userId = req.session.user_id;
+    const product = await Product.find({ blocked: false }).limit(4)
     const products = await cart
       .findOne({ userId: userId })
       .populate("product.product_Id");
-    res.render("cart", { activePage: "cart", products });
+    res.render("cart", { activePage: "cart", products,product });
   } catch (error) {
     console.log(error.message);
   }

@@ -1,5 +1,6 @@
 <%- include('./layouts/header') %>
-    <h3>Edit Product Details</h3>
+
+    <h3 style="margin: 5px;">Edit Product Details</h3>
     <div class="container-edit">
     <form  method="POST" action="/admin/editProduct?id=<%=product._id %>"  enctype="multipart/form-data">
         <label for="productName">Product Name:</label>
@@ -28,11 +29,12 @@
         <br>
         <label for="productImage" class="form-label">Image:</label>
 
-        <div class="card-body">
-            <div class="input-upload">
+        <div class="card-body" id="reloadData">
+            <div class="input-upload ">
               <% product.image.forEach((image) => {%>
-              <img style="border-radius: 20%;"
-                id="product_img" width="100" src="/admin/IMAGES_DB/<%= product.image%>" alt=""/>
+              <img style="border-radius: 20%; border: 1px solid rgb(206, 202, 202); margin: 5px; "
+                id="product_img" width="100" height="100" src="/admin/IMAGES_DB/<%=image%>" alt=""/>
+                <a onclick="deleteImage('<%=image%>','<%=product._id%>')"><i style="color: red; position: relative; bottom: 81px; right:33px" class="bi bi-x-circle-fill"></i></i></a>
               <%}) %>
 
               <input
@@ -99,6 +101,59 @@
         }
     </style>
     <script>
+
+function deleteImage(image,productId){
+  // Toastify({
+  //   text: 'This is a toast notification!',
+  //   duration: 3000, // Duration in milliseconds
+  //   close: true,
+  //   gravity: 'bottom', // 'top' or 'bottom'
+  //   positionLeft: false, // Position the toast on the left side
+  //   backgroundColor: '#333',
+  //   className: 'custom-toast',
+  // }).showToast();
+
+  $.ajax({
+  url: '/admin/deleteImage',
+  method: 'post',
+  data: {
+    productId,
+    image
+  },
+  success: (response) => {
+    if (response.success) {
+      $("#reloadData").load(`/admin/editProduct?product=${productId} #reloadData`);
+   
+
+
+      // Swal.fire({
+      //   title: "Success",
+      //   icon: "success",
+      //   text: "Order item has been updated.",
+      //   timer: 2000,
+      // });
+    } else {
+      Swal.fire({
+        title: "Error",
+        icon: "error",
+        text: "Failed to update order item.",
+        timer: 2000,
+      });
+    }
+  },
+  error: () => {
+    Swal.fire({
+      title: "Error",
+      icon: "error",
+      text: "An error occurred while updating the order item.",
+      timer: 2000,
+    });
+  }
+});
+}
+
+
+
         function viewImage(event) {
           document.getElementById("product_img").src = URL.createObjectURL(
             event.target.files[0]

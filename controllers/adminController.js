@@ -30,7 +30,7 @@ const loadCategory = async (req, res) => {
 };
 const loadaddCategory = async (req, res) => {
   try {
-    res.render("addCategory");
+    res.render("addCategory",{message:''});
   } catch (error) {
     console.log(error.message);
   }
@@ -41,6 +41,13 @@ const insertCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
 
+    const alreadyExist=await CategoryDB({name:name})
+
+    if(alreadyExist){
+      res.render("addCategory", { message: "Category already Exist !!!" });
+    }else{
+
+      
     const categoryData = new CategoryDB({
       name: name,
       description: description,
@@ -53,6 +60,8 @@ const insertCategory = async (req, res) => {
     } else {
       res.render("addCategory", { message: "something wrong!!" });
     }
+    }
+
   } catch (error) {
     console.log(error.message);
   }
@@ -63,7 +72,7 @@ const loadeditCategory = async (req, res) => {
   try {
     const name = req.query.name;
     const catData = await CategoryDB.findOne({ name: name });
-    res.render("editCategory", { catData });
+    res.render("editCategory", { catData});
   } catch (error) {
     console.log(error.message);
   }
@@ -76,15 +85,18 @@ const editCategory = async (req, res) => {
 
     const { name, description } = req.body;
 
-    await CategoryDB.updateOne(
-      { name: qname },
-      { $set: { name: name, description: description } }
-    );
-    res.redirect("/admin/category");
+      await CategoryDB.updateOne(
+        { name: qname },
+        { $set: { name: name, description: description } }
+      );
+      res.redirect("/admin/category");
+    
   } catch (error) {
     console.log(error.message);
   }
 };
+
+
 // LOAD LOGIN PAGE
 const loadLogin = async (req, res) => {
   try {
@@ -167,8 +179,7 @@ const adminLogout = async (req, res) => {
 
 const loadOrder = async (req, res) => {
   try {
-    const order = await orderDB.find().populate("products.product_Id");
-
+    const order = await orderDB.find().populate("products.product_Id")
     res.render("Admin_Order", { order });
   } catch (err) {
     console.log(err.message);
