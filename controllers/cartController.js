@@ -22,7 +22,9 @@ const loadCheckOut = async (req, res) => {
   try {
     const userId = req.session.user_id;
     const address = await AddressDB.findOne({ user: userId });
-    res.render("checkout",{address});
+    const cartproduct=await cart.findOne({userId: userId})
+  
+    res.render("checkout",{address,cartproduct});
   } catch (error) {
     console.log(error.message);
   }
@@ -186,4 +188,19 @@ const changes = async (req, res) => {
   }
 };
 
-module.exports = { addtoCart, loadCart, deletecartitem, changes,loadCheckOut };
+
+const loadProceed = async (req, res) => {
+  try {
+      const userid = req.session.userid;
+      const products = await cart.findOne({ userId: userid }).populate(
+          "items.product_Id"
+      );
+      const dataAddress = await AddressDB.findOne({ user: userid })
+
+      res.render('Proceed', { products, dataAddress })
+
+  } catch (err) {
+      console.log(err.message);
+  }
+}
+module.exports = { addtoCart, loadCart, deletecartitem, changes,loadCheckOut ,loadProceed};

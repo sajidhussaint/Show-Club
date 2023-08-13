@@ -67,7 +67,7 @@
             display: block;
             width: 40px;
             height: 2px;
-            background-color: #ff6600;
+            background-color: #F6511D;
             margin-top: 10px;
         }
 
@@ -107,14 +107,14 @@
         }
 
         .btn-primary {
-            background-color: #ff6600;
-            border-color: #ff6600;
+            background-color: #F6511D;
+            border-color: #F6511D;
             transition: background-color 0.3s ease-in-out;
         }
 
         .btn-primary:hover {
-            background-color: #cc5500;
-            border-color: #cc5500;
+            background-color: #F6511D;
+            border-color: #F6511D;
         }
 
         .card-body p {
@@ -289,7 +289,7 @@
                                </div>
                     </div>
 
-                    <div class="card mb-4" id="orderDetails" style="display: none">
+                    <div class="card mb-4" id="orderDetails" style="display: flex">
                         <div class="card-body">
                             <h5 class="card-title">Order Details</h5>
                             <hr />
@@ -307,13 +307,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr class="cart-item">
+                                            <tr class="cart-item ">
                                                 <td class="product_cart_item">
-                                                    <div class="product_cartitem_pic">
-                                                        <img src="/admin_assets/img/<%=products.product_Id.image[0]%>"
+                                                    <div class="product_cartitem_pic align-middle">
+                                                        <img src="/admin/IMAGES_DB/<%=products.product_Id.image[0]%>"
                                                             alt="Product Image">
                                                     </div>
-                                                    <div class="product_cartitem_text">
+                                                    <div class="product_cartitem_text align-middle">
                                                         <h6> <%=products.product_Id.name%></h6>
                                                         <h5> ₹<%=products.product_Id.price%></h5>
                                                     </div>
@@ -322,8 +322,8 @@
                                             <td class="align-middle">
                                               <%=products.quantity%>
                                             </td>
-                                                <td class="cart__price">₹<%=products.total%></td>
-                                                <td><a href=""><%=products.status %></a></td>
+                                                <td class="cart__price align-middle">₹<%=products.total%></td>
+                                                <td class="align-middle"><a href=""><%=products.status %></a></td>
                                                 <% })
                                                   } %>
                                         </tbody>
@@ -332,6 +332,13 @@
                             </div>
                         </div>
                     </div>
+
+
+
+
+
+                    
+
                 </div>
             </div>
         </div>

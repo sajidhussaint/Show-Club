@@ -58,7 +58,7 @@ const addAddress = async (req, res) => {
       
           const Adata = await data.save();
     }
-
+res.redirect('/checkout')
     
   } catch (error) {
     console.log(error.message);

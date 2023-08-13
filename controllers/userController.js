@@ -8,6 +8,7 @@ const randomstring = require("randomstring");
 const cart = require("../model/cartModel");
 const mongoose =require('mongoose')
 const AddressDB = require("../model/addressModel");
+const orderDB=require("../model/orderModel")
 
 dotenv.config();
 
@@ -414,8 +415,11 @@ const resend = async (req, res) => {
 //profile page
 const loadProfile = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.session.user_id });
-    res.render("profile", { user, dataAddress: null, order: null });
+    const userId=req.session.user_id
+    const user = await User.findOne({ _id:userId })
+    const dataAddress=await AddressDB.findOne({user:userId})
+    const order=await orderDB.findOne({user:userId}).populate('products.product_Id')
+    res.render("profile", { user, dataAddress, order });
   } catch (error) {
     console.log(error.message);
   }

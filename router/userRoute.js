@@ -8,6 +8,7 @@ const userController = require('../controllers/userController')
 const productController = require('../controllers/productController') 
 const cartController = require('../controllers/cartController') 
 const addressController = require('../controllers/addressController') 
+const orderController = require('../controllers/orderController') 
 
 user_Route.set("views", "./views/user");
 
@@ -63,6 +64,12 @@ user_Route.post('/changes',cartController.changes)
 
 //adderess
 user_Route.post('/checkout',addressController.addAddress)
+
+
+// order
+user_Route.post('/orderPlace',orderController.proceed)
+user_Route.get('/Proceed',cartController.loadProceed)
+user_Route.get('/order_Placed',orderController.loadOrderPlaced)
 
 
 
