@@ -1,43 +1,6 @@
 <%- include('./header') %>
 
-<script>
-	function validateForm() {
-		var checkbox = document.getElementById('acceptCheckbox');
 
-		if (!checkbox.checked) {
-			alert("Please read and accept the terms and conditions.");
-			return false;
-		}
-		return true;
-	}
-
-
-	function placeOrder() {
-
-    const address = document.querySelector('input[name = "selectedAddress"]:checked').value
-     const payment = document.querySelector('input[name = "payment"]:checked').value
-     const total = document.getElementById('grandTotal').value
-	 
-
-
-$.ajax({
-url : "/orderPlace",
-method : 'post',
-data : {
-	payment,
-	address,
-	total
-},
-success : (response) => {
-	if(response.success) {
-	   window.location = '/order_Placed'
-	}
-}
-})
-}
-
-
-</script>
 <style>
 	.addressBlocks-base-remove,
         .addressBlocks-base-edit {
@@ -76,7 +39,7 @@ success : (response) => {
 					<div class="col-lg-8">
 
 						<%if(address){%>
-							<form  class=" colorlib-form"style=" padding: 50px;" onsubmit="return validateForm()" >
+							<form  class=" colorlib-form"style=" padding: 50px;"  >
 								<h3 class="">Address Deatils </h3>
 								
 								<div class="row" style=" display: flex; justify-content:flex-start;">
@@ -257,15 +220,32 @@ success : (response) => {
 							<div class="col-md-12">
 								<div class="cart-detail">
 									<h2>Cart Total</h2>
-									<ul>
-										<li>
-											<span>Subtotal</span> <span>₹<%= cartproduct.grandTotal%></span>
+									<% if (cartproduct) { %>
+
+										<ul>
+											<li>
+												<span>Subtotal</span> <span>₹<%= cartproduct.grandTotal%></span>
+										
+											</li>
+											<li><span>Shipping</span> <span>₹0</span></li>
+											<li><span>Order Total</span> <span>₹<%= cartproduct.grandTotal%></span></li>
+											<input id="grandTotal" name="grandTotal" type="hidden" value="<%= cartproduct.grandTotal %>">
+										</ul>
+																						   
+									  <% } else { %>
+																						  
+										<ul>
+											<li>
+												<span>Subtotal</span> <span>₹<%= order.totalAmount%></span>
+										
+											</li>
+											<li><span>Shipping</span> <span>₹0</span></li>
+											<li><span>Order Total</span> <span>₹<%= order.totalAmount%></span></li>
+											<input id="grandTotal" name="grandTotal" type="hidden" value="<%= order.totalAmount%>">
+										</ul>
+																						  
+									<% } %>
 									
-										</li>
-										<li><span>Shipping</span> <span>₹0</span></li>
-										<li><span>Order Total</span> <span>₹<%= cartproduct.grandTotal%></span></li>
-										<input id="grandTotal" name="grandTotal" type="hidden" value="<%= cartproduct.grandTotal %>">
-									</ul>
 								</div>
 						   </div>
 
@@ -288,12 +268,7 @@ success : (response) => {
 											</div>
 										</div>
 									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="checkbox">
-											   <label><input type="checkbox" value="accept" id="acceptCheckbox"> I have read and accept the terms and conditions</label>
-											</div>
-										</div>
+									
 										<br>
 										<div class="row">
 											<% if (address) { %>
@@ -359,5 +334,34 @@ const pin=document.getElementById('zippostalcode')
 			}
 			
         })
+		</script>
+		<script>
+		
+		
+			function placeOrder() {
+		
+			const address = document.querySelector('input[name = "selectedAddress"]:checked').value
+			 const payment = document.querySelector('input[name = "payment"]:checked').value
+			 const total = document.getElementById('grandTotal').value
+			 
+		
+		
+		$.ajax({
+		url : "/orderPlace",
+		method : 'post',
+		data : {
+			payment,
+			address,
+			total
+		},
+		success : (response) => {
+			if(response.success) {
+			   window.location = '/order_Placed'
+			}
+		}
+		})
+		}
+		
+		
 		</script>
 		<%- include('./footer') %>

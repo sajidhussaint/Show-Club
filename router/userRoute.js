@@ -20,7 +20,7 @@ user_Route.get("/about",userController.loadAbout);
 user_Route.get("/contact",userController.loadContact);
 user_Route.get("/add-to-wishlist",auth.isLogin,userController.loadWishList);
 
-user_Route.get("/checkout",cartController.loadCheckOut);//auth.isLogin,
+
 
 user_Route.get("/order-complete",auth.isLogin,userController.loadOrderComplete);
 user_Route.get("/product-detail",productController.loadProductDetail);
@@ -63,14 +63,18 @@ user_Route.post('/changes',cartController.changes)
 
 
 //adderess
+user_Route.get("/checkout",cartController.loadCheckOut);//auth.isLogin,
 user_Route.post('/checkout',addressController.addAddress)
 
 
 // order
 user_Route.post('/orderPlace',orderController.proceed)
-user_Route.get('/Proceed',cartController.loadProceed)
 user_Route.get('/order_Placed',orderController.loadOrderPlaced)
 
+user_Route.get('/test',orderController.test)
+
+
+// user_Route.get('/Proceed',cartController.loadProceed)
 
 
 

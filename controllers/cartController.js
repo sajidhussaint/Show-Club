@@ -2,7 +2,15 @@ const cart = require("../model/cartModel");
 const Product = require("../model/productModel");
 const User = require("../model/userModel");
 const AddressDB = require("../model/addressModel");
+const orderDB = require("../model/addressModel");
 const mongoose = require("mongoose");
+ 
+
+
+
+
+
+
 
 const loadCart = async (req, res) => {
   try {
@@ -23,8 +31,10 @@ const loadCheckOut = async (req, res) => {
     const userId = req.session.user_id;
     const address = await AddressDB.findOne({ user: userId });
     const cartproduct=await cart.findOne({userId: userId})
+    const order = await orderDB.findOne({ user: userId})
+    .sort({ _id: -1 })
   
-    res.render("checkout",{address,cartproduct});
+    res.render("checkout",{address,cartproduct,order});
   } catch (error) {
     console.log(error.message);
   }

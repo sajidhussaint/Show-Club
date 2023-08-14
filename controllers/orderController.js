@@ -5,12 +5,28 @@ const AddressDB = require("../model/addressModel");
 const orderDB = require("../model/orderModel");
 const mongoose = require("mongoose");
 
+const test=async(req,res)=>{
+    try {
+        
+        const datas=await orderDB.find({})
+
+
+        res.json(datas[1].products[0].total)
+    } catch (error) {
+        console.log(error.message)
+    }
+  }
+
+
+
 const proceed=async(req,res)=>{
     try {
         const userid=req.session.user_id
         const address=req.body.address
         const payment=req.body.payment
         const grandTotal=req.body.total
+
+        console.log('this is show club',userid,address,payment,grandTotal ,'finished.........');
 
         const user=await UserDB.findOne({ _id : userid })
         const cartData = await cartDB.findOne({ userId : userid })
@@ -42,6 +58,7 @@ const proceed=async(req,res)=>{
             }})
           }
           await cartDB.findOneAndDelete({userId:userid})
+          console.log('json running');
           res.json({ success : true })
 
     } catch (error) {
@@ -51,10 +68,11 @@ const proceed=async(req,res)=>{
 
 const loadOrderPlaced=async(req,res)=>{
     try {
-          const id=req.session.user_id
-         const order=await orderDB.findOne({user:id}).populate(
-           "products.product_Id"
-         );
+        const id=req.session.user_id
+        const order = await orderDB.findOne({ user: id })
+        .sort({ _id: -1 })
+        .populate("products.product_Id");
+        console.log('running orderplaced');
    
         res.render('orderPLaced',{order})
         
@@ -65,4 +83,4 @@ const loadOrderPlaced=async(req,res)=>{
 
 
 
-module.exports={loadOrderPlaced,proceed}
+module.exports={loadOrderPlaced,proceed,test}
