@@ -20,7 +20,7 @@
                                             <td><%= user.mob %></td>
                                             <td><%= user.email %></td>
                                             <td><% if (user.is_verified==1&&user.is_blocked==false) { %>
-                                                <span class="badge rounded-pill alert-success">Unblocked</span>
+                                                <span class="badge rounded-pill alert-success">Active</span>
                                                 
                                             <% } else { %>
                                                <span class="badge rounded-pill alert-danger">
@@ -43,7 +43,7 @@
                                                         
                                                     <% } else { %>
                                                        
-                                                        Unblock
+                                                        Active
                                                        
                                                     <% } %>
 

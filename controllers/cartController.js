@@ -44,6 +44,7 @@ const loadCheckOut = async (req, res) => {
 // abd jun
 const addtoCart = async (req, res) => {
   try {
+    console.log('cart is working');
     const userid = req.session.user_id;
     const quantity = req.body.product_quantity;
     const product_Id = req.body.product_Id;

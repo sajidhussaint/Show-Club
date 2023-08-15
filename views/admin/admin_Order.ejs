@@ -13,19 +13,19 @@
     <h2 class="mb-4">Order List</h2>
     <% if (order && order.length > 0) { %>
       <% for (let i = 0; i < order.length; i++) { %>
-        <p><strong>User Name:</strong> <%= order[i].userName %>|<strong>Date:</strong><%= order[i].date.toLocaleString() %></p>
+        <p><strong style="font-weight: 800 ; color: black;">User Name:</strong> <%= order[i].userName %> | <strong style="font-weight: 800 ; color: black;">Date:</strong><%= order[i].date.toLocaleString() %></p>
         <% if (order[i] && order[i].products && order[i].products.length > 0) { %>
           <div class="row" >
             <div  class="col-md-12 col-lg-12 col-sm-12 " >
               <table class="table table-hover"  >
                 <thead class="" style="background-color: #f14d1a ; color: white; border-radius: 10px;" >
                   <tr>
-                    <th>num</th>
+                    <th>No</th>
                     <th>Product Name</th>
                     <th>Status</th>
                     <th>Quantity</th>
-                    <th>Price per Unit</th>
-                    <th>Total Price</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
                     <th>Action</th> <!-- Add a new column for the cancel button -->
                   </tr>
                 </thead>
@@ -40,7 +40,7 @@
                           <option value="Pending"  <% if (order[i].products[index].status == 'Pending') { %> selected <% } %>>Pending</option>
                           <option value="Processing" <% if (order[i].products[index].status == 'Processing') { %> selected <% } %>>Processing</option>
                           <option value="delivered" <% if (order[i].products[index].status == 'delivered') { %> selected <% } %>>delivered</option>
-                          <option value="canceled" <% if (order[i].products[index].status == 'canceled') { %> selected <% } %>>canceled</option>
+                          <option style="background-color: rgb(253, 158, 158);" value="canceled" <% if (order[i].products[index].status == 'canceled') { %> selected <% } %>>canceled</option>
                         </select>
                       </td>
                       <td><%= order[i].products[index].quantity %></td>
@@ -98,6 +98,12 @@
   success:(response) => {
         if (response.success) {
           $("#reloadData").load("/admin/Orders #reloadData");
+          Swal.fire({
+        title: "Canceled",
+        icon: "success",
+        text: "Order item has been updated.",
+        timer: 2000,
+      });
         }
       }
 })
