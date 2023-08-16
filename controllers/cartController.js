@@ -3,6 +3,9 @@ const Product = require("../model/productModel");
 const User = require("../model/userModel");
 const AddressDB = require("../model/addressModel");
 const orderDB = require("../model/addressModel");
+const couponDB = require("../model/couponModel");
+const couponHelper = require("../helpers/couponHelper");
+
 const mongoose = require("mongoose");
  
 
@@ -14,7 +17,11 @@ const loadCart = async (req, res) => {
     const products = await cart
       .findOne({ userId: userId })
       .populate("product.product_Id");
-    res.render("cart", { activePage: "cart", products,product });
+    const cartCoupons=await cart.findOneAndUpdate({userId:userId},{ $unset: { coupon: 1 }})  
+
+    const availableCoupons = await couponDB.find({startingDate : { $lte : new Date() }, expiryDate : { $gte : new Date() } })
+
+    res.render("cart", { activePage: "cart", products,product,availableCoupons});
   } catch (error) {
     console.log(error.message);
   }
@@ -29,8 +36,15 @@ const loadCheckOut = async (req, res) => {
     const cartproduct=await cart.findOne({userId: userId})
     const order = await orderDB.findOne({ user: userId})
     .sort({ _id: -1 })
+
+    const cartData= await cart.findOne({ userId : userId })
+
+    if( cartData && cartData.coupon) {
+     var discounted = await couponHelper.discountPrice( cartData.coupon, cartData.grandTotal )
+  }
+  console.log(discounted);
   
-    res.render("checkout",{address,cartproduct,order});
+    res.render("checkout",{address,cartproduct,order,discounted});
   } catch (error) {
     console.log(error.message);
   }
@@ -123,7 +137,8 @@ const deletecartitem = async (req, res) => {
       { userId: userid },
       {
         $pull: { product: { product_Id: id } }, // Remove the product from the product array
-        $inc: { grandTotal: -total ,count: -'1' } // Decrement the grandTotal by 
+        $inc: { grandTotal: -total ,count: -'1' }, // Decrement the grandTotal by 
+        $set:{coupon:null}
     }
     );
     res.redirect("/cart");
@@ -155,6 +170,7 @@ const changes = async (req, res) => {
               "product.$.total": product.price,
               grandTotal: product.price,
             },
+            $set:{coupon:null}
           }
         );
 
@@ -175,6 +191,7 @@ const changes = async (req, res) => {
               "product.$.total": -product.price,
               grandTotal: -product.price,
             },
+            $set:{coupon:null}
           }
         );
 

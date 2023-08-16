@@ -10,6 +10,7 @@ const productController = require('../controllers/productController')
 const cartController = require('../controllers/cartController') 
 const addressController = require('../controllers/addressController') 
 const orderController = require('../controllers/orderController') 
+const couponController = require('../controllers/couponController') 
 
 user_Route.set("views", "./views/user");
 
@@ -99,6 +100,9 @@ user_Route.get('/test',orderController.test)
 
 //search
 user_Route.get('/search',userController.loadsearch)
+
+
+user_Route.post("/applyCoupon",couponController.applyCoupon);
 
 
 

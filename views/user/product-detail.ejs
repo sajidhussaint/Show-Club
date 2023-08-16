@@ -3,76 +3,78 @@
 <script src="/js/jquery-zoom/jquery.ez-plus.js"></script>
 <script src="/js/jquery-zoom/jquery.mousewheel.js"></script>
 <style>
-.btn-orange{
-		background-color: orangered;
-	}
-.product-image-container {
+  .btn-orange {
+    background-color: orangered;
+  }
+
+  .product-image-container {
     position: relative;
     overflow: hidden;
-    
-    
-}
 
-#main-image {
+
+  }
+
+  #main-image {
     width: 100%;
     height: 100%;
     transition: transform 0.3s ease;
-}
+  }
 
-.zoomed-image {
+  .zoomed-image {
     position: absolute;
     top: 0;
     left: 0;
     opacity: 0;
     transform: scale(1.5);
     transition: opacity 0.3s ease;
-}
-
+  }
 </style>
-		<div class="breadcrumbs">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						<p class="bread"><span><a href="/">Home</a></span> / <span>Product Details</span></p>
-					</div>
-				</div>
-			</div>
-		</div>
+<div class="breadcrumbs">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <p class="bread"><span><a href="/">Home</a></span> / <span>Product Details</span></p>
+      </div>
+    </div>
+  </div>
+</div>
 
 
-		<div class="colorlib-product">
-			<div class="container">
-				<div class="row row-pb-lg product-detail-wrap">
-					<div class="col-sm-8">
-						<div class="owl-carousel" >
-						<% product.image.forEach(function(image) { %>
-								<div class="item">
-									<div class="product-entry border product-image-container product__details__pic__item" ><!--   id="img-container" -->
-											<img  class="zoom-img-n" src="/admin/IMAGES_DB/<%=image%>" class="img-fluid" alt="Free html5 bootstrap 4 template"><!--id="main-image"-->
-										
-									</div>
-									
-								</div>
-								<% }); %>  
+<div class="colorlib-product">
+  <div class="container">
+    <div class="row row-pb-lg product-detail-wrap">
+      <div class="col-sm-8">
+        <div class="owl-carousel">
+          <% product.image.forEach(function(image) { %>
+          <div class="item">
+            <div class="product-entry border product-image-container product__details__pic__item">
+              <!--   id="img-container" -->
+              <img class="zoom-img-n" src="/admin/IMAGES_DB/<%=image%>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+              <!--id="main-image"-->
+
+            </div>
+
+          </div>
+          <% }); %>
 
 
-							<div class="item" >
-								<div class="product-entry border product-image-container">
-									
-										<img  class="zoom-img-n" src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
-									
-								</div>
-							</div>
-							
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<div class="product-desc">
-							<h3><%=product.name %></h3>
-							<p class="price">
-								<span>₹<%=product.price %></span> 
-								<span>stock(<%=product.quantity %>) </span>
-								<!-- <span class="rate">
+          <div class="item">
+            <div class="product-entry border product-image-container">
+
+              <img class="zoom-img-n" src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="product-desc">
+          <h3><%=product.name %></h3>
+          <p class="price">
+            <span>₹<%=product.price %></span>
+            <span>stock(<%=product.quantity %>) </span>
+            <!-- <span class="rate">
 									<i class="icon-star-full"></i>
 									<i class="icon-star-full"></i>
 									<i class="icon-star-full"></i>
@@ -80,9 +82,9 @@
 									<i class="icon-star-half"></i>
 									(74 Rating)
 								</span> -->
-							</p>
-							<p><%= product.description%></p>
-							<!-- <div class="size-wrap">
+          </p>
+          <p><%= product.description%></p>
+          <!-- <div class="size-wrap">
 								<div class="block-26 mb-2">
 									<h4>Size</h4>
 				               <ul>
@@ -103,8 +105,8 @@
 				                  <li><a href="#">14</a></li>
 				               </ul>
 				            </div> -->
-							</div>
-                     <!-- <div class="input-group mb-4">
+        </div>
+        <!-- <div class="input-group mb-4">
                      	<span class="input-group-btn">
                         	<button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
                            <i class="icon-minus2"></i>
@@ -117,32 +119,32 @@
                          </button>
                      	</span>
                   	</div> -->
-                  	<div class="row text-center">
-	                  	<div class="col-sm-12 text-center p-5">
-							
-								<input type="hidden" id="custId" name="product" value="<%=product.id%>">
-								
-									
-									<%if(product.quantity> 0){%>
+        <div class="row text-center">
+          <div class="col-sm-12 text-center p-5">
 
-										<% if (productavaliable != -1) { %>
+            <input type="hidden" id="custId" name="product" value="<%=product.id%>">
 
-											
-											<a href="/cart" class="btn btn-primary btn-addtocart text-center" style="color: white;" ><i class="icon-shopping-cart"></i>Go to Cart</a>
-																							   
-										  <% } else { %>
-																							  											  
-											<a class="btn btn-primary btn-addtocart text-center " style="color: white; background-color: #F6511D;" onclick="addToCart('<%=product._id%>')"><i class="icon-shopping-cart"></i>Add to Cart</a>
-										<% } %>
 
-										
-										
-										
-										
-										<%
+            <%if(product.quantity> 0){%>
+
+            <% if (productavaliable != -1) { %>
+
+
+            <a href="/cart" class="btn btn-primary btn-addtocart text-center" style="color: white;"><i class="icon-shopping-cart"></i>Go to Cart</a>
+
+            <% } else { %>
+
+            <a class="btn btn-primary btn-addtocart text-center " style="color: white; background-color: #F6511D;" onclick="addToCart('<%=product._id%>')"><i class="icon-shopping-cart"></i>Add to Cart</a>
+            <% } %>
+
+
+
+
+
+            <%
 									}else{%>
-										<a style="color: white;" class="btn btn-danger mr-2"> out of Stock!!</a>
-									<%}%>
+            <a style="color: white;" class="btn btn-danger mr-2"> out of Stock!!</a>
+            <%}%>
 						
 							</div>
 							</div>

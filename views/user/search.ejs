@@ -4,26 +4,36 @@
 			<div class="container">
 				<div class="row">
 					<div class="col">
-						<p class="bread"><span><a href="/">Home</a></span> / <span>search</span></p>
+						<p class="bread"><span><a href="/">Home</a></span> / <span><%=searchItem%></span></p>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		
-
-		
-
 		<div class="colorlib-product">
-            <h1 class="text-center">search name</h1>
-			<div class="container">
+			<div class="container "  >
+				<div class="d-flex" >
+
+					<% if(products&&products.length>0){ %>
+						<% if(searchItem!=''){ %>
+					<h5><%=searchItem%></h5><h5 style="color: grey;">-
+						
+						<% }else{ %>
+							<h5>All</h5><h5 style="color: grey;">-
+                        <% } %>
+						 <%= products.length%>
+
+						 items</h5>
+						 <% }%>
+						 
+				</div>
 				<div class="row">
 					<div class="col-lg-3 col-xl-3">
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="side border mb-1">
-									<!-- <h3>Brand</h3>
-									<ul>
+									 <h3>FILTERS</h3>
+									<!--<ul>
 										<li><a href="#">Nike</a></li>
 										<li><a href="#">Adidas</a></li>
 										<li><a href="#">Merrel</a></li>
@@ -68,11 +78,20 @@
 								<div class="side border mb-1">
 									<h3>Category</h3>
 									<ul>
-										<li><a href="#">Slip Ons</a></li>
-										<li><a href="#">Boots</a></li>
-										<li><a href="#">Sandals</a></li>
-										<li><a href="#">Lace Ups</a></li>
-										<li><a href="#">Oxfords</a></li>
+										<% category.forEach(function(value) { %>
+											<li><a href="/search?category=<%=value.name %>"><%=value.name %></a></li>
+											<% }); %>  
+									</ul>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="side border mb-1">
+									<h3>PRICE</h3>
+									<ul>
+										<li><a href="/search?price=1000">Rs.500 to Rs.1000</a></li>
+										<li><a href="/search?price=2000">Rs.1000 to Rs.2000</a></li>
+										<li><a href="/search?price=3000">Rs.2000 to Rs.3000</a></li>
+										<li><a href="/search?price=4000">Rs.3000 to Rs.4000</a></li>	
 									</ul>
 								</div>
 							</div>
@@ -81,34 +100,72 @@
 					</div>
 					<div class="col-lg-9 col-xl-9">
 						<div class="row row-pb-md">
-							<% product.forEach(function(product,index) { %>
-								<div class="col-lg-3 mb-4 text-center main-cont">
-								  <div class="product-entry border">
-									<a href="/product-detail?productid=<%=product._id %>" class="prod-img">
-									  <img src="/admin/IMAGES_DB/<%= product.image[0] %>"
-										class="img-fluid"
-										alt="Free html5 bootstrap 4 template"
-									  />
-									</a>
-									<div class="desc">
-									  <h2><a href="#"><%=product.name %></a></h2>
-									  <span class="price">₹<%=product.price %></span>
+							<% if(products){ %>
+								<% products.forEach(function(products,index) { %>
+									<div class="col-lg-3 mb-4 text-center main-cont">
+									  <div class="product-entry border">
+										<a href="/product-detail?productid=<%=products._id %>" class="prod-img">
+										  <img src="/admin/IMAGES_DB/<%= products.image[0] %>"
+											class="img-fluid"
+											alt="Free html5 bootstrap 4 template"
+										  />
+										</a>
+										<div class="desc">
+										  <h2><a href="#"><%=products.name %></a></h2>
+										  <span class="price">₹<%=products.price %></span>
+										</div>
+									  </div>
 									</div>
-								  </div>
-								</div>
-								<% }); %>
+									<% }); %>
+								<% } %>
+							<% if(productCategory){ %>
+								<% productCategory.forEach(function(product,index) { %>
+									<div class="col-lg-3 mb-4 text-center main-cont">
+									  <div class="product-entry border">
+										<a href="/product-detail?productid=<%=product._id %>" class="prod-img">
+										  <img src="/admin/IMAGES_DB/<%= product.image[0] %>"
+											class="img-fluid"
+											alt="Free html5 bootstrap 4 template"
+										  />
+										</a>
+										<div class="desc">
+										  <h2><a href="#"><%=product.name %></a></h2>
+										  <span class="price">₹<%=product.price %></span>
+										</div>
+									  </div>
+									</div>
+									<% }); %>
+								<% } %>
+								<% if(priceData){ %>
+									<% priceData.forEach(function(product,index) { %>
+										<div class="col-lg-3 mb-4 text-center main-cont">
+										<div class="product-entry border">
+											<a href="/product-detail?productid=<%=product._id %>" class="prod-img">
+											<img src="/admin/IMAGES_DB/<%= product.image[0] %>"
+												class="img-fluid"
+												alt="Free html5 bootstrap 4 template"
+											/>
+											</a>
+											<div class="desc">
+											<h2><a href="#"><%=product.name %></a></h2>
+											<span class="price">₹<%=product.price %></span>
+											</div>
+										</div>
+										</div>
+										<% }); %>
+							<% } %>
 						</div>
 						<div class="row">
 							<div class="col-md-12 text-center">
 								<div class="block-27">
 				               <ul>
-					               <li><a href="#"><i class="ion-ios-arrow-back"></i></a></li>
+								
+					               <!-- <li><a href="#"><i class="ion-ios-arrow-back"></i></a></li>
 				                  <li class="active"><span>1</span></li>
-				                  <li><a href="#">2</a></li>
 				                  <li><a href="#">3</a></li>
 				                  <li><a href="#">4</a></li>
 				                  <li><a href="#">5</a></li>
-				                  <li><a href="#"><i class="ion-ios-arrow-forward"></i></a></li>
+				                  <li><a href="#"><i class="ion-ios-arrow-forward"></i></a></li> -->
 				               </ul>
 				            </div>
 							</div>
@@ -144,5 +201,9 @@
 				</div>
 			</div>
 		</div>
+		<script>
+
+
+		</script>
 
 		<%- include('./footer') %>

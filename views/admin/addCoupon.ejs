@@ -1,0 +1,78 @@
+<%- include('./layouts/header') %>
+<h4 style="padding: 50px">ADD COUPON</h4>
+<div class="container-edit" style="padding: 0 50px">
+  <form method="POST" action="/admin/addCoupon">
+    <label for="productName">COUPON CODE:</label>
+    <input type="text" id="code" name="code" style="text-transform: uppercase" required /><br />
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" rows="3"></textarea><br />
+
+    <label for="discount">Discount:</label>
+    <input type="text" id="discount" name="discount" required /><br />
+    <label for="discount">Minimum Purchase:</label>
+    <input type="text" id="min" name="min" required /><br />
+
+    <label for="start">Start date:</label>
+
+    <input type="date" id="start" name="start" value="0" min="0" max="" />
+
+    <label for="start">Expire date:</label>
+
+    <input type="date" id="end" name="end" value="" min="" max="" />
+    <label style="color: red"> message</label>
+    <input type="submit" value="Save" />
+  </form>
+</div>
+
+<style>
+  .container-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+  }
+
+  h3 {
+    margin: 0;
+    margin-right: 15px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    margin-bottom: 5px;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200%;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input[type="submit"] {
+    padding: 10px;
+    background-color: #21ee0e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 50%;
+  }
+
+  input[type="submit"]:hover {
+    background-color: #106315;
+  }
+</style>
+<%- include('./layouts/footer') %>

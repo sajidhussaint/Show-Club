@@ -2,109 +2,99 @@
 
 
 <style>
-	.addressBlocks-base-remove,
-        .addressBlocks-base-edit {
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-        }
-        .addressBlocks-base-remove {
-            background-color: red;
-            color: white;
-            margin-right: 10px;
-        }
-        .addressBlocks-base-edit {
-            background-color: #F6511D;
-            color: white;
-        }
+  .addressBlocks-base-remove,
+  .addressBlocks-base-edit {
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+
+  .addressBlocks-base-remove {
+    background-color: red;
+    color: white;
+    margin-right: 10px;
+  }
+
+  .addressBlocks-base-edit {
+    background-color: #F6511D;
+    color: white;
+  }
 </style>
 
-		<div class="breadcrumbs">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						<p class="bread"><span><a href="index.html">Home</a></span> / <span>Checkout</span></p>
-					</div>
-				</div>
-			</div>
-		</div>
+<div class="breadcrumbs">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <p class="bread"><span><a href="index.html">Home</a></span> / <span>Checkout</span></p>
+      </div>
+    </div>
+  </div>
+</div>
 
 
-		<div class="colorlib-product">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-8">
+<div class="colorlib-product">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
 
-						<%if(address){%>
-							<div class="colorlib-form">
-								<h3 class="">Address Deatils </h3>
-								<div class="d-flex justify-content-end">
-									<a href="/addAddress" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add
-										New Address</a>
-								</div>
-								
-								<div class="row" style=" display: flex; justify-content:flex-start;">
-								 <div class="col-md-12">
-									<div class="form-group">
-										
-									   <div class="form-field">
-										   
-										  
-									   </div>
-									</div>
-								 </div>
-	  
-									  <div class="col-md-12">
-										  <div class="form-group">
-										  </div>
-									  </div>
-									 
-	  
-									
-	  
-								
-							  
-								 
-								 
-	  
-									  <% address.address.forEach(function(address,i) { %>
-										 <!-- cardearea -->
-								  
-										 <div class="col-md-4"  margin-bottom:25px;">
-											<div class="form-group">
-												<input type="radio" id="selectedAddress" name="selectedAddress"
+        <%if(address){%>
+        <div class="colorlib-form">
+          <h3 class="">Address Deatils </h3>
+          <div class="d-flex justify-content-end">
+            <a href="/addAddress" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add
+              New Address</a>
+          </div>
 
-												<% if (i==0) { %>
+          <div class="row" style=" display: flex; justify-content:flex-start;">
+            <div class="col-md-12">
+              <div class="form-group">
 
-													checked="true" 
-													
-													<% } %>
-													
-							 name="selectedAddress" value=" <%= address.fname %> <%= address.sname %> , <%= address.housename %> , <%= address.city %> , <%= address.state %> , <%= address.district %> , <%= address.country %> " id="address<%= i %>" />
-							 <label >Address: <%=i+1 %></label>
-							</div>
-							
-						
-										</div>
-										<div class="col-md-8"  margin-bottom:25px;">
-											<div class="form-group">
-												<h6>Name: <%=address.fname %> <%=address.sname %></h6>
-												<h6>HouseName: <%=address.housename%> </h6>
-												<h6>City: <%=address.city%> </h6>
-												<h6>State: <%=address.state%></h6>
-												<h6>District: <%=address.district%></h6>
-												<h6>Country: <%=address.country%> </h6>
-												<h6>Email: <%=address.email%></h6>
-												<h6>Mobile: <%=address.mobile%></h6>
-												<h6>Pin code: <%=address.pin%></h6>
-												<input type="hidden" value="<%=address.email%>" id="addressEmail">
-												<input type="hidden" value="<%=address.mobile%>" id="addressMobile">
-												<br>
-												<!-- <div style="display: flex; gap: 10px;">
+                <div class="form-field">
+
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="form-group">
+              </div>
+            </div>
+
+
+
+
+
+            <% address.address.forEach(function(address,i) { %>
+            <!-- cardearea -->
+
+            <div class="col-md-4" margin-bottom:25px;">
+              <div class="form-group">
+                <input type="radio" id="selectedAddress" name="selectedAddress" <% if (i==0) { %> checked="true" <% } %> name="selectedAddress" value=" <%= address.fname %> <%= address.sname %> , <%= address.housename %> , <%= address.city %> , <%= address.state %> , <%= address.district %> , <%= address.country %> " id="address<%= i %>" />
+                <label>Address: <%=i+1 %></label>
+              </div>
+
+
+            </div>
+            <div class="col-md-8" margin-bottom:25px;">
+              <div class="form-group">
+                <h6>Name: <%=address.fname %> <%=address.sname %></h6>
+                <h6>HouseName: <%=address.housename%> </h6>
+                <h6>City: <%=address.city%> </h6>
+                <h6>State: <%=address.state%></h6>
+                <h6>District: <%=address.district%></h6>
+                <h6>Country: <%=address.country%> </h6>
+                <h6>Email: <%=address.email%></h6>
+                <h6>Mobile: <%=address.mobile%></h6>
+                <h6>Pin code: <%=address.pin%></h6>
+                <input type="hidden" value="<%=address.email%>" id="addressEmail">
+                <input type="hidden" value="<%=address.mobile%>" id="addressMobile">
+                <br>
+                <!-- <div style="display: flex; gap: 10px;">
 												  <button class="addressBlocks-base-edit" data-action="showModal">
 													  <i class="fas fa-edit"></i> Edit
 													</button>
@@ -112,239 +102,243 @@
 													  <i class="fas fa-trash-alt"></i> Remove
 													</button>
 												</div> -->
-												
-											</div>
-											<hr>
-										</div>
-									
-  
-										<!-- cardearea -->
-										<% }); %>  
-									 
-									</div>
-	  
-									  
-							 </div>
-						  
-						  </div>
-								
-						<%}else{%>
 
-							<form method="post" class="colorlib-form" action="/checkout">
-							
-								<h2>Billing Details</h2>
-								<div class="row">
-								 <div class="col-md-12">
-									<div class="form-group">
-										<label for="country">Select Country</label>
-									   <div class="form-field">
-										   <i class="icon icon-arrow-down3"></i>
-										  <select name="country" id="people" class="form-control" >
-												<option value="#">Select country</option>
-											  <option value="india" selected>india</option>
-											  <option value="#">japan</option>
-											 
-										  </select>
-									   </div>
-									</div>
-								 </div>
-	  
-									  <div class="col-md-6">
-										  <div class="form-group">
-											  <label for="fname">First Name</label>
-											  <input type="text" name="fname" id="fname" class="form-control" placeholder="Your firstname">
-										  </div>
-									  </div>
-									  <div class="col-md-6">
-										  <div class="form-group">
-											  <label for="lname">SName</label>
-											  <input type="text" id="sname"  name="sname" class="form-control" placeholder="Your Sname">
-										  </div>
-									  </div>
-	  
-									  <div class="col-md-12">
-										  
-								 </div>
-	  
-								 <div class="col-md-12">
-										  <div class="form-group">
-											  <label for="fname">Address</label>
-										  <input  name="housename" type="text" id="address" class="form-control" placeholder="Enter Your Address">
-									</div>
-								 </div>
-							  
-								 <div class="col-md-12">
-										  <div class="form-group">
-											  <label for="companyname">Town/City</label>
-										  <input  name="city" type="text" id="towncity" class="form-control" placeholder="Town or City">
-									</div>
-								 </div>
-								 <div class="col-md-12">
-										  <div class="form-group">
-											  <label for="companyname">District</label>
-										  <input  name="district" type="text" id="District" class="form-control" placeholder="District">
-									</div>
-								 </div>
-	  
-							  
-									  <div class="col-md-6">
-										  <div class="form-group">
-											  <label for="stateprovince">State/Province</label>
-											  <input  name="state" type="text" id="fname" class="form-control" placeholder="State Province">
-										  </div>
-									  </div>
-									  <div class="col-md-6">
-										  <div class="form-group">
-											  <label for="lname">Zip/Postal Code</label>
-											  <input  name="pin" type="text" id="zippostalcode" class="form-control" placeholder="Zip / Postal">
-										  </div>
-									  </div>
-								  
-									  <div class="col-md-6">
-										  <div class="form-group">
-											  <label for="email">E-mail Address</label>
-											  <input  name="email" type="text" id="email" class="form-control" placeholder="State Province">
-										  </div>
-									  </div>
-									  <div class="col-md-6">
-										  <div class="form-group">
-											  <label for="Phone">Phone Number</label>
-											  <input  name="mobile" type="text" id="zippostalcode" class="form-control" placeholder="">
-										  </div>
-									  </div>
-	  
-									  
-							 </div>
-						  
-						  </div>
-					<%	}%>
+              </div>
+              <hr>
+            </div>
 
-					
 
-					<div class="col-lg-4">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="cart-detail">
-									<h2>Cart Total</h2>
-									<% if (cartproduct) { %>
+            <!-- cardearea -->
+            <% }); %>
 
-										<ul>
-											<li>
-												<span>Subtotal</span> <span>₹<%= cartproduct.grandTotal%></span>
-										
-											</li>
-											<li><span>Shipping</span> <span>₹0</span></li>
-											<li><span>Order Total</span> <span>₹<%= cartproduct.grandTotal%></span></li>
-											<input id="grandTotal" name="grandTotal" type="hidden" value="<%= cartproduct.grandTotal %>">
-										</ul>
-																						   
-									  <% } else { %>
-																						  
-										<ul>
-											<li>
-												<span>Subtotal</span> <span>₹<%= order.totalAmount%></span>
-										
-											</li>
-											<li><span>Shipping</span> <span>₹0</span></li>
-											<li><span>Order Total</span> <span>₹<%= order.totalAmount%></span></li>
-											<input id="grandTotal" name="grandTotal" type="hidden" value="<%= order.totalAmount%>">
-										</ul>
-																						  
-									<% } %>
-									
-								</div>
-						   </div>
+          </div>
 
-						   <div class="w-100"></div>
 
-						   <div class="col-md-12">
-								<div class="cart-detail">
-									<h2>Payment Method</h2>
-									<!-- <div class="form-group">
+        </div>
+
+      </div>
+
+      <%}else{%>
+
+      <form method="post" class="colorlib-form" action="/checkout">
+
+        <h2>Billing Details</h2>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="country">Select Country</label>
+              <div class="form-field">
+                <i class="icon icon-arrow-down3"></i>
+                <select name="country" id="people" class="form-control">
+                  <option value="#">Select country</option>
+                  <option value="india" selected>india</option>
+                  <option value="#">japan</option>
+
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="fname">First Name</label>
+              <input type="text" name="fname" id="fname" class="form-control" placeholder="Your firstname">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="lname">SName</label>
+              <input type="text" id="sname" name="sname" class="form-control" placeholder="Your Sname">
+            </div>
+          </div>
+
+          <div class="col-md-12">
+
+          </div>
+
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="fname">Address</label>
+              <input name="housename" type="text" id="address" class="form-control" placeholder="Enter Your Address">
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="companyname">Town/City</label>
+              <input name="city" type="text" id="towncity" class="form-control" placeholder="Town or City">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="companyname">District</label>
+              <input name="district" type="text" id="District" class="form-control" placeholder="District">
+            </div>
+          </div>
+
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="stateprovince">State/Province</label>
+              <input name="state" type="text" id="fname" class="form-control" placeholder="State Province">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="lname">Zip/Postal Code</label>
+              <input name="pin" type="text" id="zippostalcode" class="form-control" placeholder="Zip / Postal">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="email">E-mail Address</label>
+              <input name="email" type="text" id="email" class="form-control" placeholder="State Province">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="Phone">Phone Number</label>
+              <input name="mobile" type="text" id="zippostalcode" class="form-control" placeholder="">
+            </div>
+          </div>
+
+
+        </div>
+
+    </div>
+    <%	}%>
+
+
+
+    <div class="col-lg-4">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="cart-detail">
+            <h2>Cart Total</h2>
+            <% if (cartproduct) { %>
+
+            <ul>
+              <li>
+                <span>Subtotal</span> <span>₹<%= cartproduct.grandTotal%></span>
+
+              </li>
+              <% if(cartproduct.coupon){ %>
+              <li><span>Discount</span> <span>-₹<%=discounted.discountAmount %></span></li>
+			  <li><span>Order Total</span> <span>₹<%= discounted.discountedTotal%></span></li>
+              <input id="grandTotal" name="grandTotal" type="hidden" value="<%= cartproduct.grandTotal %>">
+              <% }else{ %>
+				
+				<li><span>Discount</span> <span>₹0</span></li>
+				<li><span>Order Total</span> <span>₹<%= cartproduct.grandTotal%></span></li>
+              <input id="grandTotal" name="grandTotal" type="hidden" value="<%= cartproduct.grandTotal %>">
+
+              <% } %>
+            </ul>
+
+            <% } else { %>
+
+            <ul>
+              <li>
+                <span>Subtotal</span> <span>₹<%= order.totalAmount%></span>
+
+              </li>
+              <li><span>Shipping</span> <span>₹0</span></li>
+              <li><span>Order Total</span> <span>₹<%= order.totalAmount%></span></li>
+              <input id="grandTotal" name="grandTotal" type="hidden" value="<%= order.totalAmount%>">
+            </ul>
+
+            <% } %>
+
+          </div>
+        </div>
+
+        <div class="w-100"></div>
+
+        <div class="col-md-12">
+          <div class="cart-detail">
+            <h2>Payment Method</h2>
+            <!-- <div class="form-group">
 										<div class="col-md-12">
 											<div class="radio">
 											   <label><input type="radio" name="optradio"> Direct Bank Tranfer</label>
 											</div>
 										</div>
 									</div> -->
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="radio">
-											   <label><input type="radio" name="payment" id="cashOnDelivery" value="cod" checked="true"> Cash On Delivery</label>
-											   <br>
-											   <label><input type="radio" name="payment" id="cashOnDelivery" value="razorpay" > RazorPay</label>
-											</div>
-										</div>
-									</div>
-									
-										<br>
-										<div class="row">
-											<% if (address) { %>
+            <div class="form-group">
+              <div class="col-md-12">
+                <div class="radio">
+                  <label><input type="radio" name="payment" id="cashOnDelivery" value="cod" checked="true"> Cash On Delivery</label>
+                  <br>
+                  <label><input type="radio" name="payment" id="cashOnDelivery" value="razorpay"> RazorPay</label>
+                </div>
+              </div>
+            </div>
 
-												
-																								   
-												<div class="col-md-12 text-center">
-													<button  class="btn btn-primary" onclick="placeOrder()">Place an order</button>
-												</div>
-
-											  <% } else { %>
-																								  
-												<div class="col-md-12 text-center">
-													<input type="submit" value="Proceed" class="btn btn-primary">
-												</div>
-																								  
-											<% } %>
-						</div>
-										
-									</div>
-								</div>
-							</div>
-						</div>
-						
-					</form>
-					</div>
-				</div>
-			</div>
-			<button id="razorpayBtn">Pay with Razorpay</button>
-
-		</div>
-		
-		<script>
+            <br>
+            <div class="row">
+              <% if (address) { %>
 
 
-const pin=document.getElementById('zippostalcode')
-			pin.addEventListener("input",()=>{
-			
-			if (!pin.value.match(/^\d+$/)){
-						pin.setCustomValidity('please enter the Number')
-						Number_errorr.innerHTML ="please enter the Number"
-			return false
-		}
-			else{
-				pin.setCustomValidity('')
-				Number_errorr.innerHTML =""
-			return true
-			}
-			
-        })
+
+              <div class="col-md-12 text-center">
+                <button class="btn btn-primary" onclick="placeOrder()">Place an order</button>
+              </div>
+
+              <% } else { %>
+
+              <div class="col-md-12 text-center">
+                <input type="submit" value="Proceed" class="btn btn-primary">
+              </div>
+
+              <% } %>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </form>
+  </div>
+</div>
+</div>
+<button id="razorpayBtn">Pay with Razorpay</button>
+
+</div>
+
+<script>
+  const pin = document.getElementById('zippostalcode')
+  pin.addEventListener("input", () => {
+
+    if (!pin.value.match(/^\d+$/)) {
+      pin.setCustomValidity('please enter the Number')
+      Number_errorr.innerHTML = "please enter the Number"
+      return false
+    } else {
+      pin.setCustomValidity('')
+      Number_errorr.innerHTML = ""
+      return true
+    }
+
+  })
 
 
-		const mobile=document.getElementById('mobile')
-			mobile.addEventListener("input",()=>{
-			
-			if (!mobile.value.match(/^\d+$/)){
-						mobile.setCustomValidity('please enter the Number')
-						Number_errorr.innerHTML ="please enter the Number"
-			return false
-		}
-			else{
-				mobile.setCustomValidity('')
-				Number_errorr.innerHTML =""
-			return true
-			}
-			
-        })
-		</script>
+  const mobile = document.getElementById('mobile')
+  mobile.addEventListener("input", () => {
+
+    if (!mobile.value.match(/^\d+$/)) {
+      mobile.setCustomValidity('please enter the Number')
+      Number_errorr.innerHTML = "please enter the Number"
+      return false
+    } else {
+      mobile.setCustomValidity('')
+      Number_errorr.innerHTML = ""
+      return true
+    }
+
+  })
+</script>
 
 <!-- <script>
 	document.getElementById('razorpayBtn').addEventListener('click', function() {
@@ -368,104 +362,97 @@ const pin=document.getElementById('zippostalcode')
 	  rzp.open();
 	});
   </script> -->
-  
-		<script>
-		
-		function placeOrder() {
-  const address = document.querySelector(
-    'input[name = "selectedAddress"]:checked'
-  ).value;
-  const payment = document.querySelector(
-    'input[name = "payment"]:checked'
-  ).value;
-  const total = document.getElementById("grandTotal").value;
-  const email = document.getElementById("addressEmail").value;
-  const mobile = document.getElementById("addressMobile").value;
 
-  if (payment == "razorpay") {
-    $.ajax({
-      url: "/orderPlace",
-      method: "post",
-      data: {
-        payment,
-        address,
-        total,
-        email,
-      },
+<script>
+  function placeOrder() {
+    const address = document.querySelector(
+      'input[name = "selectedAddress"]:checked'
+    ).value;
+    const payment = document.querySelector(
+      'input[name = "payment"]:checked'
+    ).value;
+    const total = document.getElementById("grandTotal").value;
+    const email = document.getElementById("addressEmail").value;
+    const mobile = document.getElementById("addressMobile").value;
 
-      success: (response) => {
-        if (response.success) {
-          $.ajax({
-            url: "/orderEpay",
-            method: "post",
-            data: {
-              payment,
-              address,
-              total,
-              email,
-              mobile,
-            },
-            success: (response) => {
-              if (response.success) {
-                var options = {
-                  key: "" + response.key_id + "",
-                  amount: "" + response.amount + "", // Amount in paise (example: 10000 paise = ₹100)
-                  currency: "INR", // Currency code
-                  name: "SHOW CLUB", // Your company name
-                  order_id: "" + response.order_id + "", // Your company name
-                  description: "" + response.description + "", // Payment description
-                  handler: function (response) {
-                    // Handle the payment success response here
-                    window.location = "/order_Placed";
-                    // alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
-                  },
-                  prefill: {
-                    name: "John Doe",
-                    email: "" + response.email + "",
-                    contact: "" + response.mobile + "",
-                  },
-                };
-                var rzp = new Razorpay(options);
-                rzp.open();
-              }else{
-				Swal.fire({
-        title: "Error",
-        icon: "error",
-        text: "Failed .",
-        timer: 2000,
+    if (payment == "razorpay") {
+      $.ajax({
+        url: "/orderPlace",
+        method: "post",
+        data: {
+          payment,
+          address,
+          total,
+          email,
+        },
+
+        success: (response) => {
+          if (response.success) {
+            $.ajax({
+              url: "/orderEpay",
+              method: "post",
+              data: {
+                payment,
+                address,
+                total,
+                email,
+                mobile,
+              },
+              success: (response) => {
+                if (response.success) {
+                  var options = {
+                    key: "" + response.key_id + "",
+                    amount: "" + response.amount + "", // Amount in paise (example: 10000 paise = ₹100)
+                    currency: "INR", // Currency code
+                    name: "SHOW CLUB", // Your company name
+                    order_id: "" + response.order_id + "", // Your company name
+                    description: "" + response.description + "", // Payment description
+                    handler: function(response) {
+                      // Handle the payment success response here
+                      window.location = "/order_Placed";
+                      // alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+                    },
+                    prefill: {
+                      name: "John Doe",
+                      email: "" + response.email + "",
+                      contact: "" + response.mobile + "",
+                    },
+                  };
+                  var rzp = new Razorpay(options);
+                  rzp.open();
+                } else {
+                  Swal.fire({
+                    title: "Error",
+                    icon: "error",
+                    text: "Failed .",
+                    timer: 2000,
+                  });
+                }
+              },
+            });
+          } else {
+            alert("expected order placed");
+          }
+        },
       });
-			  }
-            },
-          });
-        } else {
-          alert("expected order placed");
-        }
-      },
-    });
-  } 
-  
-  
-  
-  else {
-    $.ajax({
-      url: "/orderPlace",
-      method: "post",
-      data: {
-        payment,
-        address,
-        total,
-      },
-      success: (response) => {
-        if (response.success) {
-          window.location = "/order_Placed";
-        } else {
-          alert("expected order placed");
-        }
-      },
-    });
+    } else {
+      $.ajax({
+        url: "/orderPlace",
+        method: "post",
+        data: {
+          payment,
+          address,
+          total,
+        },
+        success: (response) => {
+          if (response.success) {
+            window.location = "/order_Placed";
+          } else {
+            alert("expected order placed");
+          }
+        },
+      });
+    }
   }
-}
-
-		
-		</script>
-		<%- include('./footer') %>
+</script>
+<%- include('./footer') %>

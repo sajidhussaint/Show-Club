@@ -6,13 +6,17 @@ const dotenv = require("dotenv");
 const session = require("express-session");
 const randomstring = require("randomstring");
 const cart = require("../model/cartModel");
-const mongoose =require('mongoose')
+const mongoose = require("mongoose");
 const AddressDB = require("../model/addressModel");
-const orderDB=require("../model/orderModel")
-const twilio = require('twilio');
+const categoryDB = require("../model/categoryModel");
+const orderDB = require("../model/orderModel");
+const twilio = require("twilio");
 
 dotenv.config();
-const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID,process.env.TWILIO_AUTH_TOKEN);
+const twilioClient = twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 
 let otp;
 let email2;
@@ -42,7 +46,7 @@ const sendVerifymail = async (name, email, otp) => {
       },
     });
     const mailOption = {
-      from:process.env.EMAIL_USER,
+      from: process.env.EMAIL_USER,
       to: email,
       subject: "For OTP verification",
 
@@ -135,7 +139,7 @@ const loadHome = async (req, res) => {
 const loadMen = async (req, res) => {
   try {
     const product = await Product.find({ blocked: false });
-    res.render("men", { activePage: "men",product });
+    res.render("men", { activePage: "men", product });
   } catch (error) {
     console.log(error.message);
   }
@@ -145,24 +149,51 @@ const loadMen = async (req, res) => {
 const loadWomen = async (req, res) => {
   try {
     const product = await Product.find({ blocked: false });
-    res.render("women", { activePage: "women" ,product});
+    res.render("women", { activePage: "women", product });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-
-
 //search page
-const loadsearch=async(req,res)=>{
+const loadsearch = async (req, res) => {
   try {
-    const product = await Product.find({ blocked: false });
-    res.render("search", {product});
-  } catch (error) {
-      console.log(error.message)
-  }
-}
 
+    const price = req.query.price;
+    const searchItem = req.query.searchItem;
+    const filterCategory = req.query.category;
+
+    const category = await categoryDB.find({})
+    const productCategory = await Product.find({ category: filterCategory })
+    const products = await Product.aggregate([
+      {
+        $match: {
+          name: { $regex: "^" + searchItem, $options: "i" },
+        },
+      },
+    ])
+
+    const intPrice = parseInt(price);
+
+    const priceData = await Product.aggregate([
+      { $match: { price: { $gt: intPrice - 1000, $lt: intPrice } } },
+      {
+        $sort: {
+          price: 1,
+        },
+      },
+    ])
+    res.render("search", {
+      products,
+      searchItem,
+      category,
+      productCategory,
+      priceData
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 //about page
 const loadAbout = async (req, res) => {
@@ -243,7 +274,7 @@ const verifyLogin = async (req, res) => {
     // Set up a session or token for authentication (implement your own logic)
     req.session.user_id = user._id;
     // res.render("men");
-    res.redirect('/')
+    res.redirect("/");
   } catch (err) {
     console.error("Error during sign in:", err);
     res.render("login", { message: "An error occurred during sign in" });
@@ -251,13 +282,15 @@ const verifyLogin = async (req, res) => {
 };
 
 // mobileOtp
-const mobileOtp=async(req,res)=>{
+const mobileOtp = async (req, res) => {
   try {
-    const inputEmail=req.body.inputEmail;
-    const inputPassword=req.body.inputPassword;
+    const inputEmail = req.body.inputEmail;
+    const inputPassword = req.body.inputPassword;
 
-    console.log(inputEmail,inputPassword);
-    const userData = await User.findOne({ $or: [{ inputEmail }, { mob: inputEmail }] });
+    console.log(inputEmail, inputPassword);
+    const userData = await User.findOne({
+      $or: [{ inputEmail }, { mob: inputEmail }],
+    });
     if (!userData) {
       return res.render("login", { message: "Invalid username or password" });
     }
@@ -266,83 +299,82 @@ const mobileOtp=async(req,res)=>{
     if (userData.is_verified == 0) {
       return res.render("login", { message: "Account not verified" });
     }
-    
-    const passwordMatch = await bcrypt.compare(inputPassword, userData.password);
+
+    const passwordMatch = await bcrypt.compare(
+      inputPassword,
+      userData.password
+    );
     if (!passwordMatch) {
       return res.render("login", { message: "Invalid username or password" });
     }
 
     const otpMob = Math.floor(1000 + Math.random() * 9999);
 
-    console.log('this is OTP:',otpMob);
-    const user=userData._id
-    console.log('this is userid:',user);
+    console.log("this is OTP:", otpMob);
+    const user = userData._id;
+    console.log("this is userid:", user);
 
-        // sendVerifymail(req.body.name, inputEmail, otpGenarated);
-        // res.render("404", { inputEmail });
-        res.json({success:true,otpMob,user})
-
-    
-
-      
+    // sendVerifymail(req.body.name, inputEmail, otpGenarated);
+    // res.render("404", { inputEmail });
+    res.json({ success: true, otpMob, user });
   } catch (error) {
-      console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 // mobileotp(get)
-const loadmobileOtp=async(req,res)=>{
+const loadmobileOtp = async (req, res) => {
   try {
-    const mobOtp=req.query.mobOtp
-    const user=req.query.user
-console.log(mobOtp,'u',user);
+    const mobOtp = req.query.mobOtp;
+    const user = req.query.user;
+    console.log(mobOtp, "u", user);
 
-const message = `Your OTP is: ${mobOtp}`;
+    const message = `Your OTP is: ${mobOtp}`;
 
-twilioClient.messages
-.create({
-  body: message,
-  from: process.env.TWILIO_PHONE_NUMBER,
-  to: '+918089555859',
-})
-.then((message) => {
-  console.log(message.sid);
-  res.render('mobileOtp',{mobOtp,user})
-  // res.json({ success: true, message: 'OTP sent successfully!' });
-})
-.catch((error) => {
-  console.error(error);
-  res.status(500).json({ success: false, message: 'Failed to send OTP.' });
-});
-
-
-
-      
+    twilioClient.messages
+      .create({
+        body: message,
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: "+918089555859",
+      })
+      .then((message) => {
+        console.log(message.sid);
+        res.render("mobileOtp", { mobOtp, user });
+        // res.json({ success: true, message: 'OTP sent successfully!' });
+      })
+      .catch((error) => {
+        console.error(error);
+        res
+          .status(500)
+          .json({ success: false, message: "Failed to send OTP." });
+      });
   } catch (error) {
-      console.log(error.message)
+    console.log(error.message);
   }
-}
-
+};
 
 // mobileotpVerify(post)
-const mobileotpVerify=async(req,res)=>{
+const mobileotpVerify = async (req, res) => {
   try {
-    const mobOtp=req.query.mobOtp;
-    const user=req.query.user;
-    const inputOtp=req.body.otp
+    const mobOtp = req.query.mobOtp;
+    const user = req.query.user;
+    const inputOtp = req.body.otp;
 
-if(mobOtp==inputOtp){
-  req.session.user_id = user;
-  res.redirect('/')
-}else{
-res.render('mobileOtp',{message:'An error occurred during verification',mobOtp,user})
-}
+    if (mobOtp == inputOtp) {
+      req.session.user_id = user;
+      res.redirect("/");
+    } else {
+      res.render("mobileOtp", {
+        message: "An error occurred during verification",
+        mobOtp,
+        user,
+      });
+    }
 
-
-      // res.render('mobileOtp',{mobOtp})
+    // res.render('mobileOtp',{mobOtp})
   } catch (error) {
-      console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
 //register pageload
 const loadRegister = async (req, res) => {
@@ -516,18 +548,18 @@ const resend = async (req, res) => {
 //profile page
 const loadProfile = async (req, res) => {
   try {
-    const url=req.url
-    const userId=req.session.user_id
-    const user = await User.findOne({ _id:userId })
-    const dataAddress=await AddressDB.findOne({user:userId})
-    const order=await orderDB.find({user:userId}).populate('products.product_Id')
-    res.render("profile", { user, dataAddress, order,url });
+    const url = req.url;
+    const userId = req.session.user_id;
+    const user = await User.findOne({ _id: userId });
+    const dataAddress = await AddressDB.findOne({ user: userId });
+    const order = await orderDB
+      .find({ user: userId })
+      .populate("products.product_Id");
+    res.render("profile", { user, dataAddress, order, url });
   } catch (error) {
     console.log(error.message);
   }
 };
-
-
 
 module.exports = {
   loadHome,
@@ -553,5 +585,5 @@ module.exports = {
   resetpassverify,
   resend,
   mobileOtp,
-  mobileotpVerify
+  mobileotpVerify,
 };

@@ -1,16 +1,18 @@
 <%- include('./header') %>
 
 <style>
-.apply-btn{
-  width: 140px;
-}
-.c1{
-  width:50%
-}
-.scl:hover{
-  transform: scale(1.1);
+  .apply-btn {
+    width: 140px;
+  }
+
+  .c1 {
+    width: 50%
+  }
+
+  .scl:hover {
+    transform: scale(1.1);
     transition: ease-in 0.3s;
-}
+  }
 
   .qty .count {
     color: #000;
@@ -23,8 +25,9 @@
     min-width: 30px;
     text-align: center;
     font-weight: 700;
-    cursor:none;
+    cursor: none;
   }
+
   .qty .plus {
     cursor: pointer;
     display: inline-block;
@@ -36,6 +39,7 @@
     text-align: center;
     border-radius: 50%;
   }
+
   .qty .minus {
     cursor: pointer;
     display: inline-block;
@@ -48,35 +52,39 @@
     border-radius: 50%;
     background-clip: padding-box;
   }
-  
+
   .minus:hover {
     background-color: #F6511D !important;
     transform: scale(1.2);
     transition: ease-in 0.3s;
   }
+
   .plus:hover {
     background-color: #F6511D !important;
     transform: scale(1.2);
     transition: ease-in 0.3s;
   }
+
   /*Prevent text selection*/
-  
+
   input {
     border: 0;
     width: 2%;
   }
+
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
+
   input:disabled {
     background-color: white;
   }
 
-
-
-
+  #myButton:disabled {
+      background-color: #080808; 
+    }
 </style>
 <div class="breadcrumbs">
   <div class="container">
@@ -92,10 +100,10 @@
 </div>
 
 
-<div class="colorlib-product" id="reloadDiv" style="padding:20px;" >
-	<!-- toogler shoping cart,checkout -->
-	<div class="container" >
-		<!--<div class="row row-pb-lg">
+<div class="colorlib-product" id="reloadDiv" style="padding:20px;">
+  <!-- toogler shoping cart,checkout -->
+  <div class="container">
+    <!--<div class="row row-pb-lg">
 			<div class="col-md-10 offset-md-1">
 				<div class="process-wrap">
 					<div class="process text-center active">
@@ -112,217 +120,186 @@
 					</div>
 				</div>
 			</div>
-		</div> --> 
-		
-		<!-- toogler shoping cart,checkout -->
+		</div> -->
+
+    <!-- toogler shoping cart,checkout -->
     <% if (products&& products.product.length> 0) { %>
-    <div class="row row-pb-lg" style="color: black; font-weight: 500;"
-    <div class="col-md-12">
-        <div class="product-name d-flex" style="box-shadow: 5px 8px 18px #bba383;" >
-          <div class="one-forth text-left px-4" >
-            <span style="color: black; font-weight: 600;">Product Details</span>
-          </div>
-          <div class="one-eight text-center">
-            <span style="color: black; font-weight: 600;" class="">Price</span>
-          </div>
-          <div class="one-eight text-center">
-            <span style="color: black; font-weight: 600;">Quantity</span>
-          </div>
-          <div class="one-eight text-center">
-            <span style="color: black; font-weight: 600;">Total</span>
-          </div>
-          <div class="one-eight text-center px-4">
-            <span style="color: black; font-weight: 600;">Remove</span>
-          </div>
+    <div class="row row-pb-lg" style="color: black; font-weight: 500;" <div class="col-md-12">
+      <div class="product-name d-flex" style="box-shadow: 5px 8px 18px #bba383;">
+        <div class="one-forth text-left px-4">
+          <span style="color: black; font-weight: 600;">Product Details</span>
         </div>
-
-        
-         <%products.product.forEach((items)=> { %>
-
-         <div class="product-cart d-flex " >
-          <div class="one-forth " >
-            <div class="product-img">
-              <img style="box-shadow: 5px 8px 18px #c7c3c3; border-radius: 5%;"
-                src="/admin/IMAGES_DB/<%= items.product_Id.image[0] %>"
-                class="img-fluid rounded-top"
-                alt=""
-              />
-            </div>
-            <div class="display-tc">
-              <h3><%= items.product_Id.name%></h3>
-            </div>
-          </div>
-          <div class="one-eight text-center">
-            <div class="display-tc">
-              <span class="price">₹<%= items.product_Id.price%></span>
-            </div>
-          </div>
-
-          <div class="one-eight text-center" onmousedown = 'return false' onselectstart = 'return false'>
-            <div class="qty mt-5">
-              <span
-                type="button"
-                onclick="increaseQuantity('<%= items.product_Id._id %>', -1)"
-                class="minus bg-dark"
-                >-</span
-              >
-
-              <input
-                
-                class="count"
-                id="quantity"
-                name="quantity"
-                value="<%= items.quantity%>"
-                readonly
-              />
-
-              <span
-                type="button"
-                onclick="increaseQuantity('<%= items.product_Id._id %>', 1)"
-                class="plus bg-dark"
-                >+</span
-              >
-            </div>
-          </div>
-          <div class="one-eight text-center">
-            <div class="display-tc">
-              <span class="price">₹<%= items.total%></span>
-            </div>
-          </div>
-          <div class="one-eight text-center">
-            <div class="display-tc">
-              <a style="box-shadow: 5px 8px 18px #c7c3c3;"
-                class="btn btn-danger scl"
-                href="/delete_cartitem?id=<%= items.product_Id._id%>"
-                >Remove</a
-              >
-            </div>
-          </div>
+        <div class="one-eight text-center">
+          <span style="color: black; font-weight: 600;" class="">Price</span>
         </div>
-
-        <% }); %> <% } else { %>
-
-        <h1 style="color: rgb(99, 94, 94);">Your Cart is Empty</h1>
-        <p>Please Add Items</p>
-
-        <% } %>
+        <div class="one-eight text-center">
+          <span style="color: black; font-weight: 600;">Quantity</span>
+        </div>
+        <div class="one-eight text-center">
+          <span style="color: black; font-weight: 600;">Total</span>
+        </div>
+        <div class="one-eight text-center px-4">
+          <span style="color: black; font-weight: 600;">Remove</span>
+        </div>
       </div>
+
+
+      <%products.product.forEach((items)=> { %>
+
+      <div class="product-cart d-flex ">
+        <div class="one-forth ">
+          <div class="product-img">
+            <img style="box-shadow: 5px 8px 18px #c7c3c3; border-radius: 5%;" src="/admin/IMAGES_DB/<%= items.product_Id.image[0] %>" class="img-fluid rounded-top" alt="" />
+          </div>
+          <div class="display-tc">
+            <h3><%= items.product_Id.name%></h3>
+          </div>
+        </div>
+        <div class="one-eight text-center">
+          <div class="display-tc">
+            <span class="price">₹<%= items.product_Id.price%></span>
+          </div>
+        </div>
+
+        <div class="one-eight text-center" onmousedown='return false' onselectstart='return false'>
+          <div class="qty mt-5">
+            <span type="button" onclick="increaseQuantity('<%= items.product_Id._id %>', -1)" class="minus bg-dark">-</span>
+
+            <input class="count" id="quantity" name="quantity" value="<%= items.quantity%>" readonly />
+
+            <span type="button" onclick="increaseQuantity('<%= items.product_Id._id %>', 1)" class="plus bg-dark">+</span>
+          </div>
+        </div>
+        <div class="one-eight text-center">
+          <div class="display-tc">
+            <span class="price">₹<%= items.total%></span>
+          </div>
+        </div>
+        <div class="one-eight text-center">
+          <div class="display-tc">
+            <a style="box-shadow: 5px 8px 18px #c7c3c3;" class="btn btn-danger scl" href="/delete_cartitem?id=<%= items.product_Id._id%>">Remove</a>
+          </div>
+        </div>
+      </div>
+
+      <% }); %> <% } else { %>
+
+      <h1 style="color: rgb(99, 94, 94);">Your Cart is Empty</h1>
+      <p>Please Add Items</p>
+
+      <% } %>
     </div>
+  </div>
 
-    <% if (products&& products.product.length> 0) { %>
+  <% if (products&& products.product.length> 0) { %>
 
-    <div class="row row-pb-lg">
-      <h2></h2>
-      <div class="col-md-12">
-        <div class="total-wrap">
-          <div class="row">
-            <div class="col-sm-8 c1">
+  <div class="row row-pb-lg">
+    <h2></h2>
+    <div class="col-md-12">
+      <div class="total-wrap">
+        <div class="row">
+          <div class="col-sm-8 c1">
 
-              <form action="#"  class="col-md-12">
-      <div class="row form-group p-5">
-        <div class="d-flex" style="justify-content:space-between;">
-        <h3 class="mr-4">Discound coupons</h3>
-        <button data-toggle="modal" data-target="#discountModal" class="btn btn-primary " style="position: relative; right: 217px; border-radius: 2px; background-color: #F6511D; border: none;" >show coupons</button>
-      </div>
-        <div class="col-sm-9 pt-3">
-          <input
-            type="text"
-            name="quantity"
-            class="form-control input-number"
-            placeholder="Your Coupon Number..."
-          />
-        </div>
-        <div class="col-sm-3">
-          <input
-            type="submit"
-            value="Apply Coupon"
-            class="btn btn-primary apply-btn"
-          />
-        </div>
-      </div>
-    </form> 
-            </div>
-            <div class="col-sm-4 text-center scl" >
-              <div class="total " style="box-shadow: 5px 8px 18px #c7c3c3; border-radius: 5%;">
-                <div class="sub">
-                  <p>
-                    <span style="color: black; font-weight: 600;">Subtotal:</span>
-                    <span style="font-weight: 600" >₹<%=products.grandTotal %></span>
-                  </p>
-                  <p><span style="color: black; font-weight: 600;">Delivery:</span> <span >₹0</span></p>
-                  <p><span style="color: black; font-weight: 600;">Discount:</span> <span style="font-weight: 700">₹0</span></p>
+            <form action="#" class="col-md-12">
+              <div class="row form-group p-5">
+                <div class="d-flex" style="justify-content:space-between;">
+                  <h3 class="mr-4">Discound coupons</h3>
+                  <button data-toggle="modal" data-target="#discountModal" class="btn btn-primary " style="position: relative; right: 217px; border-radius: 2px; background-color: #F6511D; border: none;">show coupons</button>
                 </div>
-                <div class="grand-total">
-                  <p>
-                    <span style="color: black; font-weight: 600;"><strong>Total:</strong></span>
-                    <span style="font-weight: 800; color: black;">₹<%=products.grandTotal %></span>
-                  </p>
-                 <a href="/checkout"><button class="btn btn-dark scl">proceed</button></a> 
-                 
+                <div class="col-sm-9 pt-3">
+                  <input style="text-transform: uppercase" type="text" name="code" class="form-control input-number" placeholder="Your Coupon Number..." />
                 </div>
+                <div class="col-sm-3">
+                  <button id="myButton" onclick="applyCoupon(event)" type="submit" class="btn btn-primary apply-btn" />Apply Coupon</button>
+                </div>
+                <div id="coupon-message" class="coupon-message"></div>
+              </div>
+            </form>
+          </div>
+          <div class="col-sm-4 text-center scl">
+            <div class="total " style="box-shadow: 5px 8px 18px #c7c3c3; border-radius: 5%;">
+              <div class="sub">
+                <p>
+                  <span style="color: black; font-weight: 600;">Subtotal:</span>
+                  <span style="font-weight: 600">₹<%=products.grandTotal %></span>
+                </p>
+                <p><span style="color: black; font-weight: 600;">Delivery:</span> <span>₹0</span></p>
+                <p><span style="color: black; font-weight: 600;">Discount:</span> <span style="font-weight: 700" id="coupon-discount">₹0</span></p>
+              </div>
+              <div class="grand-total">
+                <p>
+                  <span style="color: black; font-weight: 600;"><strong>Total:</strong></span>
+                  <span id="total" style="font-weight: 800; color: black;">₹<%=products.grandTotal %></span>
+                </p>
+                <a href="/checkout"><button class="btn btn-dark scl">proceed</button></a>
+
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <% } else { %> <% } %>
+  <% } else { %> <% } %>
 
-    <div class="row">
-      <div
-        class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm"
-      >
-        <h2>Related Products</h2>
-      </div>
-    </div>
-    <div class="row">
-      <% product.forEach(function(product,index) { %>
-						<div class="col-lg-3 mb-4 text-center main-cont">
-						  <div class="product-entry border">
-							<a href="/product-detail?productid=<%=product._id %>" class="prod-img">
-							  <img src="/admin/IMAGES_DB/<%= product.image[0] %>"
-								class="img-fluid"
-								alt="Free html5 bootstrap 4 template"
-							  />
-							</a>
-							<div class="desc">
-							  <h2><a href="#"><%=product.name %></a></h2>
-							  <span class="price">₹<%=product.price %></span>
-							</div>
-						  </div>
-						</div>
-						<% }); %>
+  <div class="row">
+    <div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
+      <h2>Related Products</h2>
     </div>
   </div>
+  <div class="row">
+    <% product.forEach(function(product,index) { %>
+    <div class="col-lg-3 mb-4 text-center main-cont">
+      <div class="product-entry border">
+        <a href="/product-detail?productid=<%=product._id %>" class="prod-img">
+          <img src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template" />
+        </a>
+        <div class="desc">
+          <h2><a href="#"><%=product.name %></a></h2>
+          <span class="price">₹<%=product.price %></span>
+        </div>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+</div>
 </div>
 
 <!-- Coupon modal -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <div class="modal fade" id="discountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-            <div class="modal-content rounded-0">
-                <div class="modal-body text-center">
-                    <div class="icon text-danger">
-                        <i class="fas fa-gift"></i>
-                    </div>
-                    <div class="notice">
-                        
-                            <h4>Get 50% Discount</h4>
-                       
-                        
-                        <p>This coupon only available for purchase above ₹ 500</p>
-                        <p>And valid from </p>
-                        <p>Use promo code <spans style="font-size: medium; background-color: #F6511D; color: white;" class="badge ">name</span></p>
-                    </div>
-                    <div class="code"></div>
-                </div>
-            </div>
-      
+  <div class="modal-dialog" role="document">
+    <div class="modal-content rounded-0">
+      <div class="modal-body text-center">
+        <div class="icon text-danger">
+          <i class="fas fa-gift"></i>
+        </div>
+
+        <% availableCoupons.forEach(function(coupon) { %>
+        <div class="notice">
+          <h4>Get <%=coupon.discount%>% Discount</h4>
+          <p>This coupon only available for purchase Min ₹ <%=coupon.minimum %></p>
+
+          <% const dates = new Date(coupon.expiryDate); %>
+          <% const optionss = { year: 'numeric', month: 'long', day: 'numeric' }; %>
+
+          <p>And valid from <%= dates.toLocaleDateString('en-US', optionss) %></p>
+          <p>Use promo code <spans style="font-size: medium; background: linear-gradient(to right, red, #f58c02); color: white;" class="badge "><%=coupon.code %></span></p>
+        </div>
+        <hr>
+        <% }); %>
+
+
+
+        <div class="code"></div>
+      </div>
     </div>
+
   </div>
-  
+</div>
+
 
 
 <script>
@@ -357,10 +334,54 @@
     });
   }
 
-  $(document).ready(function() {  
-              $('#discountModal').modal('show');
-            });
+  $(document).ready(function() {
+    $('#discountModal').modal('show');
+  });
 
+
+
+
+
+
+ async function applyCoupon(event){
+      event.preventDefault()
+
+      const totalCartPrice = document.getElementById('total')
+      const couponDiscount = document.getElementById('coupon-discount')
+      var button = document.getElementById("myButton");
+  
+  if (!button.disabled) {
+    button.disabled = true; // Disable the button
+  }
+      
+      const couponCode = document.querySelector(
+        'input[name ="code"]'
+      ).value
+      const total = Number(document.getElementById('total').innerHTML.split("₹")[1])
+
+
+      const response =await axios.post('/applyCoupon', {
+        couponCode: couponCode.toUpperCase(),
+        total
+      })
+
+      if (response.data.success) {
+        alert ('success')
+        const couponMessage = document.getElementById('coupon-message')
+        couponMessage.innerHTML = '<p>Coupon applied</p>'
+        if (response.data.discounted) {
+          alert ('disconnected')
+          totalCartPrice.innerHTML = `₹ ${response.data.discounted.discountedTotal}`
+          couponDiscount.innerHTML = `-₹ ${response.data.discounted.discountAmount}`
+        }
+      } else {
+        console.log(response.data.message);
+        const couponMessage = document.getElementById('coupon-message')
+        couponMessage.innerHTML = `<p class="text-danger" >${response.data.message}</p>`
+      }
+    
+
+  }
 </script>
 
 <%- include('./footer') %>

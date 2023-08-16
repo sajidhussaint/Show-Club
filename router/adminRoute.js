@@ -48,6 +48,15 @@ admin_Route.post("/deleteImage",productController.deleteImage);
 
 
 
+//COUPON PAGE
+admin_Route.get("/addCoupon",adminController.loadCoupon);
+admin_Route.post("/addCoupon",adminController.addCoupon);
+
+
+
+
+
+
 
 
 

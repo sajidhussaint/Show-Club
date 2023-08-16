@@ -2,6 +2,8 @@ const ProductDB = require("../model/productModel");
 const UserDB = require("../model/userModel");
 const CategoryDB = require("../model/categoryModel");
 const orderDB = require("../model/orderModel");
+const couponDB = require("../model/couponModel");
+
 const bcrypt = require("bcrypt");
 
 const loadHome = async (req, res) => {
@@ -30,7 +32,7 @@ const loadCategory = async (req, res) => {
 };
 const loadaddCategory = async (req, res) => {
   try {
-    res.render("addCategory",{message:''});
+    res.render("addCategory", { message: "" });
   } catch (error) {
     console.log(error.message);
   }
@@ -41,27 +43,24 @@ const insertCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
 
-    const alreadyExist=await CategoryDB({name:name})
+    const alreadyExist = await CategoryDB({ name: name });
 
-    if(alreadyExist){
+    if (alreadyExist) {
       res.render("addCategory", { message: "Category already Exist !!!" });
-    }else{
-
-      
-    const categoryData = new CategoryDB({
-      name: name,
-      description: description,
-    });
-
-    const adddata = await categoryData.save();
-
-    if (adddata) {
-      res.redirect("/admin/category");
     } else {
-      res.render("addCategory", { message: "something wrong!!" });
-    }
-    }
+      const categoryData = new CategoryDB({
+        name: name,
+        description: description,
+      });
 
+      const adddata = await categoryData.save();
+
+      if (adddata) {
+        res.redirect("/admin/category");
+      } else {
+        res.render("addCategory", { message: "something wrong!!" });
+      }
+    }
   } catch (error) {
     console.log(error.message);
   }
@@ -72,7 +71,7 @@ const loadeditCategory = async (req, res) => {
   try {
     const name = req.query.name;
     const catData = await CategoryDB.findOne({ name: name });
-    res.render("editCategory", { catData});
+    res.render("editCategory", { catData });
   } catch (error) {
     console.log(error.message);
   }
@@ -85,17 +84,15 @@ const editCategory = async (req, res) => {
 
     const { name, description } = req.body;
 
-      await CategoryDB.updateOne(
-        { name: qname },
-        { $set: { name: name, description: description } }
-      );
-      res.redirect("/admin/category");
-    
+    await CategoryDB.updateOne(
+      { name: qname },
+      { $set: { name: name, description: description } }
+    );
+    res.redirect("/admin/category");
   } catch (error) {
     console.log(error.message);
   }
 };
-
 
 // LOAD LOGIN PAGE
 const loadLogin = async (req, res) => {
@@ -179,7 +176,7 @@ const adminLogout = async (req, res) => {
 
 const loadOrder = async (req, res) => {
   try {
-    const order = await orderDB.find().populate("products.product_Id")
+    const order = await orderDB.find().populate("products.product_Id");
     res.render("Admin_Order", { order });
   } catch (err) {
     console.log(err.message);
@@ -209,6 +206,43 @@ const OrderCancel = async (req, res) => {
   }
 };
 
+const loadCoupon = async (req, res) => {
+  try {
+    res.render("addCoupon");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+//POST ADD COUPON
+const addCoupon = async (req, res) => {
+  try {
+    const userid = req.session.user_id;
+    const { code, description, discount, start, end, min } = req.body;
+    const exist = await couponDB.findOne({ code: code.toUpperCase() });
+    if (exist) {
+      // req.flash("err", "Coupon name already exist..");
+      return res.redirect("/admin/addCoupon");
+    }
+
+    const couponData = new couponDB({
+      code: code.toUpperCase(),
+      description: description,
+      discount: discount,
+      startingDate: start,
+      expiryDate: end,
+      minimum: min,
+    });
+
+    const coupons = await couponData.save();
+
+    res.redirect("/admin/addCoupon");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
 module.exports = {
   loadHome,
   loadCategory,
@@ -224,4 +258,6 @@ module.exports = {
   unblockUser,
   editCategory,
   OrderCancel,
+  loadCoupon,
+  addCoupon,
 };
