@@ -149,7 +149,7 @@
       <div class="product-cart d-flex ">
         <div class="one-forth ">
           <div class="product-img">
-            <img style="box-shadow: 5px 8px 18px #c7c3c3; border-radius: 5%;" src="/admin/IMAGES_DB/<%= items.product_Id.image[0] %>" class="img-fluid rounded-top" alt="" />
+            <img style="box-shadow: 5px 8px 18px #c7c3c3; border-radius: 5%;" src="/admin/cropped/<%= items.product_Id.image[0] %>" class="img-fluid rounded-top" alt="" />
           </div>
           <div class="display-tc">
             <h3><%= items.product_Id.name%></h3>
@@ -210,7 +210,7 @@
                   <input style="text-transform: uppercase" type="text" name="code" class="form-control input-number" placeholder="Your Coupon Number..." />
                 </div>
                 <div class="col-sm-3">
-                  <button id="myButton" onclick="applyCoupon(event)" type="submit" class="btn btn-primary apply-btn" />Apply Coupon</button>
+                  <button id="myButton" onclick="applyCoupon(event)" type="submit" class="btn btn-primary apply-btn">Apply Coupon</button>
                 </div>
                 <div id="coupon-message" class="coupon-message"></div>
               </div>
@@ -253,7 +253,7 @@
     <div class="col-lg-3 mb-4 text-center main-cont">
       <div class="product-entry border">
         <a href="/product-detail?productid=<%=product._id %>" class="prod-img">
-          <img src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template" />
+          <img src="/admin/cropped/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template" />
         </a>
         <div class="desc">
           <h2><a href="#"><%=product.name %></a></h2>
@@ -366,11 +366,16 @@
       })
 
       if (response.data.success) {
-        alert ('success')
+        
         const couponMessage = document.getElementById('coupon-message')
         couponMessage.innerHTML = '<p>Coupon applied</p>'
         if (response.data.discounted) {
-          alert ('disconnected')
+          Swal.fire({
+            title: "COUPON ADDED",
+            icon: "success",
+            text: response.message,
+            timer: 5000,
+          });
           totalCartPrice.innerHTML = `₹ ${response.data.discounted.discountedTotal}`
           couponDiscount.innerHTML = `-₹ ${response.data.discounted.discountAmount}`
         }

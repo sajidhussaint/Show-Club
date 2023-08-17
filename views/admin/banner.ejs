@@ -1,0 +1,102 @@
+<%- include('./layouts/header') %>
+
+
+<style>
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: #1a2038;
+    }
+    
+    img {
+      max-width: 100px;
+      max-height: 100px;
+    }
+    
+    .table-container {
+      margin-top: 20px;
+    }
+    
+    .container h1 {
+      margin-bottom: 20px;
+    }
+    
+    table {
+      table-layout: fixed;
+    }
+    
+    th, td {
+      word-wrap: break-word;
+      max-width: 150px;
+    }
+    
+    td {
+      vertical-align: middle;
+    }
+    
+    </style>
+    
+    <div class="container">
+        <h1>Banner List</h1>
+      
+        <div style="margin-top: 20px;">
+          <a class="text-success" href="/admin/add-banner">Add New Banner</a>
+        </div>
+      
+        <div class="table-container">
+          <% if (banners.length > 0) { %>
+          <table>
+            <thead style="color: white;">
+              <tr>
+                <th>Image</th>
+                <th>Info</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% banners.forEach((banner) => { %>
+              <tr>
+                <td>
+                  <img src="/admin/IMAGES_DB/<%= banner.image %>" alt="Banner Image" style="width: 80px; border-radius: 5px; height: 50px;">
+                </td>
+                <td><%= banner.info %></td>
+                <td><%= banner.title %></td>
+                <td><%= banner.description %></td>
+                <td class="action-buttons">
+                  <a href="/admin/edit-banner?id=<%= banner._id %>" class="btn btn-primary">Edit</a>
+                  <a href="/admin/delete?id=<%= banner._id %>" class="btn btn-danger">Delete</a>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <% } else { %>
+          <p>No banners available.</p>
+          <% } %>
+        </div>
+      </div>
+
+      <%- include('./layouts/footer') %>
+      

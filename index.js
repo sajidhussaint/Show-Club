@@ -20,13 +20,17 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 10 * 365 * 24 * 60 * 60 * 1000, // 10 years in milliseconds
+      maxAge: 10 * 365 * 24 * 60 * 60 * 1000,
     }
   }));
 app.use(express.static("public"));
 app.set("view engine","ejs");
 app.use("/",userRoute);
 app.use('/admin', adminRoute);
+
+app.use((req, res) => {
+  res.status(404).render("error404");
+});
 app.listen(port, () => {
   console.log(`Server running on port:http://localhost:${port}`);
   console.log(`Server running on port:http://localhost:${port}/admin`);

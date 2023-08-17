@@ -2,6 +2,7 @@
 const express = require("express");
 const user_Route = express();
 const auth=require('../middleware/userAuth')
+const errorHandler =require('../middleware/errorHandler')
 
 //controllers
 const userController = require('../controllers/userController')
@@ -112,6 +113,7 @@ user_Route.post("/applyCoupon",couponController.applyCoupon);
 
 
 
-
+// error handler 
+user_Route.use(errorHandler); 
 
 module.exports = user_Route;

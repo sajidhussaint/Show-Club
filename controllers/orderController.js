@@ -15,17 +15,17 @@ const razorpayInstance = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET_KEY,
 });
 
-const test = async (req, res) => {
+const test = async (req, res,next) => {
   try {
     const datas = await orderDB.find({});
 
     res.json(datas[1].products[0].total);
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
-const loadOrderDetails = async (req, res) => {
+const loadOrderDetails = async (req, res,next) => {
   try {
     const orderId = req.query.orderId;
     const order = await orderDB
@@ -34,11 +34,11 @@ const loadOrderDetails = async (req, res) => {
 
     res.render("orderDetails", { order });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
-const proceed = async (req, res) => {
+const proceed = async (req, res,next) => {
   try {
     const userid = req.session.user_id;
     const address = req.body.address;
@@ -59,60 +59,57 @@ const proceed = async (req, res) => {
         day: "2-digit",
       })
       .replace(/\//g, "-");
-      
-      if (cartData.coupon) {
-      console.log('runn disc total');
+
+    let orderTotalPromise;
+    if (cartData.coupon) {
       const cartCoupon = cartData.coupon.toString();
-      var discounted =await couponHelper.discountPrice(cartCoupon, grandTotal);
-      console.log("this is cartCouponId", discounted);
-      var order = new orderDB({
-        user: userid,
-        deliveryAddress: address,
-        userName: user.name,
-        totalAmount: discounted.discountedTotal,
-        status: status,
-        date: orderDate,
-        payment: payment,
-        products: cartProducts,
-        expectedDelivery: deliveryDate,
-      });
+      console.log('runn disc total');
+      orderTotalPromise = couponHelper.discountPrice(cartCoupon, grandTotal)
+        .then(discounted => discounted.discountedTotal);
     } else {
       console.log('runn garnd total');
-      var order = new orderDB({
-        user: userid,
-        deliveryAddress: address,
-        userName: user.name,
-        totalAmount: grandTotal,
-        status: status,
-        date: orderDate,
-        payment: payment,
-        products: cartProducts,
-        expectedDelivery: deliveryDate,
-      });
+      orderTotalPromise = Promise.resolve(grandTotal);
     }
+
+    const orderTotal = await orderTotalPromise;
+
+    const order = new orderDB({
+      user: userid,
+      deliveryAddress: address,
+      userName: user.name,
+      totalAmount: orderTotal,
+      status: status,
+      date: orderDate,
+      payment: payment,
+      products: cartProducts,
+      expectedDelivery: deliveryDate,
+    });
+
     const orderData = await order.save();
 
-
     if (orderData.payment != "razorpay") {
-      for (let i = 0; i < cartProducts.length; i++) {
+      const productUpdatePromises = cartProducts.map(async (cartProduct) => {
         await ProductDB.findByIdAndUpdate(
-          { _id: cartProducts[i].product_Id },
+          { _id: cartProduct.product_Id },
           {
             $inc: {
-              quantity: -cartProducts[i].quantity,
+              quantity: -cartProduct.quantity,
             },
           }
         );
-      }
+      });
+
+      await Promise.all(productUpdatePromises);
       await cartDB.findOneAndDelete({ userId: userid });
     }
     res.json({ success: true });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
-const loadOrderPlaced = async (req, res) => {
+
+const loadOrderPlaced = async (req, res,next) => {
   try {
     const id = req.session.user_id;
     const cartData = await cartDB.findOne({ userId: req.session.user_id });
@@ -123,33 +120,37 @@ const loadOrderPlaced = async (req, res) => {
 
     if (order.payment == "razorpay") {
       const cartProducts = cartData.product;
-      const orderStatusUpdate = await orderDB.findOneAndUpdate(
+      const orderStatusUpdatePromise = orderDB.findOneAndUpdate(
         { user: id },
         { $set: { status: "placed" } },
         { sort: { _id: -1 } }
       );
 
-      for (let i = 0; i < cartProducts.length; i++) {
+      const updateProductQuantitiesPromises = cartProducts.map(async (cartProduct) => {
         await ProductDB.findByIdAndUpdate(
-          { _id: cartProducts[i].product_Id },
+          { _id: cartProduct.product_Id },
           {
             $inc: {
-              quantity: -cartProducts[i].quantity,
+              quantity: -cartProduct.quantity,
             },
           }
         );
-      }
+      });
+
+      await Promise.all([orderStatusUpdatePromise, ...updateProductQuantitiesPromises]);
+
       await cartDB.findOneAndDelete({ userId: req.session.user_id });
     }
 
     console.log(order.status, "this is order status");
 
     res.render("orderPLaced", { order });
-  } catch (err) {
-    console.log(err.message);
+  } catch (error) {
+    next(error)
   }
 };
-const orderEpay = async (req, res) => {
+
+const orderEpay = async (req, res,next) => {
   try {
     const cartData = await cartDB.findOne({ userId: req.session.user_id });
     const cartCoupon = cartData.coupon;
@@ -188,8 +189,8 @@ const orderEpay = async (req, res) => {
         res.status(400).send({ success: false, msg: "Something wrong" });
       }
     });
-  } catch (err) {
-    console.log(err.message);
+  } catch (error) {
+    next(error)
   }
 };
 

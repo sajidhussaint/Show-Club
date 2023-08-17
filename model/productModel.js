@@ -30,6 +30,10 @@ const productSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  offer : {
+    type : mongoose.Schema.Types.ObjectId,
+    ref : 'offer'
+}
 });
 
 module.exports = mongoose.model("Products", productSchema);

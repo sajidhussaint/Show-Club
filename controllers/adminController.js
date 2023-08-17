@@ -6,40 +6,40 @@ const couponDB = require("../model/couponModel");
 
 const bcrypt = require("bcrypt");
 
-const loadHome = async (req, res) => {
+const loadHome = async (req, res,next) => {
   try {
     const userCount = await UserDB.find({ is_admin: "0" }).count();
     res.render("index", { userCount });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
-const loadUser = async (req, res) => {
+const loadUser = async (req, res,next) => {
   try {
     const user = await UserDB.find({ is_admin: "0" });
     res.render("userDetails", { user });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
-const loadCategory = async (req, res) => {
+const loadCategory = async (req, res,next) => {
   try {
     const category = await CategoryDB.find({});
     res.render("Category", { category });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
-const loadaddCategory = async (req, res) => {
+const loadaddCategory = async (req, res,next) => {
   try {
     res.render("addCategory", { message: "" });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 // INSERT CATEGORY (POST)
-const insertCategory = async (req, res) => {
+const insertCategory = async (req, res,next) => {
   try {
     const { name, description } = req.body;
 
@@ -62,12 +62,12 @@ const insertCategory = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //EDIT CATEGORY LOAD(GET)
-const loadeditCategory = async (req, res) => {
+const loadeditCategory = async (req, res,next) => {
   try {
     const name = req.query.name;
     const catData = await CategoryDB.findOne({ name: name });
@@ -78,7 +78,7 @@ const loadeditCategory = async (req, res) => {
 };
 
 //EDIT CATEGORY LOAD(POST)
-const editCategory = async (req, res) => {
+const editCategory = async (req, res,next) => {
   try {
     const qname = req.query.name;
 
@@ -90,21 +90,21 @@ const editCategory = async (req, res) => {
     );
     res.redirect("/admin/category");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 // LOAD LOGIN PAGE
-const loadLogin = async (req, res) => {
+const loadLogin = async (req, res,next) => {
   try {
     res.render("adminLogin");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 // LOAD LOGIN PAGE
-const blockUser = async (req, res) => {
+const blockUser = async (req, res,next) => {
   try {
     const userId = req.query._id;
     await UserDB.updateOne(
@@ -113,10 +113,10 @@ const blockUser = async (req, res) => {
     );
     res.redirect("/admin/userDetails");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
-const unblockUser = async (req, res) => {
+const unblockUser = async (req, res,next) => {
   try {
     const userId = req.query._id;
     await UserDB.updateOne(
@@ -125,12 +125,12 @@ const unblockUser = async (req, res) => {
     );
     res.redirect("/admin/userDetails");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //ADMIN LOGIN(POST)
-const adminLoginVerify = async (req, res) => {
+const adminLoginVerify = async (req, res,next) => {
   try {
     const { email, password } = req.body;
 
@@ -158,32 +158,32 @@ const adminLoginVerify = async (req, res) => {
     req.session.admin_id = user._id;
     console.log(req.session.admin_id, ":session is created by admin");
     res.redirect("/admin/dashboard"); //{messageS:'login succesfull'}
-  } catch (err) {
-    console.error("Error during sign in:", err);
+  } catch (error) {
+    next(error)
     res.render("adminLogin", { message: "An error occurred during sign in" });
   }
 };
 
 //LOGOUT BTN DESTROY SESSION
-const adminLogout = async (req, res) => {
+const adminLogout = async (req, res,next) => {
   try {
     req.session.destroy();
     res.redirect("/admin");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
-const loadOrder = async (req, res) => {
+const loadOrder = async (req, res,next) => {
   try {
     const order = await orderDB.find().populate("products.product_Id");
     res.render("Admin_Order", { order });
-  } catch (err) {
-    console.log(err.message);
+  } catch (error) {
+    next(error)
   }
 };
 
-const OrderCancel = async (req, res) => {
+const OrderCancel = async (req, res,next) => {
   try {
     const product = req.body.productID;
     const quantity = req.body.quantity;
@@ -202,20 +202,31 @@ const OrderCancel = async (req, res) => {
 
     res.json({ success: true });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
-const loadCoupon = async (req, res) => {
+const loadCoupon=async(req,res,next)=>{
+  try {
+    const coupons=await couponDB.find({})
+    res.render('coupon',{coupons})
+      
+  } catch (error) {
+    next(error)
+  }
+}
+
+
+const loadaddCoupon = async (req, res,next) => {
   try {
     res.render("addCoupon");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //POST ADD COUPON
-const addCoupon = async (req, res) => {
+const addCoupon = async (req, res,next) => {
   try {
     const userid = req.session.user_id;
     const { code, description, discount, start, end, min } = req.body;
@@ -238,11 +249,21 @@ const addCoupon = async (req, res) => {
 
     res.redirect("/admin/addCoupon");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
-
+const UpdateOrderStatus = async (req, res,next) => {
+  try {
+    const productId = req.body.productID
+    const value = req.body.value
+    const orderId = req.body.orderid
+    await orderDB.findOneAndUpdate({ _id: orderId, 'products._id': productId }, { $set: { "products.$.status": value } })
+    res.json({ success: true })
+  } catch (err) {
+  next(err)
+  }
+}
 module.exports = {
   loadHome,
   loadCategory,
@@ -251,6 +272,7 @@ module.exports = {
   loadeditCategory,
   loadLogin,
   loadOrder,
+  loadCoupon,
   adminLoginVerify,
   adminLogout,
   insertCategory,
@@ -258,6 +280,7 @@ module.exports = {
   unblockUser,
   editCategory,
   OrderCancel,
-  loadCoupon,
+  loadaddCoupon,
   addCoupon,
+  UpdateOrderStatus
 };

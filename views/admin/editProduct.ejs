@@ -1,164 +1,157 @@
 <%- include('./layouts/header') %>
 
-    <h3 style="margin: 5px;">Edit Product Details</h3>
-    <div class="container-edit">
-    <form  method="POST" action="/admin/editProduct?id=<%=product._id %>"  enctype="multipart/form-data">
-        <label for="productName">Product Name:</label>
-        <input type="text" id="productName" name="name" value="<%=product.name %>" required><br>
+<h3 style="margin: 5px;">Edit Product Details</h3>
+<div class="container-edit">
+  <form method="POST" action="/admin/editProduct?id=<%=product._id %>" enctype="multipart/form-data">
+    <label for="productName">Product Name:</label>
+    <input type="text" id="productName" name="name" value="<%=product.name %>" required><br>
 
-        <label for="category">Category:</label>
+    <label for="category">Category:</label>
 
-        <select id="category" name="category" style="width: 200px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" required>
+    <select id="category" name="category" style="width: 200px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" required>
 
-            <% category.forEach(function(category) { %>
-                
-                <option value="<%=category.name %>"><%=category.name %></option>
-                <% }); %>  
-                
-          </select>
-          <br>
-        <label for="price">Price:</label>
-        <input type="number"  id="price" name="price" value="<%=product.price  %>" required><br>
+      <% category.forEach(function(category) { %>
 
-        <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" name="quantity" value="<%=product.quantity  %>" required><br>
+      <option value="<%=category.name %>" <% if(category.name==product.category){%> selected <% } %>><%=category.name %></option>
+      <% }); %>
 
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" rows="4" value="<%=product.description  %>" required></input><br>
+    </select>
+    <br>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" value="<%=product.price  %>" required><br>
 
-        <br>
-        <label for="productImage" class="form-label">Image:</label>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" value="<%=product.quantity  %>" required><br>
 
-        <div class="card-body" id="reloadData">
-            <div class="input-upload ">
-              <% product.image.forEach((image) => {%>
-              <img style="border-radius: 20%; border: 1px solid rgb(206, 202, 202); margin: 5px; "
-                id="product_img" width="100" height="100" src="/admin/IMAGES_DB/<%=image%>" alt=""/>
-                <a onclick="deleteImage('<%=image%>','<%=product._id%>')"><i style="color: red; position: relative; bottom: 81px; right:33px" class="bi bi-x-circle-fill"></i></i></a>
-              <%}) %>
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" rows="4" value="<%=product.description  %>" required></input><br>
 
-              <input
-              type="file"  name="Image" class="form-control"  multiple
-                
-                onchange="viewImage(event)"
-              />
-            </div>
-          </div>
+    <br>
+    <label for="productImage" class="form-label">Image:</label>
 
-        <input type="submit" value="Save">
-    </form>
+    <div class="card-body" id="reloadData">
+      <div class="input-upload ">
+        <% product.image.forEach((image) => {%>
+        <img style="border-radius: 20%; border: 1px solid rgb(206, 202, 202); margin: 5px; " id="product_img" width="100" height="100" src="/admin/IMAGES_DB/<%=image%>" alt="" />
+        <a onclick="deleteImage('<%=image%>','<%=product._id%>')"><i style="color: red; position: relative; bottom: 81px; right:33px" class="bi bi-x-circle-fill"></i></i></a>
+        <%}) %>
+
+        <input type="file" name="Image" class="form-control" multiple onchange="viewImage(event)" />
+      </div>
+    </div>
+
+    <input type="submit" value="Save">
+  </form>
 </div>
 
-    <style>
-        .container-edit{
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 30px;
+<style>
+  .container-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+  }
+
+  h3 {
+    margin: 0;
+    margin-right: 15px;
+
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    margin-bottom: 5px;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200%;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input[type="submit"] {
+    padding: 10px;
+    background-color: #39943c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 50%;
+  }
+
+  input[type="submit"]:hover {
+    background-color: #106315;
+  }
+</style>
+<script>
+  function deleteImage(image, productId) {
+    // Toastify({
+    //   text: 'This is a toast notification!',
+    //   duration: 3000, // Duration in milliseconds
+    //   close: true,
+    //   gravity: 'bottom', // 'top' or 'bottom'
+    //   positionLeft: false, // Position the toast on the left side
+    //   backgroundColor: '#333',
+    //   className: 'custom-toast',
+    // }).showToast();
+
+    $.ajax({
+      url: '/admin/deleteImage',
+      method: 'post',
+      data: {
+        productId,
+        image
+      },
+      success: (response) => {
+        if (response.success) {
+          $("#reloadData").load(`/admin/editProduct?product=${productId} #reloadData`);
+
+
+
+          // Swal.fire({
+          //   title: "Success",
+          //   icon: "success",
+          //   text: "Order item has been updated.",
+          //   timer: 2000,
+          // });
+        } else {
+          Swal.fire({
+            title: "Error",
+            icon: "error",
+            text: "Failed to update order item.",
+            timer: 2000,
+          });
         }
-
-        h3 {
-            margin: 0;
-            margin-right: 15px;
-
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 5px;
-        }
-
-        input[type="text"],
-        input[type="number"],
-        textarea {
-            padding: 3px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 200%;
-        }
-
-        textarea {
-            resize: vertical;
-        }
-
-        input[type="submit"] {
-            padding: 10px;
-            background-color: #39943c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 50%;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #106315;
-        }
-    </style>
-    <script>
-
-function deleteImage(image,productId){
-  // Toastify({
-  //   text: 'This is a toast notification!',
-  //   duration: 3000, // Duration in milliseconds
-  //   close: true,
-  //   gravity: 'bottom', // 'top' or 'bottom'
-  //   positionLeft: false, // Position the toast on the left side
-  //   backgroundColor: '#333',
-  //   className: 'custom-toast',
-  // }).showToast();
-
-  $.ajax({
-  url: '/admin/deleteImage',
-  method: 'post',
-  data: {
-    productId,
-    image
-  },
-  success: (response) => {
-    if (response.success) {
-      $("#reloadData").load(`/admin/editProduct?product=${productId} #reloadData`);
-   
-
-
-      // Swal.fire({
-      //   title: "Success",
-      //   icon: "success",
-      //   text: "Order item has been updated.",
-      //   timer: 2000,
-      // });
-    } else {
-      Swal.fire({
-        title: "Error",
-        icon: "error",
-        text: "Failed to update order item.",
-        timer: 2000,
-      });
-    }
-  },
-  error: () => {
-    Swal.fire({
-      title: "Error",
-      icon: "error",
-      text: "An error occurred while updating the order item.",
-      timer: 2000,
+      },
+      error: () => {
+        Swal.fire({
+          title: "Error",
+          icon: "error",
+          text: "An error occurred while updating the order item.",
+          timer: 2000,
+        });
+      }
     });
   }
-});
-}
 
 
 
-        function viewImage(event) {
-          document.getElementById("product_img").src = URL.createObjectURL(
-            event.target.files[0]
-          );
-        }
-      </script>
-    <%- include('./layouts/footer') %>
-
+  function viewImage(event) {
+    document.getElementById("product_img").src = URL.createObjectURL(
+      event.target.files[0]
+    );
+  }
+</script>
+<%- include('./layouts/footer') %>

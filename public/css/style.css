@@ -839,7 +839,7 @@ pre {
   .offset-sm-2 {
     margin-left: 16.66667%; }
   .offset-sm-3 {
-    margin-left: 25%; }
+    margin-top: 10%; }
   .offset-sm-4 {
     margin-left: 33.33333%; }
   .offset-sm-5 {
@@ -7575,8 +7575,7 @@ h1, h2, h3, h4, h5,
     #colorlib-hero .flexslider .slider-text {
       display: table;
       opacity: 0;
-      height: 440px;
-      margin-left: -120px;
+      
       z-index: 9; }
       #colorlib-hero .flexslider .slider-text > .slider-text-inner {
         display: table-cell;

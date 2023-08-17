@@ -1,4 +1,5 @@
 const Product = require("../model/productModel");
+const Banner = require("../model/bannerModel");
 const User = require("../model/userModel");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
@@ -124,39 +125,40 @@ const resetsendVerifymail = async (name, email, token) => {
 };
 
 //home page
-const loadHome = async (req, res) => {
+const loadHome = async (req, res,next) => {
   try {
     const session = req.session.user_id;
     console.log(session, "load home session");
     const product = await Product.find({ blocked: false });
-    res.render("index", { activePage: "home", product, session });
+    const banners = await Banner.find({})
+    res.render("index", { activePage: "home", product, session,banners});
   } catch (err) {
-    console.log(err.message);
+    next(error)
   }
 };
 
 //men page
-const loadMen = async (req, res) => {
+const loadMen = async (req, res,next) => {
   try {
     const product = await Product.find({ blocked: false });
     res.render("men", { activePage: "men", product });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //women page
-const loadWomen = async (req, res) => {
+const loadWomen = async (req, res,next) => {
   try {
     const product = await Product.find({ blocked: false });
     res.render("women", { activePage: "women", product });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //search page
-const loadsearch = async (req, res) => {
+const loadsearch = async (req, res,next) => {
   try {
 
     const price = req.query.price;
@@ -191,62 +193,62 @@ const loadsearch = async (req, res) => {
       priceData
     });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //about page
-const loadAbout = async (req, res) => {
+const loadAbout = async (req, res,next) => {
   try {
     res.render("about", { activePage: "about" });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //contact page
-const loadContact = async (req, res) => {
+const loadContact = async (req, res,next) => {
   try {
     res.render("contact", { activePage: "contact" });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //wish-list page
-const loadWishList = async (req, res) => {
+const loadWishList = async (req, res,next) => {
   try {
     res.render("add-to-wishlist");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 // orderComplete page
-const loadOrderComplete = async (req, res) => {
+const loadOrderComplete = async (req, res,next) => {
   try {
     res.render("order-complete");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //login page
-const loadLogin = async (req, res) => {
+const loadLogin = async (req, res,next) => {
   try {
     res.render("login");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //logout button(destory session)
-const userLogout = async (req, res) => {
+const userLogout = async (req, res,next) => {
   try {
     req.session.destroy();
     res.redirect("/");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
@@ -282,7 +284,7 @@ const verifyLogin = async (req, res) => {
 };
 
 // mobileOtp
-const mobileOtp = async (req, res) => {
+const mobileOtp = async (req, res,next) => {
   try {
     const inputEmail = req.body.inputEmail;
     const inputPassword = req.body.inputPassword;
@@ -318,11 +320,11 @@ const mobileOtp = async (req, res) => {
     // res.render("404", { inputEmail });
     res.json({ success: true, otpMob, user });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 // mobileotp(get)
-const loadmobileOtp = async (req, res) => {
+const loadmobileOtp = async (req, res,next) => {
   try {
     const mobOtp = req.query.mobOtp;
     const user = req.query.user;
@@ -348,12 +350,12 @@ const loadmobileOtp = async (req, res) => {
           .json({ success: false, message: "Failed to send OTP." });
       });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 // mobileotpVerify(post)
-const mobileotpVerify = async (req, res) => {
+const mobileotpVerify = async (req, res,next) => {
   try {
     const mobOtp = req.query.mobOtp;
     const user = req.query.user;
@@ -372,20 +374,20 @@ const mobileotpVerify = async (req, res) => {
 
     // res.render('mobileOtp',{mobOtp})
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //register pageload
-const loadRegister = async (req, res) => {
+const loadRegister = async (req, res,next) => {
   try {
     res.render("register");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 //register verify post
-const verifyUser = async (req, res) => {
+const verifyUser = async (req, res,next) => {
   try {
     const spassword = await securePassword(req.body.password);
     const email = req.body.email;
@@ -421,16 +423,16 @@ const verifyUser = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 // load OTP
-const loadOtp = async (req, res) => {
+const loadOtp = async (req, res,next) => {
   try {
     res.render("otpReminder");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
@@ -459,15 +461,15 @@ const otpValidation = async (req, res) => {
 };
 
 //forgetload page
-const forgotLoad = async (req, res) => {
+const forgotLoad = async (req, res,next) => {
   try {
     res.render("forget_password");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 //forgot validate
-const forgotSendtoEmail = async (req, res) => {
+const forgotSendtoEmail = async (req, res,next) => {
   try {
     const email = req.body.email;
     const userData = await User.findOne({ email: email });
@@ -493,12 +495,12 @@ const forgotSendtoEmail = async (req, res) => {
       res.render("forget_password", { message: "Wrong Email Id" });
     }
   } catch (error) {
-    console.log(error.messages);
+    next(error)
   }
 };
 
 // reset password load(pass in query)
-const resetpassLoad = async (req, res) => {
+const resetpassLoad = async (req, res,next) => {
   try {
     const inputtoken = req.query.token;
     const userData = await User.findOne({ token: inputtoken });
@@ -508,12 +510,12 @@ const resetpassLoad = async (req, res) => {
       res.render("404", { message: "Invlaid Token" });
     }
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //reset password verify (post)
-const resetpassverify = async (req, res) => {
+const resetpassverify = async (req, res,next) => {
   try {
     const password = req.body.password;
     const email = req.body.email;
@@ -527,12 +529,12 @@ const resetpassverify = async (req, res) => {
 
     res.redirect("/login");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //reSEND password timeout(get)
-const resend = async (req, res) => {
+const resend = async (req, res,next) => {
   try {
     //Generate a random 4-digit OTP
     const otpGenarated = Math.floor(1000 + Math.random() * 9999);
@@ -541,12 +543,12 @@ const resend = async (req, res) => {
     sendVerifymail(name2, email2, otpGenarated);
     res.render("otpReminder");
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 
 //profile page
-const loadProfile = async (req, res) => {
+const loadProfile = async (req, res,next) => {
   try {
     const url = req.url;
     const userId = req.session.user_id;
@@ -557,7 +559,7 @@ const loadProfile = async (req, res) => {
       .populate("products.product_Id");
     res.render("profile", { user, dataAddress, order, url });
   } catch (error) {
-    console.log(error.message);
+    next(error)
   }
 };
 

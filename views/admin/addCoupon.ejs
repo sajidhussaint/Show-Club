@@ -3,25 +3,25 @@
 <div class="container-edit" style="padding: 0 50px">
   <form method="POST" action="/admin/addCoupon">
     <label for="productName">COUPON CODE:</label>
-    <input type="text" id="code" name="code" style="text-transform: uppercase" required /><br />
+    <input class="form-control " type="text" id="code" name="code" style="text-transform: uppercase" required /><br />
 
     <label for="description">Description:</label>
-    <textarea id="description" name="description" rows="3"></textarea><br />
+    <textarea class="form-control " id="description" name="description" rows="3"></textarea><br />
 
     <label for="discount">Discount:</label>
-    <input type="text" id="discount" name="discount" required /><br />
+    <input class="form-control " type="text" id="discount" name="discount" required /><br />
     <label for="discount">Minimum Purchase:</label>
-    <input type="text" id="min" name="min" required /><br />
+    <input class="form-control " type="text" id="min" name="min" required /><br />
 
     <label for="start">Start date:</label>
 
-    <input type="date" id="start" name="start" value="0" min="0" max="" />
+    <input class="form-control " type="date" id="start" name="start" value="0" min="0" max="" />
 
     <label for="start">Expire date:</label>
 
-    <input type="date" id="end" name="end" value="" min="" max="" />
+    <input class="form-control " type="date" id="end" name="end" value="" min="" max="" />
     <label style="color: red"> message</label>
-    <input type="submit" value="Save" />
+    <input class="form-control btn btn-primary "  type="submit" value="Save" />
   </form>
 </div>
 
@@ -62,7 +62,7 @@
 
   input[type="submit"] {
     padding: 10px;
-    background-color: #21ee0e;
+    background-color: #2e8b25;
     color: white;
     border: none;
     border-radius: 4px;

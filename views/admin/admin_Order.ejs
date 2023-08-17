@@ -18,7 +18,7 @@
         <% if (order[i] && order[i].products && order[i].products.length > 0) { %>
           <div class="row" >
             <div  class="col-md-12 col-lg-12 col-sm-12 " >
-              <table class="table table-hover"  >
+              <table class="table table-hover" id="reloadDiv" >
                 <thead class="" style="background-color: #f14d1a ; color: white; border-radius: 10px;" >
                   <tr>
                     <th>No</th>
@@ -35,8 +35,8 @@
                     <tr>
                       <td><%= index + 1 %></td>
                       <td><%= order[i].products[index].product_Id.name %></td>
-                      <td >
-                        <select  class="form-select" onchange="updateStatus('<%= order[i].products[index]._id %>', this.value)">
+                      <td>
+                        <select  class="form-select" onchange="updateStatus('<%= order[i].products[index]._id %>','<%=order[i]._id%>', this.value)">
                           <option  value="On the way" <% if (order[i].products[index].status == 'On the way') { %> selected <% } %>>On the way</option>
                           <option value="Pending"  <% if (order[i].products[index].status == 'Pending') { %> selected <% } %>>Pending</option>
                           <option value="Processing" <% if (order[i].products[index].status == 'Processing') { %> selected <% } %>>Processing</option>
@@ -88,13 +88,26 @@
 </html>
 
 <script>
-  function updateStatus(productID){
+  function updateStatus(productID,orderid,value){
     $.ajax({
   url:'/admin/OrderUpdate',
-  method:'post',
+  method:'patch',
   data:{
-    productID
-  }
+    productID,orderid,value
+  },
+  success : (response) => {
+                if(response.success) {
+                    $('#reloadDiv').load('/admin/Orders #reloadDiv')
+                }else{
+                    Swal.fire({
+                    title : "Error",
+                    icon : 'error',
+                    text : response.message,
+                    timer : 2000
+                })
+                }
+            }
+
 })
   }
 

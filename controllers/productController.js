@@ -2,6 +2,8 @@ const ProductDB = require("../model/productModel");
 const UserDB = require("../model/userModel");
 const CategoryDB = require("../model/categoryModel");
 const cartDB = require("../model/cartModel");
+const sharp = require('sharp');
+const path= require('path');
 
 //``````````````````````````ADMIN``````````````````````````````//
 
@@ -37,11 +39,25 @@ const loadeditProduct = async (req, res) => {
 //VERIFY ADD PRODUCT(POST)(ADMIN)
 const verifyaddProduct = async (req, res) => {
   try {
+   
+
+
+
     var arrimage = [];
 
     if (req.files && req.files.length > 0) {
       for (let i = 0; i < req.files.length; i++) {
-        arrimage.push(req.files[i].filename);
+        const filePath = path.join(
+          __dirname,
+          "../public/admin/cropped",
+          req.files[i].filename
+        );
+        await sharp(req.files[i].path)
+          .resize({ width: 250, height: 250 })
+          .toFile(filePath);
+        imageArr.push(req.files[i].filename);
+
+        //  imageArr.push(req.files[i].filename);
       }
     }
 
@@ -110,7 +126,17 @@ const editProduct = async (req, res) => {
 
     if (req.files && req.files.length > 0) {
       for (let i = 0; i < req.files.length; i++) {
+        const filePath = path.join(
+          __dirname,
+          "../public/admin/cropped",
+          req.files[i].filename
+        );
+        await sharp(req.files[i].path)
+          .resize({ width: 250, height: 250 })
+          .toFile(filePath);
         imageArr.push(req.files[i].filename);
+
+        //  imageArr.push(req.files[i].filename);
       }
     }
     console.log(imageArr);

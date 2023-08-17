@@ -1,0 +1,100 @@
+<%- include('./layouts/header') %>
+
+
+<style>
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: #1a2038;
+    }
+    
+    img {
+      max-width: 100px;
+      max-height: 100px;
+    }
+    
+    .table-container {
+      margin-top: 20px;
+    }
+    
+    .container h1 {
+      margin-bottom: 20px;
+    }
+    
+    table {
+      table-layout: fixed;
+    }
+    
+    th, td {
+      word-wrap: break-word;
+      max-width: 150px;
+    }
+    
+    td {
+      vertical-align: middle;
+    }
+    
+    </style>
+    
+    <div class="container">
+        <h1>coupon List</h1>
+      
+        <div style="margin-top: 20px;">
+          <a class="text-success" href="/admin/addCoupon">Add coupons</a>
+        </div>
+      
+        <div class="table-container">
+          <% if (coupons.length > 0) { %>
+          <table>
+            <thead style="color: white;">
+              <tr>
+                <th class="p-2">code</th>
+                <th>startingDate</th>
+                <th>expiryDate</th>
+                <th>Description</th>
+                <th>Discount</th>
+                <th>Minimum Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% coupons.forEach((coupon) => { %>
+              <tr>
+                <td><%= coupon.code %></td>
+                <td><%= coupon.startingDate.toLocaleDateString("en-US")%></td>
+                <td><%= coupon.expiryDate.toLocaleDateString("en-US")%></td>
+                <td><%= coupon.description %></td>
+                <td><%= coupon.discount %></td>
+                <td><%= coupon.minimum %></td>
+                
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <% } else { %>
+          <p>No banners available.</p>
+          <% } %>
+        </div>
+      </div>
+
+      <%- include('./layouts/footer') %>
+      

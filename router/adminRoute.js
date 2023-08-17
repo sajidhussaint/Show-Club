@@ -2,8 +2,11 @@ const express = require("express");
 const admin_Route = express()
 const adminController = require('../controllers/adminController')
 const productController = require('../controllers/productController')
+const bannerController = require('../controllers/bannerController')
+const offerController = require('../controllers/offerController')
 const auth=require('../middleware/adminAuth')
 const upload = require('../middleware/uploadImage')//multer middleware
+const errorHandler =require('../middleware/errorHandler')
 
 admin_Route.set("views","./views/admin");
 
@@ -32,6 +35,7 @@ admin_Route.post("/editCategory",auth.isLogin,adminController.editCategory);
 
 admin_Route.get("/Orders",adminController.loadOrder);
 admin_Route.post("/OrderCancel",adminController.OrderCancel);
+admin_Route.patch('/OrderUpdate',adminController.UpdateOrderStatus)
 
 
 
@@ -49,11 +53,27 @@ admin_Route.post("/deleteImage",productController.deleteImage);
 
 
 //COUPON PAGE
-admin_Route.get("/addCoupon",adminController.loadCoupon);
+admin_Route.get("/coupon",adminController.loadCoupon);
+admin_Route.get("/addCoupon",adminController.loadaddCoupon);
 admin_Route.post("/addCoupon",adminController.addCoupon);
 
 
 
+//BANNER
+
+admin_Route.get('/banner' , auth.isLogin , bannerController.loadBanner)
+admin_Route.get('/add-banner' , auth.isLogin , bannerController.loadAddBanner)
+admin_Route.post('/add-banner' , upload.single('image'), bannerController.addBanner)
+admin_Route.get('/edit-banner' , auth.isLogin , bannerController.loadEditBanner)
+admin_Route.post('/edit-banner' , auth.isLogin ,upload.single('image') , bannerController.editBanner)
+admin_Route.get('/delete' , auth.isLogin , bannerController.deleteBanner)
+admin_Route.post('/delete' , auth.isLogin , bannerController.deleteBanner)
+
+//offers
+
+admin_Route.get( '/offers', offerController.getOffer )
+admin_Route.get( '/add-offer', offerController.getAddOffer )
+admin_Route.post( '/add-offer', offerController.addOffer )
 
 
 
@@ -62,6 +82,8 @@ admin_Route.post("/addCoupon",adminController.addCoupon);
 
 
 
+// error handler 
+admin_Route.use(errorHandler); 
 
 
 module.exports = admin_Route;
