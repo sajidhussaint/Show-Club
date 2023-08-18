@@ -2,18 +2,23 @@ const ProductDB = require("../model/productModel");
 const UserDB = require("../model/userModel");
 const CategoryDB = require("../model/categoryModel");
 const cartDB = require("../model/cartModel");
+const offerDB = require("../model/offerModel");
+
 const sharp = require('sharp');
 const path= require('path');
 
 //``````````````````````````ADMIN``````````````````````````````//
 
 // LOAD  PRODUCT LIST(ADMIN)
-const loadproductList = async (req, res) => {
-  try {
+const loadproductList = async (req, res,next) => {
+  try { 
+    
     const product = await ProductDB.find({});
-    res.render("productList", { product });
+    const availableOffers = await offerDB.find({ status : true, expiryDate : { $gte : new Date() }})
+    res.render("productList", { product ,availableOffers});
   } catch (error) {
     console.log(error.message);
+  // next(error)
   }
 };
 // LOAD ADD PRODUCT(ADMIN)
@@ -218,6 +223,22 @@ const loadProductDetail = async (req, res) => {
   }
 };
 
+const applyProductOffer= async(req,res,next)=>{
+  try { 
+    const { offerId, productId } = req.body
+            await ProductDB.updateOne({ _id : productId },{
+                $set : {
+                    offer : offerId
+                }
+            })
+            res.json({ success : true})
+    
+  } catch (error) {
+    console.log(error.message);
+    next(error)
+  }
+}
+
 module.exports = {
   loadproductList,
   loadaddProduct,
@@ -227,6 +248,6 @@ module.exports = {
   blockProduct,
   unblockProduct,
   loadProductDetail,
-
   deleteImage,
+  applyProductOffer
 };

@@ -1,75 +1,85 @@
 <%- include('./layouts/header') %>
-                    <!-- card-header end// -->
+<!-- card-header end// -->
 
-                    
-                    <div class="card-body" style="padding: 50px;">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">NO</th>
-                                        <th scope="col">IMAGE</th>
-                                        <th scope="col">NAME</th>
-                                        <th scope="col">CATEGORY</th>
-                                        <th scope="col">QUANTITY</th>
-                                        <th scope="col">PRICE</th>
-                                        
 
-                                    </tr>
-                                </thead>
-                                <tbody>
+<div class="card-body" style="padding: 50px;">
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">NO</th>
+          <th scope="col">IMAGE</th>
+          <th scope="col">NAME</th>
+          <th scope="col">CATEGORY</th>
+          <th scope="col">QUANTITY</th>
+          <th scope="col">PRICE</th>
+          <th scope="col">OFFERS</th>
+          <th></th>
+          <th></th>
 
-                                    <% product.forEach(function(product,index) { %>
 
-                                        <tr class="text ellipsis">
-                                            <td><%=index+1 %></td>
-                                            <td><img style="border-radius: 20%" width="50" src="/admin/IMAGES_DB/<%= product.image[0] %>" alt=""></td>
-                                            <td><%=product.name %></td>
-                                            <td><%=product.category %></td>
-                                            <td><%=product.quantity %></td>
-                                            <td>₹<%=product.price %></td>
-                                            <td class="text-end">
-                                                <a href="/admin/editProduct?product=<%=product._id %>" class="btn btn-md rounded font-sm" style="background-color: green;">EDIT</a>
-                                            </td>
-                                            <td class="text-center">
+        </tr>
+      </thead>
+      <tbody>
 
-                                                <% if (product.blocked==false) { %>
+        <% product.forEach(function(product,index) { %>
 
-                                                    
-                                           <a href="/admin/blockProduct?product=<%=product._id %>" class="btn btn-md rounded font-sm" style="background-color: RED;">
-                                            
-                                            <% } else { %>
-                                                
-                                                <a href="/admin/unblockProduct?product=<%=product._id %>" class="btn btn-md rounded font-sm" style="background-color: blue;">
-                                                 
-                                                                                                      
-                                                <% } %>
-                                                
-                                                    <% if (product.blocked==false) { %>
+        <tr class="text ellipsis">
+          <td><%=index+1 %></td>
+          <td><img style="border-radius: 20%" width="50" src="/admin/IMAGES_DB/<%= product.image[0] %>" alt=""></td>
+          <td><%=product.name %></td>
+          <td><%=product.category %></td>
+          <td><%=product.quantity %></td>
+          <td>₹<%=product.price %></td>
+          <td>
+            <% if(product.offer){ %>
+            <button onclick="removeOffer('<%= product._id %>')" class="btn btn-danger">remove offer</button>
+            <% }else{ %>
+            <button onclick="showModal('<%= product._id %>')" class="btn btn-dark">apply offer</button>
+            <% } %>
+          </td>
+          <td class="text-end">
+            <a href="/admin/editProduct?product=<%=product._id %>" class="btn btn-md rounded font-sm" style="background-color: green;">EDIT</a>
+          </td>
+          <td class="text-center">
 
-                                                        UNLIST
-                                                                                                           
-                                                      <% } else { %>
-                                                                                                          
-                                                     LIST
-                                                                                                          
-                                                    <% } %>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        
-                                        <% },1); %>  
-   
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- table-responsive //end -->
-                    </div>
-                    <!-- card-body end// -->
-                </div>
-                <!-- card end// -->
-                <!-- pagination -->
-                <!-- <div class="pagination-area mt-15 mb-50">
+            <% if (product.blocked==false) { %>
+
+
+            <a href="/admin/blockProduct?product=<%=product._id %>" class="btn btn-md rounded font-sm" style="background-color: RED;">
+
+              <% } else { %>
+
+              <a href="/admin/unblockProduct?product=<%=product._id %>" class="btn btn-md rounded font-sm" style="background-color: blue;">
+
+
+                <% } %>
+
+                <% if (product.blocked==false) { %>
+
+                UNLIST
+
+                <% } else { %>
+
+                LIST
+
+                <% } %>
+              </a>
+          </td>
+        </tr>
+
+        <% },1); %>
+
+      </tbody>
+    </table>
+  </div>
+  <!-- table-responsive //end -->
+</div>
+<!-- card-body end// -->
+</div>
+<!-- card end// -->
+<!-- pagination -->
+<!-- <div class="pagination-area mt-15 mb-50">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-start">
                             <li class="page-item active"><a class="page-link" href="#">01</a></li>
@@ -83,5 +93,61 @@
                         </ul>
                     </nav>
                 </div> -->
-            </section>
-            <%- include('./layouts/footer') %>
+                <div class="modal fade" id="discountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      
+                      <% if( availableOffers && availableOffers.length > 0) { %>
+                        <% for( offer of availableOffers ) { %>
+                
+                            <div class="modal-content rounded-0">
+                              <div data-offerid="<%= offer._id %>" style="cursor: pointer;" class="modal-body text-center">
+                                    <div class="icon text-danger">
+                                        <i style="font-size: 20px;" class="fas fa-gift"></i>
+                                    </div>
+                                    <div class="notice">  
+                                            <h2><%= offer.name %></h2>                          
+                                            <h4><%= offer.percentage %>% Discount</h4>
+                                        <p>Valid from <%=offer.startingDate.toLocaleDateString() %> to <%=offer.expiryDate.toLocaleDateString()%> </p>
+                                    </div>
+                                    <div class="code"></div>
+                                </div>
+                            </div>
+                        <% } %>
+                        <% } %>
+                    </div>
+</section>
+<script>
+ function showModal(productId) {
+        $('#discountModal').modal('show');
+        const offerElements = document.querySelectorAll('.modal-body.text-center');
+        offerElements.forEach((element) => {
+            element.onclick = function() {
+                const offerId = this.getAttribute('data-offerid');
+                enterOffer(offerId, productId); 
+            };
+        });
+    }
+
+    async function enterOffer(offerId, productId) {
+      $('#discountModal').modal('hide');
+      const response = await axios.patch( '/admin/apply-product-offer', { offerId, productId })
+      if( response.data.success ) {
+          
+          alert('Offer applied')
+          window.location= '/admin/products'
+        }
+    }
+
+    async function removeOffer( productId ) {
+      try {
+        const response = await axios.patch( '/admin/remove-product-offer', { productId  })
+        if( response.data.success ) {
+          window.location = '/admin/products'
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    } 
+
+</script>
+<%- include('./layouts/footer') %>

@@ -75,6 +75,8 @@ admin_Route.get( '/offers', offerController.getOffer )
 admin_Route.get( '/add-offer', offerController.getAddOffer )
 admin_Route.post( '/add-offer', offerController.addOffer )
 
+admin_Route.patch( '/apply-product-offer',productController.applyProductOffer )
+
 
 
 
