@@ -109,11 +109,11 @@
 								<div class="side border mb-1">
 									<h3>Category</h3>
 									<ul>
-										<li><a href="#">Slip Ons</a></li>
-										<li><a href="#">Boots</a></li>
-										<li><a href="#">Sandals</a></li>
-										<li><a href="#">Lace Ups</a></li>
-										<li><a href="#">Oxfords</a></li>
+										
+<% categories.forEach(function(category) { %>
+
+	<li><a href="#"><%=category.name%></a></li>
+	<% }); %>  
 									</ul>
 								</div>
 							</div>
@@ -173,7 +173,7 @@
 								</div>
 								<% }); %>
 						</div>
-						<div class="row">
+						<!-- <div class="row">
 							<div class="col-md-12 text-center">
 								<div class="block-27">
 				               <ul>
@@ -187,7 +187,7 @@
 				               </ul>
 				            </div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>

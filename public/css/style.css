@@ -7706,7 +7706,8 @@ h1, h2, h3, h4, h5,
 
 .product-entry {
   display: block;
-  height: 100% !important; }
+  height: 100% !important;
+ }
   .product-entry .prod-img {
     display: block; }
   .product-entry .desc {

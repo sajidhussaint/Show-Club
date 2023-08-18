@@ -132,7 +132,7 @@ const loadHome = async (req, res,next) => {
     const product = await Product.find({ blocked: false });
     const banners = await Banner.find({})
     res.render("index", { activePage: "home", product, session,banners});
-  } catch (err) {
+  } catch (error) {
     next(error)
   }
 };
@@ -150,8 +150,11 @@ const loadMen = async (req, res,next) => {
 //women page
 const loadWomen = async (req, res,next) => {
   try {
+
+
+    const categories=await categoryDB.find({blocked: false})
     const product = await Product.find({ blocked: false });
-    res.render("women", { activePage: "women", product });
+    res.render("women", { activePage: "women", product ,categories});
   } catch (error) {
     next(error)
   }
