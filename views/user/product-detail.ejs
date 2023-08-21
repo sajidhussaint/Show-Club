@@ -43,13 +43,13 @@
 <div class="colorlib-product">
   <div class="container">
     <div class="row row-pb-lg product-detail-wrap">
-      <div class="col-sm-8">
-        <div class="owl-carousel">
+      <div class="col-sm-8" >
+        <div class="owl-carousel" >
           <% product.image.forEach(function(image) { %>
-          <div class="item">
-            <div class="product-entry border product-image-container product__details__pic__item">
+          <div class="item" style="width: 728px; height: 486px;" >
+            <div class="product-entry border product-image-container product__details__pic__item" >
               <!--   id="img-container" -->
-              <img class="zoom-img-n" src="/admin/IMAGES_DB/<%=image%>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+              <img id="main-image" src="/admin/IMAGES_DB/<%=image%>" class="img-fluid" alt="Free html5 bootstrap 4 template" style="object-fit: cover;" >
               <!--id="main-image"-->
 
             </div>
@@ -58,10 +58,10 @@
           <% }); %>
 
 
-          <div class="item">
-            <div class="product-entry border product-image-container">
+          <div class="item" style="width: 728px; height: 486px; " >
+            <div class="product-entry border product-image-container"  >
 
-              <img class="zoom-img-n" src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template">
+              <img  src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template" style="object-fit: cover; width: 728px; height: 486px;"  >
 
             </div>
           </div>
@@ -72,7 +72,21 @@
         <div class="product-desc">
           <h3><%=product.name %></h3>
           <p class="price">
-            <span>₹<%=product.price %></span>
+            <% if ( product.offer){ var discount = (product.price * product.offer.percentage / 100).toFixed(0)  } else if ( product.category.offer ) {var discount = ( product.price * product.category.offer.percentage / 100 ).toFixed(0) } %>
+
+            <% if ( product.offer ) { %>
+            <p class="mb-0"><del>₹ <%= product.price %></del></p>
+            <h5 class="mb-0">₹ <%= product.price - discount %> <span class="badge" style="font-size: medium; background: linear-gradient(to right, red, #f58c02); color: white;"> Save ₹ <%= discount %> </span></h5>
+            <%} else if ( product.category.offer ) { %>
+            <p class="mb-0"><del>₹ <%= product.price %></del></p>
+            <h5 class="mb-0 fw-700"><b>₹ <%= product.price - discount %></b> <span class="badge" style="font-size: medium; background: linear-gradient(to right, red, #f58c02); color: white;"> Save ₹ <%= discount %> </span></h5>
+            <% } else { %>
+            <h5><b>₹ <%= product.price %></b></h5>
+            <% } %>
+
+
+
+
             <span>stock(<%=product.quantity %>) </span>
             <!-- <span class="rate">
 									<i class="icon-star-full"></i>
@@ -134,7 +148,7 @@
 
             <% } else { %>
 
-            <a class="btn btn-primary btn-addtocart text-center " style="color: white; background-color: #F6511D;" onclick="addToCart('<%=product._id%>')"><i class="icon-shopping-cart"></i>Add to Cart</a>
+            <a class="btn btn-primary btn-addtocart text-center " style="color: white; background-color: #F6511D; border: none;" onclick="addToCart('<%=product._id%>')"><i class="icon-shopping-cart" style="color: white; font-size: larger;"></i> Add to Cart</a>
             <% } %>
 
 
@@ -219,95 +233,95 @@
 
 <script>
 
-$(`.zoom-img-n`).ezPlus({
+// $(`.zoom-img-n`).ezPlus({
 
-container: 'ZoomContainer',
-attrImageZoomSrc: 'zoom-image', // attribute to plugin use for zoom
-borderColour: '#888',
-borderSize: 0,
-constrainSize: true,  //in pixels the dimensions you want to constrain on
-constrainType: false,  //width or height
-containLensZoom: true,
-cursor: 'inherit', // user should set to what they want the cursor as, if they have set a click function
-debug: false,
-easing: true, // easing effects
-easingAmount: 10,
-enabled: true,
+// container: 'ZoomContainer',
+// attrImageZoomSrc: 'zoom-image', // attribute to plugin use for zoom
+// borderColour: '#888',
+// borderSize: 0,
+// constrainSize: true,  //in pixels the dimensions you want to constrain on
+// constrainType: false,  //width or height
+// containLensZoom: true,
+// cursor: 'inherit', // user should set to what they want the cursor as, if they have set a click function
+// debug: false,
+// easing: true, // easing effects
+// easingAmount: 10,
+// enabled: true,
 
-// gallery options
-gallery: false,
-galleryActiveClass: 'zoomGalleryActive',
-gallerySelector: false,
-galleryItem: 'a',
-galleryEvent: 'click',
+// // gallery options
+// gallery: false,
+// galleryActiveClass: 'zoomGalleryActive',
+// gallerySelector: false,
+// galleryItem: 'a',
+// galleryEvent: 'click',
 
-// enable cross-fade effect
-imageCrossfade: false,
+// // enable cross-fade effect
+// imageCrossfade: false,
 
-// lens options
-lensBorderColour: '#000',
-lensBorderSize: 1,
-lensColour: 'white', //colour of the lens background
-lensFadeIn: false,
-lensFadeOut: false,
-lensOpacity: 0.4, //opacity of the lens
-lensShape: 'square', //can be 'round'
-lensSize: 100,
-lenszoom: false,
+// // lens options
+// lensBorderColour: '#000',
+// lensBorderSize: 1,
+// lensColour: 'white', //colour of the lens background
+// lensFadeIn: false,
+// lensFadeOut: false,
+// lensOpacity: 0.4, //opacity of the lens
+// lensShape: 'square', //can be 'round'
+// lensSize: 100,
+// lenszoom: false,
 
-// image loading spinner
-loadingIcon: false, //http://www.example.com/spinner.gif
+// // image loading spinner
+// loadingIcon: false, //http://www.example.com/spinner.gif
 
-// This change will allow to decide if you want to decrease
-// zoom of one of the dimensions once the other reached it's top value,
-// or keep the aspect ratio, default behaviour still being as always,
-// allow to continue zooming out, so it keeps retrocompatibility.
-mantainZoomAspectRatio: true,
-maxZoomLevel: false,
-minZoomLevel: 2,
+// // This change will allow to decide if you want to decrease
+// // zoom of one of the dimensions once the other reached it's top value,
+// // or keep the aspect ratio, default behaviour still being as always,
+// // allow to continue zooming out, so it keeps retrocompatibility.
+// mantainZoomAspectRatio: true,
+// maxZoomLevel: false,
+// minZoomLevel: 2,
 
-// callbacks
-onComplete: $.noop,
-onDestroy: $.noop,
-onImageClick: $.noop,
-onImageSwap: $.noop,
-onImageSwapComplete: $.noop,
-onShow: $.noop,
-onHide: $.noop,
-onZoomedImageLoaded: $.noop,
+// // callbacks
+// onComplete: $.noop,
+// onDestroy: $.noop,
+// onImageClick: $.noop,
+// onImageSwap: $.noop,
+// onImageSwapComplete: $.noop,
+// onShow: $.noop,
+// onHide: $.noop,
+// onZoomedImageLoaded: $.noop,
 
-preloading: 1, //by default, load all the images, if 0, then only load images after activated (PLACEHOLDER FOR NEXT VERSION)
-respond: [],
-responsive: true,
-scrollZoom: false, //allow zoom on mousewheel, true to activate
-scrollZoomIncrement: 0.1,  //steps of the scrollzoom
-showLens: true,
-tint: false, //enable the tinting
-tintColour: '#333', //default tint color, can be anything, red, #ccc, rgb(0,0,0)
-tintOpacity: 0.4, //opacity of the tint
-touchEnabled: true,
+// preloading: 1, //by default, load all the images, if 0, then only load images after activated (PLACEHOLDER FOR NEXT VERSION)
+// respond: [],
+// responsive: true,
+// scrollZoom: false, //allow zoom on mousewheel, true to activate
+// scrollZoomIncrement: 0.1,  //steps of the scrollzoom
+// showLens: true,
+// tint: false, //enable the tinting
+// tintColour: '#333', //default tint color, can be anything, red, #ccc, rgb(0,0,0)
+// tintOpacity: 0.4, //opacity of the tint
+// touchEnabled: true,
 
-// zoom options
-zoomActivation: 'hover', // Can also be click (PLACEHOLDER FOR NEXT VERSION)
-zoomContainerAppendTo: 'body', //zoom container parent selector
-zoomId: -1, // identifier for the zoom container
-zoomLevel: 1, //default zoom level of image
-zoomTintFadeIn: false,
-zoomTintFadeOut: false,
-zoomType: 'window', //window is default,  also 'lens' available -
-zoomWindowAlwaysShow: false,
-zoomWindowBgColour: '#fff',
-zoomWindowFadeIn: false,
-zoomWindowFadeOut: false,
-zoomWindowHeight: 300,
-zoomWindowOffsetX: 0,
-zoomWindowOffsetY: 0,
-zoomWindowPosition: 1, //Possible values: 1-16, but we can also position with a selector string.
-zoomWindowWidth: 300,
-zoomEnabled: true, //false disables zoomwindow from showing
-zIndex: 999
+// // zoom options
+// zoomActivation: 'hover', // Can also be click (PLACEHOLDER FOR NEXT VERSION)
+// zoomContainerAppendTo: 'body', //zoom container parent selector
+// zoomId: -1, // identifier for the zoom container
+// zoomLevel: 1, //default zoom level of image
+// zoomTintFadeIn: false,
+// zoomTintFadeOut: false,
+// zoomType: 'window', //window is default,  also 'lens' available -
+// zoomWindowAlwaysShow: false,
+// zoomWindowBgColour: '#fff',
+// zoomWindowFadeIn: false,
+// zoomWindowFadeOut: false,
+// zoomWindowHeight: 300,
+// zoomWindowOffsetX: 0,
+// zoomWindowOffsetY: 0,
+// zoomWindowPosition: 1, //Possible values: 1-16, but we can also position with a selector string.
+// zoomWindowWidth: 300,
+// zoomEnabled: true, //false disables zoomwindow from showing
+// zIndex: 999
 
-});
+// });
 
 </script>
 

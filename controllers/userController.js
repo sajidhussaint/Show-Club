@@ -129,7 +129,10 @@ const loadHome = async (req, res,next) => {
   try {
     const session = req.session.user_id;
     console.log(session, "load home session");
-    const product = await Product.find({ blocked: false });
+    const product = await Product.find({ blocked: false }).populate({
+      path : 'offer',
+      match :  { startingDate : { $lte : new Date() }, expiryDate : { $gte : new Date() }}
+  })
     const banners = await Banner.find({})
     res.render("index", { activePage: "home", product, session,banners});
   } catch (error) {

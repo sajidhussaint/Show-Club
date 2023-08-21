@@ -188,7 +188,9 @@ const OrderCancel = async (req, res,next) => {
     const product = req.body.productID;
     const quantity = req.body.quantity;
     const ProId = req.body.proId;
-    console.log(ProId);
+    const userId=req.session.user_id
+    const total=req.body.total;
+    const payment=req.body.payment
 
     const datas = await orderDB.findOneAndUpdate(
       { "products._id": product },
@@ -199,6 +201,15 @@ const OrderCancel = async (req, res,next) => {
       { _id: ProId },
       { $inc: { quantity: quantity } }
     );
+    if(payment=="razorpay"||payment=="wallet"){
+      await UserDB.findByIdAndUpdate({_id:userId},{$inc:{wallet:total},$push: {
+       walletHistory: {
+         date: new Date(),
+         amount: total,
+         description: `Refunded for Order cancel`,
+       },
+     },})
+        }
 
     res.json({ success: true });
   } catch (error) {

@@ -1,62 +1,65 @@
 <%- include('./header') %>
 <style>
-  .main-cont:hover{
+  .main-cont:hover {
     transform: scale(1.05);
     transition: ease-in-out 0.5s;
   }
+
   .blur h1 {
-    
-    
+
+
     background-clip: text;
     backdrop-filter: blur(10px);
-}
-.banner-list {
-  list-style: none;
-  padding: 0;
-}
+  }
 
-.banner-item {
-  position: relative;
-  height: 400px; /* Adjust the height as needed */
-  background-size: cover;
-  background-position: center;
-}
+  .banner-list {
+    list-style: none;
+    padding: 0;
+  }
 
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(rgba(49, 48, 48, 0.466), rgba(85, 84, 84, 0.719)); /* Adjust gradient colors and opacity */
-  z-index: 1;
-}
+  .banner-item {
+    position: relative;
+    height: 400px;
+    /* Adjust the height as needed */
+    background-size: cover;
+    background-position: center;
+  }
 
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(49, 48, 48, 0.466), rgba(85, 84, 84, 0.719));
+    /* Adjust gradient colors and opacity */
+    z-index: 1;
+  }
 </style>
 <aside id="colorlib-hero">
   <div class="flexslider">
     <ul class="slides banner-list">
 
-      <% banners.forEach(function(banner) { %> 
-        <li class="banner-item" style="background-image: url('/admin/IMAGES_DB/<%= banner.image %>');" >
-          <div class="overlay"></div>
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-sm-6 offset-sm-3 text-center slider-text">
-                <div class="slider-text-inner">
-                  <div class="desc blur" >
-                    <h1 class="head-1"><%=banner.info%></h1>
-                    <h2 class="head-2">Shoes</h2>
-                    <h2 class="head-3"><%=banner.title%></h2>
-                    <p class="category"><span><%=banner.description%></span></p>
-                    <p><a href="#" class="btn btn-primary">Shop Collection</a></p>
-                  </div>
+      <% banners.forEach(function(banner) { %>
+      <li class="banner-item" style="background-image: url('/admin/IMAGES_DB/<%= banner.image %>');">
+        <div class="overlay"></div>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-6 offset-sm-3 text-center slider-text">
+              <div class="slider-text-inner">
+                <div class="desc blur">
+                  <h1 class="head-1"><%=banner.info%></h1>
+                  <h2 class="head-2">Shoes</h2>
+                  <h2 class="head-3"><%=banner.title%></h2>
+                  <p class="category"><span><%=banner.description%></span></p>
+                  <p><a href="#" class="btn btn-primary">Shop Collection</a></p>
                 </div>
               </div>
             </div>
           </div>
-        </li>
-        <% }); %>  
+        </div>
+      </li>
+      <% }); %>
 
 
       <!-- <li style="background-image: url(images/img_bg_2.jpg)">
@@ -121,11 +124,7 @@
     <div class="row">
       <div class="col-sm-6 text-center">
         <div class="featured">
-          <a
-            href="#"
-            class="featured-img"
-            style="background-image: url(images/men.jpg)"
-          ></a>
+          <a href="#" class="featured-img" style="background-image: url(images/men.jpg)"></a>
           <div class="desc">
             <h2><a href="/men">Shop Men's Collection</a></h2>
           </div>
@@ -133,11 +132,7 @@
       </div>
       <div class="col-sm-6 text-center">
         <div class="featured">
-          <a
-            href="#"
-            class="featured-img"
-            style="background-image: url(images/women.jpg)"
-          ></a>
+          <a href="#" class="featured-img" style="background-image: url(images/women.jpg)"></a>
           <div class="desc">
             <h2><a href="/women">Shop Women's Collection</a></h2>
           </div>
@@ -159,14 +154,27 @@
       <div class="col-lg-3 mb-4 text-center main-cont">
         <div class="product-entry border">
           <a href="/product-detail?productid=<%=product._id %>" class="prod-img">
-            <img src="/admin/cropped/<%= product.image[0] %>"
-              class="img-fluid"
-              alt="Free html5 bootstrap 4 template"
-            />
+            <img src="/admin/cropped/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template" />
           </a>
           <div class="desc">
-            <h2><a href="#"><%=product.name %></a></h2>
-            <span class="price">₹<%=product.price %></span>
+
+
+            <h2><a href="/product-detail?productid=<%=product._id %>"><%=product.name %></a></h2>
+
+            <% if ( product.offer){ var discount = (product.price * product.offer.percentage / 100).toFixed(0)  } else if ( product.category.offer ) {var discount = ( product.price * product.category.offer.percentage / 100 ).toFixed(0) } %>
+
+            <% if ( product.offer ) { %>
+            <p class="mb-0"><del>₹ <%= product.price %></del></p>
+            <h5 class="mb-0">₹ <%= product.price - discount %> <span class="badge" style="font-size: medium; background: linear-gradient(to right, red, #f58c02); color: white;"> Save ₹ <%= discount %> </span></h5>
+            <%} else if ( product.category.offer ) { %>
+            <p class="mb-0"><del>₹ <%= product.price %></del></p>
+            <h5 class="mb-0 fw-700">₹ <%= product.price - discount %> <span class="badge" style="font-size: medium; background: linear-gradient(to right, red, #f58c02); color: white;"> Save ₹ <%= discount %> </span></h5>
+            <% } else { %>
+            <h5>₹ <%= product.price %> </h5>
+            <% } %>
+
+            <!-- <span class="price">₹<%=product.price %></span> -->
+
           </div>
         </div>
       </div>
@@ -183,47 +191,25 @@
 <div class="colorlib-partner">
   <div class="container">
     <div class="row">
-      <div
-        class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm"
-      >
+      <div class="col-sm-8 offset-sm-2 text-center colorlib-heading colorlib-heading-sm">
         <h2>Trusted Partners</h2>
       </div>
     </div>
     <div class="row">
       <div class="col partner-col text-center">
-        <img
-          src="images/brand-1.jpg"
-          class="img-fluid"
-          alt="Free html4 bootstrap 4 template"
-        />
+        <img src="images/brand-1.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template" />
       </div>
       <div class="col partner-col text-center">
-        <img
-          src="images/brand-2.jpg"
-          class="img-fluid"
-          alt="Free html4 bootstrap 4 template"
-        />
+        <img src="images/brand-2.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template" />
       </div>
       <div class="col partner-col text-center">
-        <img
-          src="images/brand-3.jpg"
-          class="img-fluid"
-          alt="Free html4 bootstrap 4 template"
-        />
+        <img src="images/brand-3.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template" />
       </div>
       <div class="col partner-col text-center">
-        <img
-          src="images/brand-4.jpg"
-          class="img-fluid"
-          alt="Free html4 bootstrap 4 template"
-        />
+        <img src="images/brand-4.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template" />
       </div>
       <div class="col partner-col text-center">
-        <img
-          src="images/brand-5.jpg"
-          class="img-fluid"
-          alt="Free html4 bootstrap 4 template"
-        />
+        <img src="images/brand-5.jpg" class="img-fluid" alt="Free html4 bootstrap 4 template" />
       </div>
     </div>
   </div>

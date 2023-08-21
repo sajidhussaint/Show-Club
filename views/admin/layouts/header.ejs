@@ -1,117 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>SHOW☰CLUB</title>
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content="" />
-        <meta property="og:type" content="" />
-        <meta property="og:url" content="" />
-        <meta property="og:image" content="" />
-        <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="" />
-        <style>@import url('https://fonts.googleapis.com/css2?family=Odibee+Sans&display=swap');</style>
-        <!-- Template CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<!-- toastify -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js@1.11.0/dist/toastify.min.css">
-<!-- toastify -->
+
+<head>
+  <meta charset="utf-8" />
+  <title>SHOW☰CLUB</title>
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta property="og:title" content="" />
+  <meta property="og:type" content="" />
+  <meta property="og:url" content="" />
+  <meta property="og:image" content="" />
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Odibee+Sans&display=swap');
+  </style>
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- toastify -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js@1.11.0/dist/toastify.min.css">
+  <!-- toastify -->
 
   <!-- Link Bootstrap Icons -->
-        <link href="/admin/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+  <link href="/admin/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-       
-        
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- sweet2.0 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- snippet popup success -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
-    <!-- ajax snippet -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!-- sweet2.0 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- snippet popup success -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+
+  <!-- axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- axios -->
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- toastify -->
-<script src="https://cdn.jsdelivr.net/npm/toastify-js@1.11.0/dist/toastify.min.js"></script>
-<!-- toastify -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- toastify -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.11.0/dist/toastify.min.js"></script>
+  <!-- toastify -->
 
-<!-- moment -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <!-- moment -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+</head>
 
+<body>
 
+  <div class="screen-overlay"></div>
+  <aside class="navbar-aside" id="offcanvas_aside">
 
-    </head>
+    <div class="aside-top">
 
-    <body>
+      <br>
+      <div style="color: rgb(78, 77, 77); font-family:'Odibee Sans', cursive; font-weight: 900; font-size: 30px; text-shadow: 2px 1px 15px; letter-spacing: 3px;" id="colorlib-logo">SHOW<a href='/admin' style="color: #F6511D" ;>☰</a>CLUB</div>
 
-        <div class="screen-overlay"></div>
-        <aside class="navbar-aside" id="offcanvas_aside">
-            
-            <div class="aside-top">
-            
-                    <br>
-                    <div style="color: rgb(78, 77, 77); font-family:'Odibee Sans', cursive; font-weight: 900; font-size: 30px; text-shadow: 2px 1px 15px; letter-spacing: 3px;" id="colorlib-logo">SHOW<a href='/admin'style="color: #F6511D"; >☰</a>CLUB</div>
-                
-                    <br>
-                
-            </div>
-        </a>
-            <nav>
-                <ul class="menu-aside">
-                    <li class="menu-item active">
-                        <a class="menu-link" href="/admin/dashboard">
-                            <i class="icon material-icons md-home" style="color: #F6511D;"></i>
-                            <span class="text">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="menu-item ">
-                        <a class="menu-link" href="/admin/userDetails">
-                            <i class="icon material-icons md-person" style="color: #F6511D;"></i>
-                            <span class="text">USERS</span>
-                        </a>
-                        <!-- <div class="submenu">
+      <br>
+
+    </div>
+    </a>
+    <nav>
+      <ul class="menu-aside">
+        <li class="menu-item active">
+          <a class="menu-link" href="/admin/dashboard">
+            <i class="icon material-icons md-home" style="color: #F6511D;"></i>
+            <span class="text">Dashboard</span>
+          </a>
+        </li>
+        <li class="menu-item ">
+          <a class="menu-link" href="/admin/userDetails">
+            <i class="icon material-icons md-person" style="color: #F6511D;"></i>
+            <span class="text">USERS</span>
+          </a>
+          <!-- <div class="submenu">
                             <a href="/admin/userDetails">USER DETAILS</a>
                             <a href="page-account-register.html"></a>
                             <a href="page-error-404.html"></a>
                         </div> -->
-                    </li>
-                    <li class="menu-item has-submenu">
-                        <a class="menu-link" href="page-products-list.html">
-                            <i class="icon material-icons md-shopping_bag" style="color: #F6511D;"></i>
-                            <span class="text">PRODUCTS</span>
-                        </a>
-                        <div class="submenu">
-                            <a href="/admin/productlist">ALL PRODUCT</a>
-                            <a href="/admin/addProduct">ADD PRODUCT</a>
-                            
-                        </div>
-                    </li>
-                    <li class="menu-item has-submenu">
-                        <a class="menu-link" href="">
-                            <i class="icon material-icons md-stars" style="color: #F6511D;"></i>
-                            <span class="text">CATEGORY</span>
-                        </a>
-                        <div class="submenu">
-                            <a href="/admin/category">ALL CATEGORY</a>
-                            <a href="/admin/addCategory">ADD CATEGORY</a>
-                        </div>
-                    </li>
-                    <li class="menu-item has-submenu">
-                        <a class="menu-link" href="/admin/Orders">
-                            <i class="icon material-icons md-shopping_cart" style="color: #F6511D;"></i>
-                            <span class="text">Orders</span>
-                        </a>
-                        <div class="submenu">
-                            <a href="/admin/Orders">Order detail</a>
-                        </div>
-                    </li>
-                    <!-- <li class="menu-item has-submenu">
+        </li>
+        <li class="menu-item has-submenu">
+          <a class="menu-link" href="page-products-list.html">
+            <i class="icon material-icons md-shopping_bag" style="color: #F6511D;"></i>
+            <span class="text">PRODUCTS</span>
+          </a>
+          <div class="submenu">
+            <a href="/admin/productlist">ALL PRODUCT</a>
+            <a href="/admin/addProduct">ADD PRODUCT</a>
+
+          </div>
+        </li>
+        <li class="menu-item has-submenu">
+          <a class="menu-link" href="">
+            <i class="icon material-icons md-stars" style="color: #F6511D;"></i>
+            <span class="text">CATEGORY</span>
+          </a>
+          <div class="submenu">
+            <a href="/admin/category">ALL CATEGORY</a>
+            <a href="/admin/addCategory">ADD CATEGORY</a>
+          </div>
+        </li>
+        <li class="menu-item has-submenu">
+          <a class="menu-link" href="/admin/Orders">
+            <i class="icon material-icons md-shopping_cart" style="color: #F6511D;"></i>
+            <span class="text">Orders</span>
+          </a>
+          <div class="submenu">
+            <a href="/admin/Orders">Order detail</a>
+          </div>
+        </li>
+        <!-- <li class="menu-item has-submenu">
                         <a class="menu-link" href="page-sellers-cards.html">
                             <i class="icon material-icons md-store"></i>
                             <span class="text">OFFERS</span>
@@ -119,66 +122,66 @@
                         <div class="submenu">
                         </div>
                     </li> -->
-                    <li class="menu-item has-submenu">
-                        <a class="menu-link">
-                            <i class="icon material-icons md-local_offer" style="color: #F6511D;"></i>
-                            <span class="text">COUPONS</span>
-                        </a>
-                        <div class="submenu">
-                            <a href="/admin/coupon">coupon Details</a>
-                            <a href="/admin/addCoupon">Add Coupons</a>
-                        </div>
-                    </li>
-                    <li class="menu-item has-submenu">
-                        <a class="menu-link">
-                            <i class="icon material-icons md-bookmark" style="color: #F6511D;"></i>
-                            <span class="text">BANNERS</span>
-                        </a>
-                        <div class="submenu">
-                            <a href="/admin/banner">Banner List</a>
-                            <a href="/admin/add-banner">Add Banner</a>
-                        </div>
-                    </li>
-                    <li class="menu-item has-submenu">
-                        <a class="menu-link">
-                            <i class="icon material-icons md-percentage" style="color: #F6511D;"></i>
-                            <span class="text">OFFERS</span>
-                        </a>
-                        <div class="submenu">
-                            <a href="/admin/offers">Offer List</a>
-                            <a href="/admin/add-offer">Add Offer</a>
-                        </div>
-                    </li>
-                   
-                   
-                    <!-- <li class="menu-item">
+        <li class="menu-item has-submenu">
+          <a class="menu-link">
+            <i class="icon material-icons md-local_offer" style="color: #F6511D;"></i>
+            <span class="text">COUPONS</span>
+          </a>
+          <div class="submenu">
+            <a href="/admin/coupon">coupon Details</a>
+            <a href="/admin/addCoupon">Add Coupons</a>
+          </div>
+        </li>
+        <li class="menu-item has-submenu">
+          <a class="menu-link">
+            <i class="icon material-icons md-bookmark" style="color: #F6511D;"></i>
+            <span class="text">BANNERS</span>
+          </a>
+          <div class="submenu">
+            <a href="/admin/banner">Banner List</a>
+            <a href="/admin/add-banner">Add Banner</a>
+          </div>
+        </li>
+        <li class="menu-item has-submenu">
+          <a class="menu-link">
+            <i class="icon material-icons md-percentage" style="color: #F6511D;"></i>
+            <span class="text">OFFERS</span>
+          </a>
+          <div class="submenu">
+            <a href="/admin/offers">Offer List</a>
+            <a href="/admin/add-offer">Add Offer</a>
+          </div>
+        </li>
+
+
+        <!-- <li class="menu-item">
                         <a class="menu-link" href="page-reviews.html">
                             <i class="icon material-icons md-comment"></i>
                             <span class="text">Reviews</span>
                         </a>
                     </li> -->
-                    <!-- <li class="menu-item">
+        <!-- <li class="menu-item">
                         <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i> <span class="text">Brands</span> </a>
                     </li> -->
-                    
-                </ul>
-                <hr />
-               
-                <br />
-                <br />
-            </nav>
-        </aside>
-        <main class="main-wrap">
-            <header class="main-header navbar">
-                <div class="col-search">
-                    <h2>Dashboard</h2>
-                    <p>Admin User</p>
-                </div>
-                <div class="col-nav">
-                    <a href="/admin/logout" class="btn btn-md rounded font-sm" style="background-color: red;"><i  class="fas fa-sign-out-alt"></i>Log out</a>
-                </div>
-            </header>
-            <script>
-                
-            </script>
-            <!-- header area -->
+
+      </ul>
+      <hr />
+
+      <br />
+      <br />
+    </nav>
+  </aside>
+  <main class="main-wrap">
+    <header class="main-header navbar">
+      <div class="col-search">
+        <h2>Dashboard</h2>
+        <p>Admin User</p>
+      </div>
+      <div class="col-nav">
+        <a href="/admin/logout" class="btn btn-md rounded font-sm" style="background-color: red;"><i class="fas fa-sign-out-alt"></i>Log out</a>
+      </div>
+    </header>
+    <script>
+
+    </script>
+    <!-- header area -->

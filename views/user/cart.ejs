@@ -157,7 +157,11 @@
         </div>
         <div class="one-eight text-center">
           <div class="display-tc">
-            <span class="price">₹<%= items.product_Id.price%></span>
+            <% if(items.product_Id.offer){ %>
+              <span class="price">₹<%=(items.total/items.quantity).toFixed(0)  %></span>
+              <% }else{ %>
+                <span class="price">₹<%= items.product_Id.price%></span>
+              <% } %>
           </div>
         </div>
 

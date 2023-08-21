@@ -123,7 +123,7 @@
                                 <% if(value.status=='canceled'){%>
                                     <button disabled  class="btn btn-danger"><i class="fas fa-trash-alt"></i>Canceled</button>
                                     <% }else{ %>
-                                        <button onclick="cancelOrderItem('<%= value._id %>','<%= value.quantity %>','<%= value.product_Id._id%>')" class="delete-button"><i class="fas fa-trash-alt"></i>Cancel</button>
+                                        <button onclick="cancelOrderItem('<%= value._id %>','<%= value.quantity %>','<%= value.product_Id._id%>','<%= value.total %>','<%= order.payment%>')" class="delete-button"><i class="fas fa-trash-alt"></i>Cancel</button>
                                         <% } %>
                             </td>
                         </tr>
@@ -133,14 +133,14 @@
         </section>
     </div>
     <script>
-    function cancelOrderItem(productID,quantity,proId){
+    function cancelOrderItem(productID,quantity,proId,total,payment){
     event.preventDefault()
     $.ajax({
 
   url:'/OrderCancel',
   method:'post',
   data:{
-    productID,quantity,proId
+    productID,quantity,proId,total,payment
   },
   success:(response) => {
         if (response.success) {

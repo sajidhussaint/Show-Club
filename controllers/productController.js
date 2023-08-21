@@ -205,7 +205,10 @@ const deleteImage = async (req, res) => {
 const loadProductDetail = async (req, res) => {
   try {
     const id = req.query.productid;
-    const product = await ProductDB.findById({ _id: id });
+    const product = await ProductDB.findById({ _id: id }).populate({
+      path : 'offer',
+      match :  { startingDate : { $lte : new Date() }, expiryDate : { $gte : new Date() }}
+  })
     if (req.session.user_id) {
       const carts = await cartDB.findOne({ userId: req.session.user_id });
       if (carts) {
@@ -225,6 +228,7 @@ const loadProductDetail = async (req, res) => {
 
 const applyProductOffer= async(req,res,next)=>{
   try { 
+    console.log('working apply product');
     const { offerId, productId } = req.body
             await ProductDB.updateOne({ _id : productId },{
                 $set : {
@@ -234,8 +238,22 @@ const applyProductOffer= async(req,res,next)=>{
             res.json({ success : true})
     
   } catch (error) {
-    console.log(error.message);
     next(error)
+  }
+}
+
+const removeProductOffer=async(req,res)=>{
+  try {
+    const { productId } = req.body
+            const remove = await ProductDB.updateOne({ _id : productId },{
+                $unset : {
+                    offer : ""
+                }
+            })
+            res.json({ success : true })
+      
+  } catch (error) {
+       next(error)
   }
 }
 
@@ -249,5 +267,6 @@ module.exports = {
   unblockProduct,
   loadProductDetail,
   deleteImage,
-  applyProductOffer
+  applyProductOffer,
+  removeProductOffer
 };

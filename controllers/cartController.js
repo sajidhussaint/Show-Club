@@ -16,7 +16,9 @@ const loadCart = async (req, res) => {
     const product = await Product.find({ blocked: false }).limit(4)
     const products = await cart
       .findOne({ userId: userId })
-      .populate("product.product_Id");
+      .populate("product.product_Id")
+      .populate('product.product_Id.offer')
+
     const cartCoupons=await cart.findOneAndUpdate({userId:userId},{ $unset: { coupon: 1 }})  
 
     const availableCoupons = await couponDB.find({startingDate : { $lte : new Date() }, expiryDate : { $gte : new Date() } })
@@ -58,8 +60,21 @@ const addtoCart = async (req, res) => {
     const quantity = req.body.product_quantity;
     const product_Id = req.body.product_Id;
     const cartdata = await cart.findOne({ userId: userid });
-    const productData = await Product.findOne({ _id: product_Id });
-    const total = quantity * productData.price;
+    const productData = await Product.findOne({ _id: product_Id }).populate({
+      path : 'offer',
+      match :  { startingDate : { $lte : new Date() }, expiryDate : { $gte : new Date() }}
+  })
+  
+  if(productData.offer){
+    var discount = (productData.price * productData.offer.percentage / 100).toFixed(0)
+
+  }else{
+    var discount=0;
+  }
+  
+  
+  const total = quantity * (productData.price-discount);
+  console.log(total);
 
     if (cartdata) {
       const findProduct = await cart.findOne({
@@ -154,21 +169,33 @@ const changes = async (req, res) => {
     const productId = req.body.productId;
 
     const Cart = await cart.findOne({ userId: req.session.user_id });
-    const product = await Product.findOne({ _id: productId });
+    const product = await Product.findOne({ _id: productId })
+    .populate({
+      path : 'offer',
+      match :  { startingDate : { $lte : new Date() }, expiryDate : { $gte : new Date() }}
+  })
 
     const cartProduct = Cart.product.find(
       (product) => product.product_Id.toString() === productId
     );
+if(product.offer){
+ var disc = (product.price * product.offer.percentage / 100).toFixed(0) 
+ disc=product.price-disc
+}else{
+  disc=product.price
+}
 
     if (count == 1) {
       if (cartProduct.quantity < product.quantity) {
+
+
         const incqt = await cart.findOneAndUpdate(
           { userId: req.session.user_id, "product.product_Id": productId },
           {
             $inc: {
               "product.$.quantity": 1,
-              "product.$.total": product.price,
-              grandTotal: product.price,
+              "product.$.total": disc,
+              grandTotal: disc,
             },
             $set:{coupon:null}
           }
@@ -188,8 +215,8 @@ const changes = async (req, res) => {
           {
             $inc: {
               "product.$.quantity": -1,
-              "product.$.total": -product.price,
-              grandTotal: -product.price,
+              "product.$.total": -disc,
+              grandTotal: -disc,
             },
             $set:{coupon:null}
           }

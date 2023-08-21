@@ -130,11 +130,11 @@
 
     async function enterOffer(offerId, productId) {
       $('#discountModal').modal('hide');
+      alert('Offer applied')
       const response = await axios.patch( '/admin/apply-product-offer', { offerId, productId })
       if( response.data.success ) {
           
-          alert('Offer applied')
-          window.location= '/admin/products'
+          window.location= '/admin/productlist'
         }
     }
 
@@ -142,7 +142,7 @@
       try {
         const response = await axios.patch( '/admin/remove-product-offer', { productId  })
         if( response.data.success ) {
-          window.location = '/admin/products'
+          window.location = '/admin/productlist'
         }
       } catch (error) {
         console.log(error.message);
