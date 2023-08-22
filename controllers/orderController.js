@@ -40,6 +40,7 @@ const loadOrderDetails = async (req, res,next) => {
 
 const proceed = async (req, res,next) => {
   try {
+    console.log('running wallet');
     const userid = req.session.user_id;
     const address = req.body.address;
     const payment = req.body.payment;
@@ -49,7 +50,7 @@ const proceed = async (req, res,next) => {
     const cartData = await cartDB.findOne({ userId: userid });
     const cartProducts = cartData.product;
 
-    let status = payment == "cod" ? "placed" : "pending";
+    let status = payment == "cod" || payment == "wallet" ? "placed" : "pending";
     const orderDate = new Date();
     const delivery = new Date(orderDate.getTime() + 10 * 24 * 60 * 60 * 1000);
     const deliveryDate = delivery
@@ -86,6 +87,19 @@ const proceed = async (req, res,next) => {
     });
 
     const orderData = await order.save();
+   if(payment == "wallet"){
+    
+    await UserDB.findByIdAndUpdate({_id:userid},{$inc:{wallet:-orderTotal},$push: {
+      walletHistory: {
+        date: new Date(),
+        amount:-orderTotal,
+        description: `Buy product with wallet`,
+      },
+    },})
+
+   }
+
+
 
     if (orderData.payment != "razorpay") {
       const productUpdatePromises = cartProducts.map(async (cartProduct) => {
@@ -161,7 +175,6 @@ const orderEpay = async (req, res,next) => {
     if (cartCoupon) {
       var amount = discounted.discountedTotal * 100;
     } else {
-      console.log('this is working total*100');
       var amount = req.body.total * 100;
     }
     const mobile = req.body.mobile;
@@ -172,7 +185,9 @@ const orderEpay = async (req, res,next) => {
       receipt: process.env.EMAIL_USER,
     };
     razorpayInstance.orders.create(options, (err, order) => {
+      console.log(order)
       if (!err) {
+
         res.status(200).send({
           success: true,
           msg: "order created",

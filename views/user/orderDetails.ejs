@@ -1,160 +1,183 @@
-
 <%- include('./header.ejs') %>
 
 
-    
-    <style>
-        
-        /* Desktop styles */
-        .order-section, .product-section {
-            margin: 20px;
-            padding: 30px;
-            border: 1px solid #beb0b0;
-            background-color: #fff;
-            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Tablet styles */
-        @media (max-width: 768px) {
-            .order-section, .product-section {
-                padding: 20px;
-            }
-        }
-        
-        /* Mobile styles */
-        @media (max-width: 480px) {
-            .order-section, .product-section {
-                margin: 10px;
-                padding: 15px;
-            }
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        
 
-        
-        .order-section h2, .product-section h2 {
-            margin-top: 0;
-            color: #F6511D;
-        }
-        
-        .edit-button, .delete-button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            color: #fff;
-        }
-        
-        .edit-button {
-            background-color: #F6511D;
-        }
-        
-        .delete-button {
-            background-color: #FF4500;
-        }
-        
-        .edit-button:hover, .delete-button:hover {
-            background-color: #FF6347;
-        }
-    </style>
-    <div style="padding: 20px 200px;" >
-        <section class="order-section" >
-            <h2>Order Information</h2>
-            <table>
-                <tr>
-                    <th>Date:</th>
-                    <td><%=order.date.toLocaleString()%></td>
-                </tr>
-                <tr>
-                    <th>Order ID:</th>
-                    <td> <%=order._id%></td>
-                </tr>
-                <tr>
-                    <th>Grand Total:</th>
-                    <td> ₹<%=order.totalAmount%></td>
-                </tr>
-                <tr>
-                    <th>Payment Method:</th>
-                    <td><% if (order.payment=='cod') { %>                                                  
-                        Cash On Delivery
-                      <% }%></td>
-                </tr>
-                <tr>
-                    <th>Delivery Date:</th>
-                    <% const options = { year: 'numeric', month: 'long', day: 'numeric' }; %>
-                    <td><%=order.expectedDelivery.toLocaleDateString('en-US', options)%></td>
-                </tr>
-            </table>
-        </section>
-        <section class="product-section" id="reloadData">
-            <h2>Product Ordered</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Image</th>
-                        <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% order.products.forEach(function(value) { %>
-                        <tr>
-                            <td><img style="width: 50px; height: 50px; border-radius: 20%" src="/admin/IMAGES_DB/<%= value.product_Id.image[0] %>" alt="Product 1"></td>
-                            <td><%= value.product_Id.name%></td>
-                            <td><%= value.quantity %></td>
-                            <td>₹<%= value.product_Id.price%></td>
-                            <td>₹<%= value.total%></td>
-                            <td>
-                                <!-- <button class="edit-button"><i class="fas fa-edit"></i> Edit</button> -->
-                                <% if(value.status=='canceled'){%>
-                                    <button disabled  class="btn btn-danger"><i class="fas fa-trash-alt"></i>Canceled</button>
-                                    <% }else{ %>
-                                        <button onclick="cancelOrderItem('<%= value._id %>','<%= value.quantity %>','<%= value.product_Id._id%>','<%= value.total %>','<%= order.payment%>')" class="delete-button"><i class="fas fa-trash-alt"></i>Cancel</button>
-                                        <% } %>
-                            </td>
-                        </tr>
-                        <% }); %>  
-                </tbody>
-            </table>
-        </section>
-    </div>
-    <script>
-    function cancelOrderItem(productID,quantity,proId,total,payment){
+<style>
+  /* Desktop styles */
+  .order-section,
+  .product-section {
+    margin: 20px;
+    padding: 30px;
+    border: 1px solid #beb0b0;
+    background-color: #fff;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Tablet styles */
+  @media (max-width: 768px) {
+
+    .order-section,
+    .product-section {
+      padding: 20px;
+    }
+  }
+
+  /* Mobile styles */
+  @media (max-width: 480px) {
+
+    .order-section,
+    .product-section {
+      margin: 10px;
+      padding: 15px;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+  }
+
+
+
+  .order-section h2,
+  .product-section h2 {
+    margin-top: 0;
+    color: #F6511D;
+  }
+
+  .edit-button,
+  .delete-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #fff;
+  }
+
+  .edit-button {
+    background-color: #F6511D;
+  }
+
+  .delete-button {
+    background-color: #FF4500;
+  }
+
+  .edit-button:hover,
+  .delete-button:hover {
+    background-color: #FF6347;
+  }
+</style>
+<div style="padding: 20px 200px;">
+  <section class="order-section">
+    <h2>Order Information</h2>
+    <table>
+      <tr>
+        <th>Date:</th>
+        <td><%=order.date.toLocaleString()%></td>
+      </tr>
+      <tr>
+        <th>Order ID:</th>
+        <td> <%=order._id%></td>
+      </tr>
+      <tr>
+        <th>Grand Total:</th>
+        <td> ₹<%=order.totalAmount%></td>
+      </tr>
+      <tr>
+        <th>Payment Method:</th>
+        <td><% if (order.payment=='cod') { %>
+          Cash On Delivery
+          <% }%></td>
+      </tr>
+      <tr>
+        <th>Delivery Date:</th>
+        <% const options = { year: 'numeric', month: 'long', day: 'numeric' }; %>
+        <td><%=order.expectedDelivery.toLocaleDateString('en-US', options)%></td>
+      </tr>
+    </table>
+  </section>
+  <section class="product-section" id="reloadData">
+    <h2>Product Ordered</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Product Name</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% order.products.forEach(function(value) { %>
+        <tr>
+          <td><img style="width: 50px; height: 50px; border-radius: 20%" src="/admin/IMAGES_DB/<%= value.product_Id.image[0] %>" alt="Product 1"></td>
+          <td><%= value.product_Id.name%></td>
+          <td><%= value.quantity %></td>
+          <td>₹<%= value.product_Id.price%></td>
+          <td>₹<%= value.total%></td>
+          <td>
+            <!-- <button class="edit-button"><i class="fas fa-edit"></i> Edit</button> -->
+            <% if(value.status=='canceled'){%>
+            <button disabled class="btn btn-danger"><i class="fas fa-trash-alt"></i>Canceled</button>
+            <% }else{ %>
+            <button onclick="cancelOrderItem('<%= value._id %>','<%= value.quantity %>','<%= value.product_Id._id%>','<%= value.total %>','<%= order.payment%>')" class="delete-button"><i class="fas fa-trash-alt"></i>Cancel</button>
+            <% } %>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </section>
+</div>
+<script>
+  function cancelOrderItem(productID, quantity, proId, total, payment) {
     event.preventDefault()
     $.ajax({
 
-  url:'/OrderCancel',
-  method:'post',
-  data:{
-    productID,quantity,proId,total,payment
-  },
-  success:(response) => {
+      url: '/OrderCancel',
+      method: 'post',
+      data: {
+        productID,
+        quantity,
+        proId,
+        total,
+        payment
+      },
+      success: (response) => {
         if (response.success) {
           $("#reloadData").load("/orderDetails?orderId=<%=order._id%> #reloadData");
           Swal.fire({
-        title: "Canceled",
-        icon: "success",
-        text: "Order item has been updated.",
-        timer: 2000,
-      });
+            title: 'Are you sure?',
+            text: "You want cancel this order!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#F6511D',
+            confirmButtonText: 'Yes, Cancel it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire(
+                'canceled!',
+                'Your Order has been Canceled.',
+                'success'
+              )
+            }
+          })
+
         }
       }
-})
+    })
   }
-    </script>
+</script>
 
-    <%- include('./footer.ejs') %>
+<%- include('./footer.ejs') %>

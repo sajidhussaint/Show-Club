@@ -1,0 +1,110 @@
+<%- include('./header.ejs') %>
+
+
+
+<style>
+  /* Desktop styles */
+  .order-section,
+  .product-section {
+    margin: 20px;
+    padding: 30px;
+    border: 1px solid #beb0b0;
+    background-color: #fff;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Tablet styles */
+  @media (max-width: 768px) {
+
+    .order-section,
+    .product-section {
+      padding: 20px;
+    }
+  }
+
+  /* Mobile styles */
+  @media (max-width: 480px) {
+
+    .order-section,
+    .product-section {
+      margin: 10px;
+      padding: 15px;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+  }
+
+
+
+  .order-section h2,
+  .product-section h2 {
+    margin-top: 0;
+    color: #F6511D;
+  }
+
+  .edit-button,
+  .delete-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #fff;
+  }
+
+  .edit-button {
+    background-color: #F6511D;
+  }
+
+  .delete-button {
+    background-color: #FF4500;
+  }
+
+  .edit-button:hover,
+  .delete-button:hover {
+    background-color: #FF6347;
+  }
+</style>
+<div style="padding: 20px 200px;">
+  <section class="product-section" id="reloadData">
+    <h2 >Wallet History</h2>
+    <table>
+      <thead style="font-weight: 900 ; color: black;" >
+        <tr>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody style="font-weight: 700; ">
+
+        <% wallet.forEach(function(item) { %>
+            <tr>
+              <td><%=item.date.toLocaleDateString()%></td>
+              
+              <% if(item.amount>0){ %>
+                <td style="color: green;"><%=item.amount%></td>
+                <% }else{%>
+                    <td style="color:red;"><%=item.amount%></td>
+                    <% }%>
+              <td><%=item.description%></td>
+            </tr>
+            <% }); %>  
+
+
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<%- include('./footer.ejs') %>

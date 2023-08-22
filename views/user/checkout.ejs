@@ -270,7 +270,11 @@
                 <div class="radio">
                   <label><input type="radio" name="payment" id="cashOnDelivery" value="cod" checked="true"> Cash On Delivery</label>
                   <br>
-                  <label><input type="radio" name="payment" id="cashOnDelivery" value="razorpay"> RazorPay</label>
+                  <label><input type="radio" name="payment" id="" value="razorpay"> RazorPay</label>
+                  <% if(user.wallet){ %>
+                    <br>
+                    <label><input type="radio" name="payment" id="" value="wallet"> Wallet</label>
+                    <% } %>
                 </div>
               </div>
             </div>
@@ -434,7 +438,8 @@
           }
         },
       });
-    } else {
+    }
+    else {
       $.ajax({
         url: "/orderPlace",
         method: "post",

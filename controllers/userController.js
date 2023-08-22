@@ -12,6 +12,10 @@ const AddressDB = require("../model/addressModel");
 const categoryDB = require("../model/categoryModel");
 const orderDB = require("../model/orderModel");
 const twilio = require("twilio");
+const ejs = require("ejs");
+const puppeteer = require("puppeteer");
+const fs = require("fs");
+const path = require("path");
 
 dotenv.config();
 const twilioClient = twilio(
@@ -247,6 +251,20 @@ const loadLogin = async (req, res,next) => {
     next(error)
   }
 };
+
+//walletHistoryPage
+const loadwalletHistory = async (req, res,next) => {
+  try {
+    const user_id=req.session.user_id;
+    const user=await User.findOne({_id:user_id})
+    res.render("walletHistory",{wallet:user.walletHistory});
+  } catch (error) {
+    next(error)
+  }
+};
+
+
+
 
 //logout button(destory session)
 const userLogout = async (req, res,next) => {
@@ -569,6 +587,48 @@ const loadProfile = async (req, res,next) => {
   }
 };
 
+
+const invoiceDownload=async(req,res)=>{
+  try {  
+    const { orderId } = req.query
+    const userId = req.session.user_id
+    let sumTotal = 0
+    const userData = await User.findById(userId)
+    const orderData = await orderDB.findById(orderId).populate('products.product_Id')
+
+    orderData.products.forEach(item => {
+        const total = item.product_Id.price * item.quantity
+        sumTotal += total
+    })
+
+    const date = new Date()
+    const data = {
+        order: orderData,
+        user: userData,
+        date,
+        sumTotal
+    }
+
+    const filepathName = path.resolve(__dirname, "../views/user/invoice.ejs")
+    const html = fs.readFileSync(filepathName).toString()
+    const ejsData = ejs.render(html, data)
+    const browser = await puppeteer.launch({ headless: "new" });
+    const page = await browser.newPage();
+    await page.setContent(ejsData, { waitUntil: "networkidle0" });
+    const pdfBytes = await page.pdf({ format: "Letter" });
+    await browser.close();
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+        "Content-Disposition",
+        "attachment; filename= orderInvoice_showClub.pdf"
+    );
+    res.send(pdfBytes);
+  } catch (error) {
+       next(error)
+  }
+}
+
 module.exports = {
   loadHome,
   loadMen,
@@ -583,6 +643,7 @@ module.exports = {
   loadProfile,
   loadOtp,
   loadsearch,
+  loadwalletHistory,
   userLogout,
   verifyUser,
   verifyLogin,
@@ -594,4 +655,5 @@ module.exports = {
   resend,
   mobileOtp,
   mobileotpVerify,
+  invoiceDownload
 };

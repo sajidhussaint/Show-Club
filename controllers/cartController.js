@@ -41,12 +41,14 @@ const loadCheckOut = async (req, res) => {
 
     const cartData= await cart.findOne({ userId : userId })
 
+    const user=await User.findOne({_id:userId})
+
     if( cartData && cartData.coupon) {
      var discounted = await couponHelper.discountPrice( cartData.coupon, cartData.grandTotal )
   }
   console.log(discounted);
   
-    res.render("checkout",{address,cartproduct,order,discounted});
+    res.render("checkout",{address,cartproduct,order,discounted,user});
   } catch (error) {
     console.log(error.message);
   }

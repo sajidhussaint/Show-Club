@@ -102,9 +102,14 @@ user_Route.get('/test',orderController.test)
 //search
 user_Route.get('/search',userController.loadsearch)
 
-
 user_Route.post("/applyCoupon",couponController.applyCoupon);
 
+
+
+// wallet
+user_Route.get('/walletHistory',userController.loadwalletHistory)
+
+user_Route.get('/invoice',userController.invoiceDownload)
 
 
 // user_Route.get('/Proceed',cartController.loadProceed)
