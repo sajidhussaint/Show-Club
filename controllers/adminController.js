@@ -6,46 +6,192 @@ const couponDB = require("../model/couponModel");
 
 const bcrypt = require("bcrypt");
 
-const loadHome = async (req, res,next) => {
+const loadHome = async (req, res, next) => {
   try {
-    const userCount = await UserDB.find({ is_admin: "0" }).count();
-    res.render("index", { userCount });
+    let currentDate = new Date();
+
+    const categoryOrders = await orderDB.aggregate([
+      {
+        $match: {
+          status: { $ne: "pending" },
+        },
+      },
+      {
+        $unwind: "$products",
+      },
+      {
+        $match: {
+          "products.status": { $ne: "cancelled" },
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product_Id",
+          foreignField: "_id",
+          as: "productData",
+        },
+      },
+      {
+        $unwind: "$productData",
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "productData.category",
+          foreignField: "_id",
+          as: "categoryData",
+        },
+      },
+      {
+        $unwind: "$categoryData",
+      },
+      {
+        $group: {
+          _id: "$categoryData.name",
+          totalQuantitySold: { $sum: "$products.quantity" },
+        },
+      },
+      {
+        $project: {
+          category: "$_id",
+          totalQuantitySold: 1,
+          _id: 0,
+        },
+      },
+    ]);
+
+    let ordersCategory = {};
+
+    categoryOrders.forEach((category) => {
+      ordersCategory[category.category] = category.totalQuantitySold;
+    });
+    console.log("this is obj", ordersCategory);
+
+    const Category = await CategoryDB.find({});
+
+    const paymentCod1 = await orderDB.aggregate([
+      { $match: { payment: "cod", "products.status": "delivered" } },
+      { $group: { _id: null, total: { $sum: "$totalAmount" } } },
+      { $project: { total: 1, _id: 0 } },
+    ]);
+    const paymentRazor1 = await orderDB.aggregate([
+      { $match: { payment: "razorpay", "products.status": "delivered" } },
+      { $group: { _id: null, total: { $sum: "$totalAmount" } } },
+      { $project: { total: 1, _id: 0 } },
+    ]);
+
+    let paymentRazor;
+    let paymentCod;
+    if (paymentRazor1.length > 0) {
+      paymentRazor = parseInt(paymentRazor1[0].total);
+    } else {
+      paymentRazor = 0;
+    }
+
+    if (paymentCod1.length > 0) {
+      paymentCod = parseInt(paymentCod1[0].total);
+    } else {
+      paymentCod = 0;
+    }
+
+    const startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+    const endOfWeek = new Date(currentDate);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+    const dailyOrders = await orderDB.aggregate([
+      {
+        $match: {
+          status: {
+            $ne: "pending",
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$date",
+            },
+          },
+          dailyrevenue: {
+            $sum: "$totalAmount",
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+      {
+        $limit: 7,
+      },
+    ]);
+
+    const result = dailyOrders || 0;
+
+    const Revenue = paymentCod + paymentRazor;
+
+    console.log(Revenue);
+
+    const countOrder = await orderDB.find().countDocuments();
+
+    const countProduct = await ProductDB.find().countDocuments();
+    const countCategory = await CategoryDB.find().countDocuments();
+
+    const userCount = await UserDB.find({ is_admin: "0" }).countDocuments();
+    res.render("index", {
+      ordersCategory,
+      Category,
+      paymentCod,
+      paymentRazor,
+      result,
+      Revenue,
+      countOrder,
+      countCategory,
+      countProduct,
+      userCount,
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
-const loadUser = async (req, res,next) => {
+const loadUser = async (req, res, next) => {
   try {
     const user = await UserDB.find({ is_admin: "0" });
     res.render("userDetails", { user });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
-const loadCategory = async (req, res,next) => {
+const loadCategory = async (req, res, next) => {
   try {
     const category = await CategoryDB.find({});
     res.render("Category", { category });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
-const loadaddCategory = async (req, res,next) => {
+const loadaddCategory = async (req, res, next) => {
   try {
     res.render("addCategory", { message: "" });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 // INSERT CATEGORY (POST)
-const insertCategory = async (req, res,next) => {
+const insertCategory = async (req, res, next) => {
   try {
     const { name, description } = req.body;
 
-    const alreadyExist = await CategoryDB({ name: name });
+    const alreadyExist = await CategoryDB.findOne({ name: name });
 
     if (alreadyExist) {
+      console.log("already exist is working");
       res.render("addCategory", { message: "Category already Exist !!!" });
     } else {
       const categoryData = new CategoryDB({
@@ -62,12 +208,12 @@ const insertCategory = async (req, res,next) => {
       }
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //EDIT CATEGORY LOAD(GET)
-const loadeditCategory = async (req, res,next) => {
+const loadeditCategory = async (req, res, next) => {
   try {
     const name = req.query.name;
     const catData = await CategoryDB.findOne({ name: name });
@@ -78,7 +224,7 @@ const loadeditCategory = async (req, res,next) => {
 };
 
 //EDIT CATEGORY LOAD(POST)
-const editCategory = async (req, res,next) => {
+const editCategory = async (req, res, next) => {
   try {
     const qname = req.query.name;
 
@@ -90,21 +236,21 @@ const editCategory = async (req, res,next) => {
     );
     res.redirect("/admin/category");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 // LOAD LOGIN PAGE
-const loadLogin = async (req, res,next) => {
+const loadLogin = async (req, res, next) => {
   try {
     res.render("adminLogin");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 // LOAD LOGIN PAGE
-const blockUser = async (req, res,next) => {
+const blockUser = async (req, res, next) => {
   try {
     const userId = req.query._id;
     await UserDB.updateOne(
@@ -113,10 +259,10 @@ const blockUser = async (req, res,next) => {
     );
     res.redirect("/admin/userDetails");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
-const unblockUser = async (req, res,next) => {
+const unblockUser = async (req, res, next) => {
   try {
     const userId = req.query._id;
     await UserDB.updateOne(
@@ -125,12 +271,12 @@ const unblockUser = async (req, res,next) => {
     );
     res.redirect("/admin/userDetails");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //ADMIN LOGIN(POST)
-const adminLoginVerify = async (req, res,next) => {
+const adminLoginVerify = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -159,38 +305,38 @@ const adminLoginVerify = async (req, res,next) => {
     console.log(req.session.admin_id, ":session is created by admin");
     res.redirect("/admin/dashboard"); //{messageS:'login succesfull'}
   } catch (error) {
-    next(error)
+    next(error);
     res.render("adminLogin", { message: "An error occurred during sign in" });
   }
 };
 
 //LOGOUT BTN DESTROY SESSION
-const adminLogout = async (req, res,next) => {
+const adminLogout = async (req, res, next) => {
   try {
     req.session.destroy();
     res.redirect("/admin");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
-const loadOrder = async (req, res,next) => {
+const loadOrder = async (req, res, next) => {
   try {
     const order = await orderDB.find().populate("products.product_Id");
     res.render("Admin_Order", { order });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
-const OrderCancel = async (req, res,next) => {
+const OrderCancel = async (req, res, next) => {
   try {
     const product = req.body.productID;
     const quantity = req.body.quantity;
     const ProId = req.body.proId;
-    const userId=req.session.user_id
-    const total=req.body.total;
-    const payment=req.body.payment
+    const userId = req.session.user_id;
+    const total = req.body.total;
+    const payment = req.body.payment;
 
     const datas = await orderDB.findOneAndUpdate(
       { "products._id": product },
@@ -201,43 +347,47 @@ const OrderCancel = async (req, res,next) => {
       { _id: ProId },
       { $inc: { quantity: quantity } }
     );
-    if(payment=="razorpay"||payment=="wallet"){
-      await UserDB.findByIdAndUpdate({_id:userId},{$inc:{wallet:total},$push: {
-       walletHistory: {
-         date: new Date(),
-         amount: total,
-         description: `Refunded for Order cancel`,
-       },
-     },})
+    if (payment == "razorpay" || payment == "wallet") {
+      await UserDB.findByIdAndUpdate(
+        { _id: userId },
+        {
+          $inc: { wallet: total },
+          $push: {
+            walletHistory: {
+              date: new Date(),
+              amount: total,
+              description: `Refunded for Order cancel`,
+            },
+          },
         }
+      );
+    }
 
     res.json({ success: true });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
-const loadCoupon=async(req,res,next)=>{
+const loadCoupon = async (req, res, next) => {
   try {
-    const coupons=await couponDB.find({})
-    res.render('coupon',{coupons})
-      
+    const coupons = await couponDB.find({});
+    res.render("coupon", { coupons });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
-
-const loadaddCoupon = async (req, res,next) => {
+const loadaddCoupon = async (req, res, next) => {
   try {
     res.render("addCoupon");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //POST ADD COUPON
-const addCoupon = async (req, res,next) => {
+const addCoupon = async (req, res, next) => {
   try {
     const userid = req.session.user_id;
     const { code, description, discount, start, end, min } = req.body;
@@ -260,21 +410,24 @@ const addCoupon = async (req, res,next) => {
 
     res.redirect("/admin/addCoupon");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
-const UpdateOrderStatus = async (req, res,next) => {
+const UpdateOrderStatus = async (req, res, next) => {
   try {
-    const productId = req.body.productID
-    const value = req.body.value
-    const orderId = req.body.orderid
-    await orderDB.findOneAndUpdate({ _id: orderId, 'products._id': productId }, { $set: { "products.$.status": value } })
-    res.json({ success: true })
+    const productId = req.body.productID;
+    const value = req.body.value;
+    const orderId = req.body.orderid;
+    await orderDB.findOneAndUpdate(
+      { _id: orderId, "products._id": productId },
+      { $set: { "products.$.status": value } }
+    );
+    res.json({ success: true });
   } catch (err) {
-  next(err)
+    next(err);
   }
-}
+};
 module.exports = {
   loadHome,
   loadCategory,
@@ -293,5 +446,5 @@ module.exports = {
   OrderCancel,
   loadaddCoupon,
   addCoupon,
-  UpdateOrderStatus
+  UpdateOrderStatus,
 };

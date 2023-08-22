@@ -13,7 +13,7 @@ const path= require('path');
 const loadproductList = async (req, res,next) => {
   try { 
     
-    const product = await ProductDB.find({});
+    const product = await ProductDB.find({}).populate('category')
     const availableOffers = await offerDB.find({ status : true, expiryDate : { $gte : new Date() }})
     res.render("productList", { product ,availableOffers});
   } catch (error) {
@@ -45,9 +45,6 @@ const loadeditProduct = async (req, res) => {
 const verifyaddProduct = async (req, res) => {
   try {
    
-
-
-
     var arrimage = [];
 
     if (req.files && req.files.length > 0) {
@@ -60,7 +57,7 @@ const verifyaddProduct = async (req, res) => {
         await sharp(req.files[i].path)
           .resize({ width: 250, height: 250 })
           .toFile(filePath);
-        imageArr.push(req.files[i].filename);
+        arrimage.push(req.files[i].filename);
 
         //  imageArr.push(req.files[i].filename);
       }

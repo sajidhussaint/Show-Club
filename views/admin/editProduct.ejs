@@ -12,7 +12,7 @@
 
       <% category.forEach(function(category) { %>
 
-      <option value="<%=category.name %>" <% if(category.name==product.category){%> selected <% } %>><%=category.name %></option>
+      <option value="<%=category._id %>" <% if(category.name==product.category){%> selected <% } %>><%=category.name %></option>
       <% }); %>
 
     </select>
