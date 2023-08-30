@@ -386,11 +386,14 @@ const loadaddCoupon = async (req, res, next) => {
   }
 };
 
+
+
+
 //POST ADD COUPON
 const addCoupon = async (req, res, next) => {
   try {
     const userid = req.session.user_id;
-    const { code, description, discount, start, end, min } = req.body;
+    const { code, description, discount, start, end, min ,max} = req.body;
     const exist = await couponDB.findOne({ code: code.toUpperCase() });
     if (exist) {
       // req.flash("err", "Coupon name already exist..");
@@ -404,6 +407,7 @@ const addCoupon = async (req, res, next) => {
       startingDate: start,
       expiryDate: end,
       minimum: min,
+      maximum:max,
     });
 
     const coupons = await couponData.save();
@@ -413,6 +417,40 @@ const addCoupon = async (req, res, next) => {
     next(error);
   }
 };
+
+const loadeditCoupon=async(req,res)=>{
+  try {
+    const id=req.query.id
+
+    const coupon=await couponDB.findOne({_id:id})
+
+    res.render("editCoupon",{coupon});
+    
+  } catch (error) {
+    next(error);
+  }
+}
+
+const verifyeditCoupon = async (req, res, next) => {
+  try {
+
+    const { code, description, discount, start, end, min ,max} = req.body;
+
+    await CategoryDB.updateOne(
+      { code: code },
+      { $set: { description: description,
+        discount: discount,
+        startingDate: start,
+        expiryDate: end,
+        minimum: min,
+        maximum:max } }
+    );
+    res.redirect("/admin/coupon");
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 const UpdateOrderStatus = async (req, res, next) => {
   try {
@@ -428,6 +466,121 @@ const UpdateOrderStatus = async (req, res, next) => {
     next(err);
   }
 };
+
+//sales Report(get)
+const salesReport = async (req, res,next) => {
+  try {
+
+    const totalAmount = await orderDB.aggregate([
+      { $unwind: '$products' },
+      { $match: { 'products.status': 'delivered' } },
+      { $group: { _id: null, total: { $sum: '$products.total' } } }
+    ]);
+
+    console.log(totalAmount,'total amount');
+    
+    const totalSold = await orderDB.aggregate([
+      { $unwind: '$products' },
+      { $match: { 'products.status': 'delivered' } },
+      { $group: { _id: null, total: { $sum: '$products.quantity' } } },
+      { $project: { total: 1, _id: 0 } }
+    ]);
+    
+    console.log(totalSold,'total Sold');
+
+    const product = await orderDB.find({ "products.status": 'delivered' }).populate('products.product_Id').populate('user')
+
+    console.log( 'this is products',product);
+
+    res.render('sales-report', {
+      totalAmount,
+      totalSold,
+      product,
+    })
+
+
+  } catch (err) {
+    next(err);
+  }
+}
+
+
+const sortSalesReport = async (req, res,next) => {
+    try {
+      let fromDate = req.body.fromDate ? new Date(req.body.fromDate) : null;
+      fromDate.setHours(0, 0, 0, 0);
+      let toDate = req.body.toDate ? new Date(req.body.toDate) : null;
+      toDate.setHours(23, 59, 59, 999);
+
+      const currentDate = new Date();
+
+      if (fromDate && toDate) {
+        if (toDate < fromDate) {
+          const temp = fromDate;
+          fromDate = toDate;
+          toDate = temp;
+        }
+      } else if (fromDate) {
+        toDate = currentDate;
+      } else if (toDate) {
+        fromDate = currentDate;
+      }
+console.log("*/n*/n$");
+   console.log(toDate,fromDate);
+      var matchStage = {
+      
+        'products.status': 'delivered'
+      };
+
+      const totalAmount = await orderDB.aggregate([  {
+        $match: {
+
+        
+          expectedDelivery: { $gte: fromDate, $lte: toDate },
+        },
+      },
+        { $unwind: '$products' },
+        { $match: matchStage }, // This is where you would put your additional matching criteria if needed
+        {
+          $group: {
+            _id: null,
+            total: { $sum: '$products.total' }
+          }
+        }
+      ]);
+      
+
+      const totalSold = await orderDB.aggregate([
+        {
+          $match: {
+  
+          
+            expectedDelivery: { $gte: fromDate, $lte: toDate },
+          },
+        },
+        { $unwind: '$products' },
+        { $match: matchStage },
+        { $group: { _id: null, total: { $sum: '$products.quantity' } } },
+        { $project: { total: 1, _id: 0 } },
+      ]);
+
+     
+      const product = await orderDB.find({ expectedDelivery: { $gte: fromDate, $lte: toDate },"products.status": 'delivered' }).populate('products.product_Id').populate('user')
+      console.log('hai');
+      console.log( totalAmount,
+        totalSold, 
+        product);
+      res.render('sales-report', {
+        totalAmount,
+        totalSold,
+        product,
+      })
+      
+    } catch (err) {
+      console.log((err.message));
+    }
+  };
+
 module.exports = {
   loadHome,
   loadCategory,
@@ -447,4 +600,8 @@ module.exports = {
   loadaddCoupon,
   addCoupon,
   UpdateOrderStatus,
+  salesReport,
+  sortSalesReport,
+  loadeditCoupon,
+  verifyeditCoupon
 };

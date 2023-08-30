@@ -112,6 +112,9 @@ user_Route.get('/walletHistory',userController.loadwalletHistory)
 user_Route.get('/invoice',userController.invoiceDownload)
 
 
+user_Route.post('/review',auth.isLogin,userController.review)
+
+
 // user_Route.get('/Proceed',cartController.loadProceed)
 
 

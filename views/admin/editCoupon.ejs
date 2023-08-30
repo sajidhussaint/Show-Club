@@ -1,27 +1,27 @@
 <%- include('./layouts/header') %>
-<h4 style="padding: 50px">ADD COUPON</h4>
+<h4 style="padding: 50px">EDIT COUPON</h4>
 <div class="container-edit" style="padding: 0 50px">
   <form method="POST" action="/admin/addCoupon">
     <label for="productName">COUPON CODE:</label>
-    <input class="form-control " type="text" id="code" name="code" style="text-transform: uppercase" required /><br />
+    <input class="form-control " type="text" id="code" name="code" style="text-transform: uppercase" value="<%=coupon.code%>" required /><br />
 
     <label for="description">Description:</label>
-    <textarea class="form-control " id="description" name="description" rows="3"></textarea><br />
+    <textarea class="form-control " id="description" name="description" rows="3"><%=coupon.description%></textarea><br />
 
     <label for="discount">Discount:</label>
-    <input class="form-control " type="text" id="discount" name="discount" required /><br />
+    <input class="form-control " type="text" id="discount" name="discount" value="<%=coupon.discount%>" required /><br />
     <label for="discount">Minimum Purchase:</label>
-    <input class="form-control " type="text" id="min" name="min" required /><br />
+    <input class="form-control " type="text" id="min" name="min" value="<%=coupon.minimum%>" required /><br />
     <label for="discount">Maximum Purchase:</label>
-    <input class="form-control " type="text" id="max" name="max" required /><br />
+    <input class="form-control " type="text" id="max" name="max" value="<%=coupon.maximum%>" required /><br />
 
     <label for="start">Start date:</label>
 
-    <input class="form-control " type="date" id="start" name="start" value="0" min="0" max="" />
+    <input class="form-control " type="date" id="start" name="start"  min="0" max="" value="<%=coupon.startingDate%>" />
 
     <label for="start">Expire date:</label>
 
-    <input class="form-control " type="date" id="end" name="end" value="" min="" max="" />
+    <input class="form-control " type="date" id="end" name="end" value="" min="" max="" value="<%=coupon.expiryDate%>" />
     <label style="color: red"></label>
     <input class="form-control btn btn-primary "  type="submit" value="Save" />
   </form>

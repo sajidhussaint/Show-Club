@@ -9,7 +9,6 @@
 				</div>
 			</div>
 		</div>
-
 		<div class="colorlib-product">
 			<div class="container "  >
 				<div class="d-flex" >
@@ -79,7 +78,7 @@
 									<h3>Category</h3>
 									<ul>
 										<% category.forEach(function(value) { %>
-											<li><a href="/search?category=<%=value.name %>"><%=value.name %></a></li>
+											<li><a href="/search?category=<%=value._id %><% if (searchItem) { %>&&searchItem=<%= searchItem %><% } %><% if (price) { %>&&price=<%= price %><% } %>"><%=value.name %></a></li>
 											<% }); %>  
 									</ul>
 								</div>
@@ -88,10 +87,10 @@
 								<div class="side border mb-1">
 									<h3>PRICE</h3>
 									<ul>
-										<li><a href="/search?price=1000">Rs.500 to Rs.1000</a></li>
-										<li><a href="/search?price=2000">Rs.1000 to Rs.2000</a></li>
-										<li><a href="/search?price=3000">Rs.2000 to Rs.3000</a></li>
-										<li><a href="/search?price=4000">Rs.3000 to Rs.4000</a></li>	
+										<li><a href="/search?price=1000<% if (filterCategory) { %>&&category=<%= filterCategory %><% } %><% if (searchItem){%>&searchItem=<%= searchItem %><% } %>">Rs.500 to Rs.1000</a></li>
+										<li><a href="/search?price=2000<% if (filterCategory) { %>&&category=<%= filterCategory %><% } %><% if (searchItem){%>&searchItem=<%= searchItem %><% } %>">Rs.1000 to Rs.2000</a></li>
+										<li><a href="/search?price=3000<% if (filterCategory) { %>&&category=<%= filterCategory %><% } %><% if (searchItem){%>&searchItem=<%= searchItem %><% } %>">Rs.2000 to Rs.3000</a></li>
+										<li><a href="/search?price=4000<% if (filterCategory) { %>&&category=<%= filterCategory %><% } %><% if (searchItem){%>&searchItem=<%= searchItem %><% } %>">Rs.3000 to Rs.4000</a></li>	
 									</ul>
 								</div>
 							</div>
@@ -100,7 +99,7 @@
 					</div>
 					<div class="col-lg-9 col-xl-9">
 						<div class="row row-pb-md">
-							<% if(products){ %>
+						
 								<% products.forEach(function(products,index) { %>
 									<div class="col-lg-3 mb-4 text-center main-cont">
 									  <div class="product-entry border">
@@ -117,9 +116,10 @@
 									  </div>
 									</div>
 									<% }); %>
-								<% } %>
-							<% if(productCategory){ %>
-								<% productCategory.forEach(function(product,index) { %>
+								
+
+							<!-- <% if(filteredProducts){ %>
+								<% filteredProducts.forEach(function(product,index) { %>
 									<div class="col-lg-3 mb-4 text-center main-cont">
 									  <div class="product-entry border">
 										<a href="/product-detail?productid=<%=product._id %>" class="prod-img">
@@ -154,7 +154,7 @@
 										</div>
 										<% }); %>
 							<% } %>
-						</div>
+						</div> -->
 						<div class="row">
 							<div class="col-md-12 text-center">
 								<div class="block-27">
@@ -202,7 +202,8 @@
 			</div>
 		</div>
 		<script>
-
+const nice=document.getElementById('nice').value
+console.log(nice);
 
 		</script>
 

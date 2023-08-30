@@ -57,6 +57,9 @@ admin_Route.get("/coupon",adminController.loadCoupon);
 admin_Route.get("/addCoupon",adminController.loadaddCoupon);
 admin_Route.post("/addCoupon",adminController.addCoupon);
 
+admin_Route.get("/editCoupon",adminController.loadeditCoupon);
+admin_Route.post("/editCoupon",adminController.verifyeditCoupon);
+
 
 
 //BANNER
@@ -79,7 +82,12 @@ admin_Route.patch( '/apply-product-offer',productController.applyProductOffer )
 admin_Route.patch('/remove-product-offer',productController.removeProductOffer)
 
 
+//sales report
 
+admin_Route.get( '/salesReport', adminController.salesReport )
+
+//To sort the sales report page 
+admin_Route.post('/salesReport' ,adminController.sortSalesReport)
 
 
 

@@ -5,11 +5,12 @@
 <div class="card-body" style="padding: 50px;">
   <div class="table-responsive">
     <table class="table table-hover">
-      <thead>
+      <thead class="text-center">
         <tr>
           <th scope="col">NO</th>
           <th scope="col">IMAGE</th>
           <th scope="col">NAME</th>
+          <th scope="col">GENDER</th>
           <th scope="col">CATEGORY</th>
           <th scope="col">QUANTITY</th>
           <th scope="col">PRICE</th>
@@ -20,7 +21,7 @@
 
         </tr>
       </thead>
-      <tbody>
+      <tbody class="text-center">
 
         <% product.forEach(function(product,index) { %>
 
@@ -28,6 +29,7 @@
           <td><%=index+1 %></td>
           <td><img style="border-radius: 20%" width="50" src="/admin/IMAGES_DB/<%= product.image[0] %>" alt=""></td>
           <td><%=product.name %></td>
+          <td><%=product.gender %></td>
           <td><%=product.category.name%></td>
           <td><%=product.quantity %></td>
           <td>₹<%=product.price %></td>

@@ -28,6 +28,77 @@
     transform: scale(1.5);
     transition: opacity 0.3s ease;
   }
+
+  .star-rating input[type="radio"] {
+    display: none;
+  }
+
+  .star-rating i {
+    font-size: 24px;
+    color: #FFD700;
+    /* Gold color */
+    cursor: pointer;
+  }
+
+  .star-rating input[type="radio"]:checked~i {
+    color: #F6511D;
+    /* Custom color for selected stars */
+  }
+
+  .review-container {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+
+  .review-container p {
+    margin-top: 10px;
+  }
+
+
+  
+/* starts */
+.rating {
+display: flex;
+flex-direction: row-reverse;
+justify-content: left;
+
+
+}
+
+
+.rating > input{ display:none;}
+
+.rating > label {
+position: relative;
+width: 1.1em;
+font-size: 20px;
+color: #FFD700;
+cursor: pointer;
+}
+
+.rating > label::before{
+content: "\2605";
+position: absolute;
+opacity: 0;
+}
+
+.rating > label:hover:before,
+.rating > label:hover ~ label:before {
+opacity: 1 !important;
+}
+
+.rating > input:checked ~ label:before{
+opacity:1;
+}
+
+.rating:hover > input:checked ~ label:before{ opacity: 0.4; }
+
+
+
+/* starts */
+
 </style>
 <div class="breadcrumbs">
   <div class="container">
@@ -43,13 +114,13 @@
 <div class="colorlib-product">
   <div class="container">
     <div class="row row-pb-lg product-detail-wrap">
-      <div class="col-sm-8" >
-        <div class="owl-carousel" >
+      <div class="col-sm-8">
+        <div class="owl-carousel">
           <% product.image.forEach(function(image) { %>
-          <div class="item" style="width: 728px; height: 486px;" >
-            <div class="product-entry border product-image-container product__details__pic__item" >
+          <div class="item" style="width: 728px; height: 486px;">
+            <div class="product-entry border product-image-container product__details__pic__item">
               <!--   id="img-container" -->
-              <img id="main-image" src="/admin/IMAGES_DB/<%=image%>" class="img-fluid" alt="Free html5 bootstrap 4 template" style="object-fit: cover;" >
+              <img id="main-image" src="/admin/IMAGES_DB/<%=image%>" class="img-fluid" alt="Free html5 bootstrap 4 template" style="object-fit: cover;">
               <!--id="main-image"-->
 
             </div>
@@ -58,10 +129,10 @@
           <% }); %>
 
 
-          <div class="item" style="width: 728px; height: 486px; " >
-            <div class="product-entry border product-image-container"  >
+          <div class="item" style="width: 728px; height: 486px; ">
+            <div class="product-entry border product-image-container">
 
-              <img  src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template" style="object-fit: cover; width: 728px; height: 486px;"  >
+              <img src="/admin/IMAGES_DB/<%= product.image[0] %>" class="img-fluid" alt="Free html5 bootstrap 4 template" style="object-fit: cover; width: 728px; height: 486px;">
 
             </div>
           </div>
@@ -75,27 +146,27 @@
             <% if ( product.offer){ var discount = (product.price * product.offer.percentage / 100).toFixed(0)  } else if ( product.category.offer ) {var discount = ( product.price * product.category.offer.percentage / 100 ).toFixed(0) } %>
 
             <% if ( product.offer ) { %>
-            <p class="mb-0"><del>₹ <%= product.price %></del></p>
-            <h5 class="mb-0">₹ <%= product.price - discount %> <span class="badge" style="font-size: medium; background: linear-gradient(to right, red, #f58c02); color: white;"> Save ₹ <%= discount %> </span></h5>
-            <%} else if ( product.category.offer ) { %>
-            <p class="mb-0"><del>₹ <%= product.price %></del></p>
-            <h5 class="mb-0 fw-700"><b>₹ <%= product.price - discount %></b> <span class="badge" style="font-size: medium; background: linear-gradient(to right, red, #f58c02); color: white;"> Save ₹ <%= discount %> </span></h5>
-            <% } else { %>
-            <h5><b>₹ <%= product.price %></b></h5>
-            <% } %>
+          <p class="mb-0"><del>₹ <%= product.price %></del></p>
+          <h5 class="mb-0">₹ <%= product.price - discount %> <span class="badge" style="font-size: medium; background: linear-gradient(to right, red, #f58c02); color: white;"> Save ₹ <%= discount %> </span></h5>
+          <%} else if ( product.category.offer ) { %>
+          <p class="mb-0"><del>₹ <%= product.price %></del></p>
+          <h5 class="mb-0 fw-700"><b>₹ <%= product.price - discount %></b> <span class="badge" style="font-size: medium; background: linear-gradient(to right, red, #f58c02); color: white;"> Save ₹ <%= discount %> </span></h5>
+          <% } else { %>
+          <h5><b>₹ <%= product.price %></b></h5>
+          <% } %>
 
 
 
 
-            <span>stock(<%=product.quantity %>) </span>
-            <!-- <span class="rate">
-									<i class="icon-star-full"></i>
-									<i class="icon-star-full"></i>
-									<i class="icon-star-full"></i>
-									<i class="icon-star-full"></i>
-									<i class="icon-star-half"></i>
-									(74 Rating)
-								</span> -->
+          <span>stock(<%=product.quantity %>) </span>
+          <!-- <span class="rate">
+            <i class="icon-star-full"></i>
+            <i class="icon-star-full"></i>
+            <i class="icon-star-full"></i>
+            <i class="icon-star-full"></i>
+            <i class="icon-star-half"></i>
+            (74 Rating)
+          </span> -->
           </p>
           <p><%= product.description%></p>
           <!-- <div class="size-wrap">
@@ -133,7 +204,7 @@
                          </button>
                      	</span>
                   	</div> -->
-        <div class="row text-center">
+        <div class="row text-center" >
           <div class="col-sm-12 text-center p-5">
 
             <input type="hidden" id="custId" name="product" value="<%=product.id%>">
@@ -166,19 +237,19 @@
 					</div>
 				</div>
 
-				<div class="row col-md-10 pl-5">
+				<div class="row col-md-10" style="padding-left: 100px;">
 					<div class="col-sm-10>
-						<div class="row">
+						<div class="row" >
 							<div class="col-md-12 pills">
 								<div class="bd-example bd-example-tabs">
 								  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 
-								    <li class="nav-item">
-								      <a class="nav-link active" id="pills-description-tab" data-toggle="pill" href="#pills-description" role="tab" aria-controls="pills-description" aria-expanded="true">Description</a>
+                    <li class="nav-item">
+                      <a class="nav-link active" id="pills-manufacturer-tab" data-toggle="pill" href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer" aria-expanded="true">Reviews</a>
 								    </li>
-								    <li class="nav-item">
-								      <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill" href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer" aria-expanded="true">Manufacturer</a>
-								    </li>
+                    <!-- <li class="nav-item">
+                      <a class="nav-link " id="pills-description-tab" data-toggle="pill" href="#pills-description" role="tab" aria-controls="pills-description" aria-expanded="true">Description</a>
+                    </li> -->
 									<!--
 								    <li class="nav-item">
 								      <a class="nav-link" id="pills-review-tab" data-toggle="pill" href="#pills-review" role="tab" aria-controls="pills-review" aria-expanded="true">Review</a>
@@ -186,7 +257,7 @@
 								  </ul>-->
 
 								  <div class="tab-content" id="pills-tabContent">
-								    <div class="tab-pane border fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
+								    <!-- <div class="tab-pane border fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
 								      <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
 										<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek, then she continued her way.</p>
 										<ul>
@@ -196,186 +267,278 @@
 											<li>She packed her seven versalia</li>
 											<li>tial into the belt and made herself on the way.</li>
 										</ul>
-								    </div>
+								    </div> -->
 
-								    <div class="tab-pane border fade" id="pills-manufacturer" role="tabpanel" aria-labelledby="pills-manufacturer-tab">
-								      <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-										<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek, then she continued her way.</p>
-								    </div>
+								    <div class="tab-pane border fade show active" id="pills-manufacturer" role="tabpanel" aria-labelledby="pills-manufacturer-tab" style=" width: 70vw;">
+                      <h6>Add Your Review</h6>
+                      <form id="reviewForm" action="/review" method="post" style="text-align: center;">
+                        <div class="rating" style="margin-bottom: 10px;">
+                          <input type="radio" name="rating" value="5" id="5" style="display: none;">
+                          <label for="5" style="font-size: 24px; cursor: pointer;">☆</label>
+                          
+                          <input type="radio" name="rating" value="4" id="4" style="display: none;">
+                          <label for="4" style="font-size: 24px; cursor: pointer;">☆</label>
+                          
+                          <input type="radio" name="rating" value="3" id="3" style="display: none;">
+                          <label for="3" style="font-size: 24px; cursor: pointer;">☆</label>
+                          
+                          <input type="radio" name="rating" value="2" id="2" style="display: none;">
+                          <label for="2" style="font-size: 24px; cursor: pointer;">☆</label>
+                          
+                          <input type="radio" name="rating" value="1" id="1" style="display: none;">
+                          <label for="1" style="font-size: 24px; cursor: pointer;">☆</label>
+                        </div>
+                        
+                        <div class="d-flex" style="gap: 2px;">
+                        <textarea name="review" id="review" rows="1" required style="width: 100%; "></textarea>
+                        <div class="error-message" style="color: red;" id="codeError"></div>
+                        <input type="hidden" name="id" value="<%= product._id %>">
+                        <button type="submit" class="btn btn-dark" style="margin: 0px;
+                        padding: 0px;
+                        border-radius: 5%;
+                        height: 36px; width:160px">Submit Review</button>
+                      </div>
+                      </form>
+                      
 
-								    
+            <% product.review.forEach(function(data) { %> 
+              <div class="review-container"  >
+                <%if(data.user){ %>
+                  <p> <i class="bi bi-person-circle" style="font-size: 20px;"></i>  <%=data.user.name%></p>
+                  <% }else{%>
+                    <p><i class="bi bi-person-circle" style="font-size: 20px;"></i> Unknown</p>
+                    <% } %>
+                <% if(data.rating==1){%>
+                  <span class="star-rating">
+                    <i class="icon-star-full"></i>
+                    <i class="icon-star-empty"></i>
+                    <i class="icon-star-empty"></i>
+                    <i class="icon-star-empty"></i>
+                    <i class="icon-star-empty"></i>
+                    
+                  </span>
+                  <% }else if(data.rating==2){ %>
+                    <span class="star-rating">
+                      <i class="icon-star-full"></i>
+                      <i class="icon-star-full"></i>
+                      <i class="icon-star-empty"></i>
+                      <i class="icon-star-empty"></i>
+                      <i class="icon-star-empty"></i>
+                      
+                    </span>
+
+                <% }else if(data.rating==3){ %>
+                  <span class="star-rating">
+                    <i class="icon-star-full"></i>
+                    <i class="icon-star-full"></i>
+                    <i class="icon-star-full"></i>
+                    <i class="icon-star-empty"></i>
+                    <i class="icon-star-empty"></i>
+                    
+                  </span>
+                <% }else if(data.rating==4){ %>
+                  <span class="star-rating">
+                    <i class="icon-star-full"></i>
+                    <i class="icon-star-full"></i>
+                    <i class="icon-star-full"></i>
+                    <i class="icon-star-full"></i>
+                    <i class="icon-star-empty"></i>
+                    
+                  </span>
+                <% }else if(data.rating==5){ %>
+                  <span class="star-rating">
+                    <i class="icon-star-full"></i>
+                    <i class="icon-star-full"></i>
+                    <i class="icon-star-full"></i>
+                    <i class="icon-star-full"></i>
+                    <i class="icon-star-full"></i>
+                    
+                  </span>
+
+                  <% }else{ %>
+                    <span class="star-rating">
+                      <i class="icon-star-half"></i>
+                      <i class="icon-star-empty"></i>
+                      <i class="icon-star-empty"></i>
+                      <i class="icon-star-empty"></i>
+                      <i class="icon-star-empty"></i>
+                      
+                    </span>
+                    <% } %>
+                <p><%=data.review%></p>
+              </div>
+              <% }); %>  
+          </div>
 
 
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
 
-
-
-
-
-
-								  </div>
-								</div>
-				         </div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- old sweet alert -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- old sweet alert -->
-
+<!-- old sweet alert -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- old sweet alert -->
 
 
 
 
 
 <script>
+  // $(`.zoom-img-n`).ezPlus({
 
-// $(`.zoom-img-n`).ezPlus({
+  // container: 'ZoomContainer',
+  // attrImageZoomSrc: 'zoom-image', // attribute to plugin use for zoom
+  // borderColour: '#888',
+  // borderSize: 0,
+  // constrainSize: true,  //in pixels the dimensions you want to constrain on
+  // constrainType: false,  //width or height
+  // containLensZoom: true,
+  // cursor: 'inherit', // user should set to what they want the cursor as, if they have set a click function
+  // debug: false,
+  // easing: true, // easing effects
+  // easingAmount: 10,
+  // enabled: true,
 
-// container: 'ZoomContainer',
-// attrImageZoomSrc: 'zoom-image', // attribute to plugin use for zoom
-// borderColour: '#888',
-// borderSize: 0,
-// constrainSize: true,  //in pixels the dimensions you want to constrain on
-// constrainType: false,  //width or height
-// containLensZoom: true,
-// cursor: 'inherit', // user should set to what they want the cursor as, if they have set a click function
-// debug: false,
-// easing: true, // easing effects
-// easingAmount: 10,
-// enabled: true,
+  // // gallery options
+  // gallery: false,
+  // galleryActiveClass: 'zoomGalleryActive',
+  // gallerySelector: false,
+  // galleryItem: 'a',
+  // galleryEvent: 'click',
 
-// // gallery options
-// gallery: false,
-// galleryActiveClass: 'zoomGalleryActive',
-// gallerySelector: false,
-// galleryItem: 'a',
-// galleryEvent: 'click',
+  // // enable cross-fade effect
+  // imageCrossfade: false,
 
-// // enable cross-fade effect
-// imageCrossfade: false,
+  // // lens options
+  // lensBorderColour: '#000',
+  // lensBorderSize: 1,
+  // lensColour: 'white', //colour of the lens background
+  // lensFadeIn: false,
+  // lensFadeOut: false,
+  // lensOpacity: 0.4, //opacity of the lens
+  // lensShape: 'square', //can be 'round'
+  // lensSize: 100,
+  // lenszoom: false,
 
-// // lens options
-// lensBorderColour: '#000',
-// lensBorderSize: 1,
-// lensColour: 'white', //colour of the lens background
-// lensFadeIn: false,
-// lensFadeOut: false,
-// lensOpacity: 0.4, //opacity of the lens
-// lensShape: 'square', //can be 'round'
-// lensSize: 100,
-// lenszoom: false,
+  // // image loading spinner
+  // loadingIcon: false, //http://www.example.com/spinner.gif
 
-// // image loading spinner
-// loadingIcon: false, //http://www.example.com/spinner.gif
+  // // This change will allow to decide if you want to decrease
+  // // zoom of one of the dimensions once the other reached it's top value,
+  // // or keep the aspect ratio, default behaviour still being as always,
+  // // allow to continue zooming out, so it keeps retrocompatibility.
+  // mantainZoomAspectRatio: true,
+  // maxZoomLevel: false,
+  // minZoomLevel: 2,
 
-// // This change will allow to decide if you want to decrease
-// // zoom of one of the dimensions once the other reached it's top value,
-// // or keep the aspect ratio, default behaviour still being as always,
-// // allow to continue zooming out, so it keeps retrocompatibility.
-// mantainZoomAspectRatio: true,
-// maxZoomLevel: false,
-// minZoomLevel: 2,
+  // // callbacks
+  // onComplete: $.noop,
+  // onDestroy: $.noop,
+  // onImageClick: $.noop,
+  // onImageSwap: $.noop,
+  // onImageSwapComplete: $.noop,
+  // onShow: $.noop,
+  // onHide: $.noop,
+  // onZoomedImageLoaded: $.noop,
 
-// // callbacks
-// onComplete: $.noop,
-// onDestroy: $.noop,
-// onImageClick: $.noop,
-// onImageSwap: $.noop,
-// onImageSwapComplete: $.noop,
-// onShow: $.noop,
-// onHide: $.noop,
-// onZoomedImageLoaded: $.noop,
+  // preloading: 1, //by default, load all the images, if 0, then only load images after activated (PLACEHOLDER FOR NEXT VERSION)
+  // respond: [],
+  // responsive: true,
+  // scrollZoom: false, //allow zoom on mousewheel, true to activate
+  // scrollZoomIncrement: 0.1,  //steps of the scrollzoom
+  // showLens: true,
+  // tint: false, //enable the tinting
+  // tintColour: '#333', //default tint color, can be anything, red, #ccc, rgb(0,0,0)
+  // tintOpacity: 0.4, //opacity of the tint
+  // touchEnabled: true,
 
-// preloading: 1, //by default, load all the images, if 0, then only load images after activated (PLACEHOLDER FOR NEXT VERSION)
-// respond: [],
-// responsive: true,
-// scrollZoom: false, //allow zoom on mousewheel, true to activate
-// scrollZoomIncrement: 0.1,  //steps of the scrollzoom
-// showLens: true,
-// tint: false, //enable the tinting
-// tintColour: '#333', //default tint color, can be anything, red, #ccc, rgb(0,0,0)
-// tintOpacity: 0.4, //opacity of the tint
-// touchEnabled: true,
+  // // zoom options
+  // zoomActivation: 'hover', // Can also be click (PLACEHOLDER FOR NEXT VERSION)
+  // zoomContainerAppendTo: 'body', //zoom container parent selector
+  // zoomId: -1, // identifier for the zoom container
+  // zoomLevel: 1, //default zoom level of image
+  // zoomTintFadeIn: false,
+  // zoomTintFadeOut: false,
+  // zoomType: 'window', //window is default,  also 'lens' available -
+  // zoomWindowAlwaysShow: false,
+  // zoomWindowBgColour: '#fff',
+  // zoomWindowFadeIn: false,
+  // zoomWindowFadeOut: false,
+  // zoomWindowHeight: 300,
+  // zoomWindowOffsetX: 0,
+  // zoomWindowOffsetY: 0,
+  // zoomWindowPosition: 1, //Possible values: 1-16, but we can also position with a selector string.
+  // zoomWindowWidth: 300,
+  // zoomEnabled: true, //false disables zoomwindow from showing
+  // zIndex: 999
 
-// // zoom options
-// zoomActivation: 'hover', // Can also be click (PLACEHOLDER FOR NEXT VERSION)
-// zoomContainerAppendTo: 'body', //zoom container parent selector
-// zoomId: -1, // identifier for the zoom container
-// zoomLevel: 1, //default zoom level of image
-// zoomTintFadeIn: false,
-// zoomTintFadeOut: false,
-// zoomType: 'window', //window is default,  also 'lens' available -
-// zoomWindowAlwaysShow: false,
-// zoomWindowBgColour: '#fff',
-// zoomWindowFadeIn: false,
-// zoomWindowFadeOut: false,
-// zoomWindowHeight: 300,
-// zoomWindowOffsetX: 0,
-// zoomWindowOffsetY: 0,
-// zoomWindowPosition: 1, //Possible values: 1-16, but we can also position with a selector string.
-// zoomWindowWidth: 300,
-// zoomEnabled: true, //false disables zoomwindow from showing
-// zIndex: 999
-
-// });
-
+  // });
 </script>
 
 
-		<script>
-		   
-		  const addToCart = async (product_Id)=>{   
-	 try {
-		showSwal('success-message');
-		
-	   event.preventDefault();
-	let product_quantity =1
-	   const quantityData = await axios.post('/cart',{product_quantity,product_Id})
-	 } catch (error) {
-	   console.log(error.message);
-	 }
-	 }
-	 (function ($) {
-        showSwal = function (type) {
-          "use strict";
-          if (type === "success-message") {
-            swal({
-              title: "added cart",
-              text: "Thanks",
-              type: "success",
-              button: {
-                text: "Continue",
-                value: true,
-                visible: true,
-                className: "btn btn-primary btn-orange",
-              },
-            });
-          } else {
-            swal("Error occured !");
-          }
-        };
-      })(jQuery);
-
-
-
-	</script>
 <script>
-const productImageContainer = document.querySelector('.product-image-container');
-const mainImage = document.getElementById('main-image');
+  const addToCart = async (product_Id) => {
+      try {
+        showSwal('success-message');
 
-const zoomedImage = document.createElement('img');
-zoomedImage.src = mainImage.src;
-zoomedImage.classList.add('zoomed-image');
+        event.preventDefault();
+        let product_quantity = 1
+        const quantityData = await axios.post('/cart', {
+          product_quantity,
+          product_Id
+        })
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+    (function($) {
+      showSwal = function(type) {
+        "use strict";
+        if (type === "success-message") {
+          swal({
+            title: "added cart",
+            text: "Thanks",
+            type: "success",
+            button: {
+              text: "Continue",
+              value: true,
+              visible: true,
+              className: "btn btn-primary btn-orange",
+            },
+          });
+        } else {
+          swal("Error occured !");
+        }
+      };
+    })(jQuery);
+</script>
+<script>
+  const productImageContainer = document.querySelector('.product-image-container');
+  const mainImage = document.getElementById('main-image');
 
-productImageContainer.appendChild(zoomedImage);
+  const zoomedImage = document.createElement('img');
+  zoomedImage.src = mainImage.src;
+  zoomedImage.classList.add('zoomed-image');
 
-productImageContainer.addEventListener('mousemove', (e) => {
-    const { left, top, width, height } = productImageContainer.getBoundingClientRect();
-    const { clientX, clientY } = e;
+  productImageContainer.appendChild(zoomedImage);
+
+  productImageContainer.addEventListener('mousemove', (e) => {
+    const {
+      left,
+      top,
+      width,
+      height
+    } = productImageContainer.getBoundingClientRect();
+    const {
+      clientX,
+      clientY
+    } = e;
 
     const x = (clientX - left) / width;
     const y = (clientY - top) / height;
@@ -383,17 +546,36 @@ productImageContainer.addEventListener('mousemove', (e) => {
     mainImage.style.transform = `scale(2) translate(-${x * 25}%, -${y * 25}%)`;
     zoomedImage.style.opacity = 0;
     zoomedImage.style.transform = `scale(1) translate(-${x * 25}%, -${y * 25}%)`;
-});
+  });
 
-productImageContainer.addEventListener('mouseleave', () => {
+  productImageContainer.addEventListener('mouseleave', () => {
     mainImage.style.transform = 'scale(1)';
     zoomedImage.style.opacity = 0;
     zoomedImage.style.transform = 'scale(1)';
-});
+  });
 
-	</script>
+  function validateForm() {
+
+const review = document.getElementById("review").value.trim();
+const words = review.split(/\s+/);
+
+const error = document.getElementById('codeError')
+error.textContent = ''
+
+if (words.length < 3) {
+    error.textContent = 'Please enter a review with at least 3 words'
+    return false;
+}
+if (review === "") {
+    error.textContent = 'Connot submit spaces'
+    return false;
+}
+return true;
+}
+
+</script>
 
 
-			
-		
-		<%- include('./footer') %>
+
+
+<%- include('./footer') %>

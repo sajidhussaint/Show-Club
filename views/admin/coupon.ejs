@@ -74,6 +74,8 @@
                 <th>Description</th>
                 <th>Discount</th>
                 <th>Minimum Amount</th>
+                <th>Maximum Amount</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -85,6 +87,9 @@
                 <td><%= coupon.description %></td>
                 <td><%= coupon.discount %></td>
                 <td><%= coupon.minimum %></td>
+                <td><%= coupon.maximum %></td>
+                <td><a href="/admin/editCoupon?id=<%=coupon._id%>"><button class="btn btn-dark">Edit</button></a></td>
+
                 
               </tr>
               <% }) %>

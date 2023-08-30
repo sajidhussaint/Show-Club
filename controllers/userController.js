@@ -129,61 +129,99 @@ const resetsendVerifymail = async (name, email, token) => {
 };
 
 //home page
-const loadHome = async (req, res,next) => {
+const loadHome = async (req, res, next) => {
   try {
     const session = req.session.user_id;
     console.log(session, "load home session");
     const product = await Product.find({ blocked: false }).populate({
-      path : 'offer',
-      match :  { startingDate : { $lte : new Date() }, expiryDate : { $gte : new Date() }}
-  })
-    const banners = await Banner.find({})
-    res.render("index", { activePage: "home", product, session,banners});
+      path: "offer",
+      match: {
+        startingDate: { $lte: new Date() },
+        expiryDate: { $gte: new Date() },
+      },
+    });
+    const banners = await Banner.find({});
+    res.render("index", { activePage: "home", product, session, banners });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //men page
-const loadMen = async (req, res,next) => {
+const loadMen = async (req, res, next) => {
   try {
-    const product = await Product.find({ blocked: false });
+    const product = await Product.find({ blocked: false,gender:'men'});
     res.render("men", { activePage: "men", product });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //women page
-const loadWomen = async (req, res,next) => {
+const loadWomen = async (req, res, next) => {
   try {
-
-
-    const categories=await categoryDB.find({blocked: false})
-    const product = await Product.find({ blocked: false });
-    res.render("women", { activePage: "women", product ,categories});
+    const categories = await categoryDB.find({ blocked: false });
+    const product = await Product.find({ blocked: false,gender:'women' });
+    res.render("women", { activePage: "women", product, categories });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //search page
-const loadsearch = async (req, res,next) => {
+const loadsearch = async (req, res, next) => {
   try {
-
     const price = req.query.price;
     const searchItem = req.query.searchItem;
     const filterCategory = req.query.category;
 
-    const category = await categoryDB.find({})
-    const productCategory = await Product.find({ category: filterCategory })
-    const products = await Product.aggregate([
-      {
-        $match: {
-          name: { $regex: "^" + searchItem, $options: "i" },
+    console.log(filterCategory);
+    const condition = { blocked: false };
+
+    if (filterCategory) {
+      condition.category = filterCategory;
+    }
+    if (price) {
+      // condition.price = price;
+      condition.$or = [
+        { price: { $gt: price - 1000, $lt: price }}
+      ];
+    }
+    if (searchItem) {
+      condition.$or = [
+        { name: { $regex: searchItem, $options: "i" } },
+        { description: { $regex: searchItem, $options: "i" } },
+      ];
+    }
+
+    const category = await categoryDB.find({});
+
+    const productCategory = await Product.find({}).populate("category");
+
+    // Filter the populated results based on the category name
+    const filteredProducts = productCategory.filter(
+      (product) => product.category && product.category.name === filterCategory
+    );
+
+    // console.log(filteredProducts);
+
+    // const products = await Product.aggregate([
+    //   {
+    //     $match: {
+    //       name: { $regex: "^" + searchItem, $options: "i" },
+    //     },
+    //   },
+    // ]);
+
+    const products = await Product.find(condition)
+      .populate({
+        path: "offer",
+        match: {
+          startingDate: { $lte: new Date() },
+          expiryDate: { $gte: new Date() },
         },
-      },
-    ])
+      })
+      .populate("category");
 
     const intPrice = parseInt(price);
 
@@ -194,85 +232,86 @@ const loadsearch = async (req, res,next) => {
           price: 1,
         },
       },
-    ])
+    ]);
     res.render("search", {
       products,
       searchItem,
       category,
       productCategory,
-      priceData
+      priceData,
+      filteredProducts,
+      price,
+      filterCategory,
+      condition,
     });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //about page
-const loadAbout = async (req, res,next) => {
+const loadAbout = async (req, res, next) => {
   try {
     res.render("about", { activePage: "about" });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //contact page
-const loadContact = async (req, res,next) => {
+const loadContact = async (req, res, next) => {
   try {
     res.render("contact", { activePage: "contact" });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //wish-list page
-const loadWishList = async (req, res,next) => {
+const loadWishList = async (req, res, next) => {
   try {
     res.render("add-to-wishlist");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 // orderComplete page
-const loadOrderComplete = async (req, res,next) => {
+const loadOrderComplete = async (req, res, next) => {
   try {
     res.render("order-complete");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //login page
-const loadLogin = async (req, res,next) => {
+const loadLogin = async (req, res, next) => {
   try {
     res.render("login");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //walletHistoryPage
-const loadwalletHistory = async (req, res,next) => {
+const loadwalletHistory = async (req, res, next) => {
   try {
-    const user_id=req.session.user_id;
-    const user=await User.findOne({_id:user_id})
-    res.render("walletHistory",{wallet:user.walletHistory});
+    const user_id = req.session.user_id;
+    const user = await User.findOne({ _id: user_id });
+    res.render("walletHistory", { wallet: user.walletHistory });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
-
-
-
 //logout button(destory session)
-const userLogout = async (req, res,next) => {
+const userLogout = async (req, res, next) => {
   try {
     req.session.destroy();
     res.redirect("/");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
@@ -308,7 +347,7 @@ const verifyLogin = async (req, res) => {
 };
 
 // mobileOtp
-const mobileOtp = async (req, res,next) => {
+const mobileOtp = async (req, res, next) => {
   try {
     const inputEmail = req.body.inputEmail;
     const inputPassword = req.body.inputPassword;
@@ -344,11 +383,11 @@ const mobileOtp = async (req, res,next) => {
     // res.render("404", { inputEmail });
     res.json({ success: true, otpMob, user });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 // mobileotp(get)
-const loadmobileOtp = async (req, res,next) => {
+const loadmobileOtp = async (req, res, next) => {
   try {
     const mobOtp = req.query.mobOtp;
     const user = req.query.user;
@@ -374,12 +413,12 @@ const loadmobileOtp = async (req, res,next) => {
           .json({ success: false, message: "Failed to send OTP." });
       });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 // mobileotpVerify(post)
-const mobileotpVerify = async (req, res,next) => {
+const mobileotpVerify = async (req, res, next) => {
   try {
     const mobOtp = req.query.mobOtp;
     const user = req.query.user;
@@ -398,20 +437,20 @@ const mobileotpVerify = async (req, res,next) => {
 
     // res.render('mobileOtp',{mobOtp})
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //register pageload
-const loadRegister = async (req, res,next) => {
+const loadRegister = async (req, res, next) => {
   try {
     res.render("register");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 //register verify post
-const verifyUser = async (req, res,next) => {
+const verifyUser = async (req, res, next) => {
   try {
     const spassword = await securePassword(req.body.password);
     const email = req.body.email;
@@ -447,16 +486,16 @@ const verifyUser = async (req, res,next) => {
       }
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 // load OTP
-const loadOtp = async (req, res,next) => {
+const loadOtp = async (req, res, next) => {
   try {
     res.render("otpReminder");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
@@ -485,15 +524,15 @@ const otpValidation = async (req, res) => {
 };
 
 //forgetload page
-const forgotLoad = async (req, res,next) => {
+const forgotLoad = async (req, res, next) => {
   try {
     res.render("forget_password");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 //forgot validate
-const forgotSendtoEmail = async (req, res,next) => {
+const forgotSendtoEmail = async (req, res, next) => {
   try {
     const email = req.body.email;
     const userData = await User.findOne({ email: email });
@@ -519,12 +558,12 @@ const forgotSendtoEmail = async (req, res,next) => {
       res.render("forget_password", { message: "Wrong Email Id" });
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 // reset password load(pass in query)
-const resetpassLoad = async (req, res,next) => {
+const resetpassLoad = async (req, res, next) => {
   try {
     const inputtoken = req.query.token;
     const userData = await User.findOne({ token: inputtoken });
@@ -534,12 +573,12 @@ const resetpassLoad = async (req, res,next) => {
       res.render("404", { message: "Invlaid Token" });
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //reset password verify (post)
-const resetpassverify = async (req, res,next) => {
+const resetpassverify = async (req, res, next) => {
   try {
     const password = req.body.password;
     const email = req.body.email;
@@ -553,12 +592,12 @@ const resetpassverify = async (req, res,next) => {
 
     res.redirect("/login");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //reSEND password timeout(get)
-const resend = async (req, res,next) => {
+const resend = async (req, res, next) => {
   try {
     //Generate a random 4-digit OTP
     const otpGenarated = Math.floor(1000 + Math.random() * 9999);
@@ -567,12 +606,12 @@ const resend = async (req, res,next) => {
     sendVerifymail(name2, email2, otpGenarated);
     res.render("otpReminder");
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 //profile page
-const loadProfile = async (req, res,next) => {
+const loadProfile = async (req, res, next) => {
   try {
     const url = req.url;
     const userId = req.session.user_id;
@@ -583,35 +622,36 @@ const loadProfile = async (req, res,next) => {
       .populate("products.product_Id");
     res.render("profile", { user, dataAddress, order, url });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
+const invoiceDownload = async (req, res) => {
+  try {
+    const { orderId } = req.query;
+    const userId = req.session.user_id;
+    let sumTotal = 0;
+    const userData = await User.findById(userId);
+    const orderData = await orderDB
+      .findById(orderId)
+      .populate("products.product_Id");
 
-const invoiceDownload=async(req,res)=>{
-  try {  
-    const { orderId } = req.query
-    const userId = req.session.user_id
-    let sumTotal = 0
-    const userData = await User.findById(userId)
-    const orderData = await orderDB.findById(orderId).populate('products.product_Id')
+    orderData.products.forEach((item) => {
+      const total = item.product_Id.price * item.quantity;
+      sumTotal += total;
+    });
 
-    orderData.products.forEach(item => {
-        const total = item.product_Id.price * item.quantity
-        sumTotal += total
-    })
-
-    const date = new Date()
+    const date = new Date();
     const data = {
-        order: orderData,
-        user: userData,
-        date,
-        sumTotal
-    }
+      order: orderData,
+      user: userData,
+      date,
+      sumTotal,
+    };
 
-    const filepathName = path.resolve(__dirname, "../views/user/invoice.ejs")
-    const html = fs.readFileSync(filepathName).toString()
-    const ejsData = ejs.render(html, data)
+    const filepathName = path.resolve(__dirname, "../views/user/invoice.ejs");
+    const html = fs.readFileSync(filepathName).toString();
+    const ejsData = ejs.render(html, data);
     const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     await page.setContent(ejsData, { waitUntil: "networkidle0" });
@@ -620,14 +660,35 @@ const invoiceDownload=async(req,res)=>{
 
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
-        "Content-Disposition",
-        "attachment; filename= orderInvoice_showClub.pdf"
+      "Content-Disposition",
+      "attachment; filename= orderInvoice_showClub.pdf"
     );
     res.send(pdfBytes);
   } catch (error) {
-       next(error)
+    next(error);
   }
-}
+};
+
+const review = async (req, res, next) => {
+  try {
+    const id = req.body.id;
+    console.log(id);
+    const { review, rating } = req.body;
+    const newReview = {
+      user: req.session.user_id,
+      review: review,
+      rating: rating,
+    };
+    await Product.findOneAndUpdate(
+      { _id: id },
+      { $push: { review: newReview } }
+    );
+
+    res.redirect(`/product-detail?productid=${id}`);
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   loadHome,
@@ -655,5 +716,6 @@ module.exports = {
   resend,
   mobileOtp,
   mobileotpVerify,
-  invoiceDownload
+  invoiceDownload,
+  review,
 };

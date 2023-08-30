@@ -63,7 +63,7 @@ const verifyaddProduct = async (req, res) => {
       }
     }
 
-    const { name, category, price, quantity, description } = req.body;
+    const { name, category, price, quantity, description,gender } = req.body;
 
     if (price && quantity > 0) {
       const existProduct = await ProductDB.findOne({ name: name });
@@ -74,10 +74,12 @@ const verifyaddProduct = async (req, res) => {
         const productData = new ProductDB({
           name: name,
           category: category,
+          gender:gender,
           price: price,
           quantity: quantity,
           description: description,
           image: arrimage,
+
         });
 
         const newProduct = productData.save();
@@ -122,7 +124,7 @@ const editProduct = async (req, res) => {
   try {
     const qid = req.query.id;
 
-    const { name, category, price, quantity, description } = req.body;
+    const { name, category, price, quantity, description,gender } = req.body;
 
     var imageArr = [];
 
@@ -153,6 +155,7 @@ const editProduct = async (req, res) => {
             quantity: quantity,
             price: price,
             category: category,
+            gender:gender,
             image: imageArr,
           },
         }
@@ -168,6 +171,7 @@ const editProduct = async (req, res) => {
             quantity: quantity,
             price: price,
             category: category,
+            gender:gender,
           },
         }
       );
@@ -201,11 +205,14 @@ const deleteImage = async (req, res) => {
 // productDetail page
 const loadProductDetail = async (req, res) => {
   try {
+
     const id = req.query.productid;
     const product = await ProductDB.findById({ _id: id }).populate({
       path : 'offer',
       match :  { startingDate : { $lte : new Date() }, expiryDate : { $gte : new Date() }}
-  })
+  }).populate('review.user')
+
+  console.log(product.review.user,'fffff');
     if (req.session.user_id) {
       const carts = await cartDB.findOne({ userId: req.session.user_id });
       if (carts) {

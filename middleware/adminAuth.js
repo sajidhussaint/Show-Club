@@ -9,6 +9,7 @@ const isLogin = async (req, res, next) => {
     console.log(error.message);
   }
 };
+
 const isLogout = async (req, res, next) => {
   try {
     if (req.session.admin_id) {
