@@ -21,6 +21,8 @@ user_Route.get("/men",userController.loadMen);
 user_Route.get("/women",userController.loadWomen);
 user_Route.get("/about",userController.loadAbout);
 user_Route.get("/contact",userController.loadContact);
+user_Route.post("/contact",userController.verifyContact);
+
 user_Route.get("/add-to-wishlist",auth.isLogin,userController.loadWishList);
 
 
@@ -110,6 +112,8 @@ user_Route.post("/applyCoupon",couponController.applyCoupon);
 user_Route.get('/walletHistory',userController.loadwalletHistory)
 
 user_Route.get('/invoice',userController.invoiceDownload)
+
+
 
 
 user_Route.post('/review',auth.isLogin,userController.review)

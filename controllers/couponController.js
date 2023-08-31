@@ -13,7 +13,6 @@ const applyCoupon = async (req, res) => {
       // If coupon exists
       if (coupon && coupon.length > 0) {
           const now = new Date();
-          console.log(now);
         // if coupon not expired
         if (coupon[0].expiryDate>= now && coupon[0].startingDate <= now) {
           // Convert the user IDs in the "users" array to strings for comparison

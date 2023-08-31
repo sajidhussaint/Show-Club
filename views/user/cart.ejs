@@ -289,7 +289,8 @@
           <% const dates = new Date(coupon.expiryDate); %>
           <% const optionss = { year: 'numeric', month: 'long', day: 'numeric' }; %>
 
-          <p>And valid from <%= dates.toLocaleDateString('en-US', optionss) %></p>
+          <p> Maximum ₹<%=coupon.maximum %></p>
+          <p> And valid from <%= dates.toLocaleDateString('en-US', optionss) %></p>
           <p>Use promo code <spans style="font-size: medium; background: linear-gradient(to right, red, #f58c02); color: white;" class="badge "><%=coupon.code %></span></p>
         </div>
         <hr>

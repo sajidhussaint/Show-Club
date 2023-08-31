@@ -101,6 +101,7 @@ const resetsendVerifymail = async (name, email, token) => {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+      
     });
     const mailOption = {
       from: process.env.EMAIL_USER,
@@ -151,7 +152,8 @@ const loadHome = async (req, res, next) => {
 const loadMen = async (req, res, next) => {
   try {
     const product = await Product.find({ blocked: false,gender:'men'});
-    res.render("men", { activePage: "men", product });
+    const categories=await categoryDB.find({blocked:false}).limit(3)
+    res.render("men", { activePage: "men", product ,categories});
   } catch (error) {
     next(error);
   }
@@ -690,6 +692,47 @@ const review = async (req, res, next) => {
   }
 };
 
+
+const verifyContact = async (req, res, next) => {
+  try {
+    const { fname, lname, email, subject, message }= req.body;
+
+    // Form data is valid, send the email
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      
+    });
+
+    
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to:process.env.EMAIL_USER,
+      subject: 'New Contact Form Submission',
+      text: `Name: ${fname} ${lname}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while sending the email.');
+      } else {
+        console.log('Email sent:', info.response);
+        res.send('Form submitted and email sent successfully.');
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   loadHome,
   loadMen,
@@ -718,4 +761,5 @@ module.exports = {
   mobileotpVerify,
   invoiceDownload,
   review,
+  verifyContact,
 };

@@ -35,32 +35,32 @@
 					<div class="col-md-6">
 						<div class="contact-wrap">
 							<h3>Get In Touch</h3>
-							<form action="#" class="contact-form">
+							<form action="/contact" method="post" class="contact-form">
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="fname">First Name</label>
-											<input type="text" id="fname" class="form-control" placeholder="Your firstname">
+											<input type="text" id="fname" class="form-control" placeholder="Your firstname" name="fname">
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="lname">Last Name</label>
-											<input type="text" id="lname" class="form-control" placeholder="Your lastname">
+											<input type="text" id="lname" class="form-control" placeholder="Your lastname" name="lname">
 										</div>
 									</div>
 									<div class="w-100"></div>
 									<div class="col-sm-12">
 										<div class="form-group">
 											<label for="email">Email</label>
-											<input type="text" id="email" class="form-control" placeholder="Your email address">
+											<input type="text" id="email" class="form-control" placeholder="Your email address" name="email">
 										</div>
 									</div>
 									<div class="w-100"></div>
 									<div class="col-sm-12">
 										<div class="form-group">
 											<label for="subject">Subject</label>
-											<input type="text" id="subject" class="form-control" placeholder="Your subject of this message">
+											<input type="text" id="subject" class="form-control" placeholder="Your subject of this message" name="email">
 										</div>
 									</div>
 									<div class="w-100"></div>
@@ -86,5 +86,56 @@
 				</div>
 			</div>
 		</div>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const form = document.querySelector('.contact-form');
+				const firstName = document.getElementById('fname');
+				const lastName = document.getElementById('lname');
+				const email = document.getElementById('email');
+				const subject = document.getElementById('subject');
+				const message = document.getElementById('message');
+			
+				form.addEventListener('submit', function(event) {
+					let valid = true;
+			
+					if (firstName.value.trim() === '') {
+						valid = false;
+						Toastify({
+							text: 'Please enter your first name.',
+							style: {
+								background: 'red'
+							}
+						}).showToast();
+					}
+			
+					if (lastName.value.trim() === '') {
+						valid = false;
+						Toastify({
+							text: 'Please enter your last name.',
+							style: {
+								background: 'red'
+							}
+						}).showToast();
+					}
+			
+					if (email.value.trim() === '') {
+						valid = false;
+						Toastify({
+							text: 'Please enter your email address.',
+							style: {
+								background: 'red'
+							}
+						}).showToast();
+					}
+			
+					// ... (similar code for other fields)
+			
+					if (!valid) {
+						event.preventDefault(); // Prevent form submission if validation fails
+					}
+				});
+			});
+			</script>
 
 		<%- include('./footer') %>
