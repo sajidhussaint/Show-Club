@@ -525,7 +525,6 @@ const sortSalesReport = async (req, res,next) => {
       } else if (toDate) {
         fromDate = currentDate;
       }
-console.log("*/n*/n$");
    console.log(toDate,fromDate);
       var matchStage = {
       
