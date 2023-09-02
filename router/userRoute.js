@@ -15,7 +15,7 @@ const couponController = require('../controllers/couponController')
 
 user_Route.set("views", "./views/user");
 
-//load pages
+//load page
 user_Route.get("/",userController.loadHome);
 user_Route.get("/men",userController.loadMen);
 user_Route.get("/women",userController.loadWomen);
