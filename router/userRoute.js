@@ -32,10 +32,10 @@ user_Route.get("/product-detail",productController.loadProductDetail);
 
 //login
 user_Route.get("/login",auth.isLogout,userController.loadLogin);
-user_Route.post("/login",userController.verifyLogin)
+user_Route.post("/login",userController.verifyLogin);
 user_Route.post("/mobileOtp",userController.mobileOtp)
 user_Route.get("/mobileOtp",userController.loadmobileOtp)
-user_Route.post("/mobileotpVerify",userController.mobileotpVerify)
+user_Route.post("/mobileotpVerify",userController.mobileotpVerify);
 
 
 //logout
