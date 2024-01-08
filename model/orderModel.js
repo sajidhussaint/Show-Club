@@ -46,6 +46,16 @@ const orderSchema = new mongoose.Schema({
     paymentId : {
         type : String
     },
+
+    walletUsed : {
+        type : Number,
+        required : false
+    },
+
+    amountPayable : {
+        type : Number,
+        required : false
+    },
     
 
     products: [{

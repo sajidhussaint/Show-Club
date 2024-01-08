@@ -40,11 +40,15 @@ const loadOrderDetails = async (req, res,next) => {
 
 const proceed = async (req, res,next) => {
   try {
-    console.log('running wallet');
     const userid = req.session.user_id;
     const address = req.body.address;
     const payment = req.body.payment;
     var grandTotal = req.body.total;
+    const walletAmount=req.body.walletAmount;
+    let walletBalance
+            if( walletAmount ){
+                walletBalance = Number( walletAmount )
+            }
 
     const user = await UserDB.findOne({ _id: userid });
     const cartData = await cartDB.findOne({ userId: userid });
@@ -64,16 +68,26 @@ const proceed = async (req, res,next) => {
     let orderTotalPromise;
     if (cartData.coupon) {
       const cartCoupon = cartData.coupon.toString();
-      console.log('runn disc total');
       orderTotalPromise = couponHelper.discountPrice(cartCoupon, grandTotal)
         .then(discounted => discounted.discountedTotal);
     } else {
-      console.log('runn garnd total');
       orderTotalPromise = Promise.resolve(grandTotal);
     }
 
     const orderTotal = await orderTotalPromise;
 
+    let walletUsed, amountPayable
+    if( walletAmount ) {
+        if( orderTotal > walletBalance ) {
+            amountPayable = orderTotal - walletBalance
+            walletUsed = walletBalance
+        } else if( walletBalance > orderTotal ) {
+            amountPayable = 0
+            walletUsed = orderTotal
+        }
+    } else {
+        amountPayable = orderTotal
+    }
     const order = new orderDB({
       user: userid,
       deliveryAddress: address,
@@ -84,24 +98,29 @@ const proceed = async (req, res,next) => {
       payment: payment,
       products: cartProducts,
       expectedDelivery: deliveryDate,
+      walletUsed:walletUsed,
+      amountPayable : amountPayable
+
     });
 
-    const orderData = await order.save();
-   if(payment == "wallet"){
-    
-    await UserDB.findByIdAndUpdate({_id:userid},{$inc:{wallet:-orderTotal},$push: {
-      walletHistory: {
-        date: new Date(),
-        amount:-orderTotal,
-        description: `Buy product with wallet`,
-      },
-    },})
 
-   }
+    const orderData=order.save()
 
 
 
-    if (orderData.payment != "razorpay") {
+    if (orderData.payment != "razorpay" ) {
+
+      if(walletUsed>0){
+        await UserDB.findByIdAndUpdate({_id:userid},{$inc:{wallet:-walletUsed},$push: {
+          walletHistory: {
+            date: new Date(),
+            amount:-walletUsed,
+            description: `Buy product with wallet`,
+          },
+        },})
+      }
+
+
       const productUpdatePromises = cartProducts.map(async (cartProduct) => {
         await ProductDB.findByIdAndUpdate(
           { _id: cartProduct.product_Id },
@@ -114,7 +133,7 @@ const proceed = async (req, res,next) => {
       });
 
       await Promise.all(productUpdatePromises);
-      await cartDB.findOneAndDelete({ userId: userid });
+      
     }
     res.json({ success: true });
   } catch (error) {
@@ -153,11 +172,9 @@ const loadOrderPlaced = async (req, res,next) => {
 
       await Promise.all([orderStatusUpdatePromise, ...updateProductQuantitiesPromises]);
 
-      await cartDB.findOneAndDelete({ userId: req.session.user_id });
+      // await cartDB.findOneAndDelete({ userId: req.session.user_id });
     }
-
-    console.log(order.status, "this is order status");
-
+    await cartDB.findOneAndDelete({ userId: req.session.user_id });
     res.render("orderPLaced", { order });
   } catch (error) {
     next(error)
@@ -167,16 +184,30 @@ const loadOrderPlaced = async (req, res,next) => {
 const orderEpay = async (req, res,next) => {
   try {
     const cartData = await cartDB.findOne({ userId: req.session.user_id });
-    const cartCoupon = cartData.coupon;
-    const discounted = await couponHelper.discountPrice(
-      cartCoupon,
-      req.body.total
-    );
-    if (cartCoupon) {
+    // const cartCoupon = cartData.coupon;
+    if (cartData.coupon) {
+      const discounted = await couponHelper.discountPrice(
+        cartData.coupon,
+        req.body.total
+      );
       var amount = discounted.discountedTotal * 100;
     } else {
+      const orderDatas = await orderDB
+      .findOne({ user: req.session.user_id })
+      .sort({ _id: -1 })
+      
+
+    if(orderDatas.amountPayable>0){
+      var amount=orderDatas.amountPayable* 100
+    }else if(orderDatas.amountPayable==0){
+      
+      res.status(200).send({datas:true})
+    }else{
       var amount = req.body.total * 100;
     }
+    
+    // await cartDB.findOneAndDelete({ userId: req.session.user_id });
+    
     const mobile = req.body.mobile;
     const email = req.body.email;
     const options = {
@@ -185,7 +216,6 @@ const orderEpay = async (req, res,next) => {
       receipt: process.env.EMAIL_USER,
     };
     razorpayInstance.orders.create(options, (err, order) => {
-      console.log(order)
       if (!err) {
 
         res.status(200).send({
@@ -204,7 +234,7 @@ const orderEpay = async (req, res,next) => {
         res.status(400).send({ success: false, msg: "Something wrong" });
       }
     });
-  } catch (error) {
+  } }catch (error) {
     next(error)
   }
 };

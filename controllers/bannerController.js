@@ -26,7 +26,6 @@ const addBanner = async (req , res , next) => {
 
        const { info , title , description } = req.body
        const image = req.file.filename
-       console.log(image)
        const banner = new Banner({
             image : image,
             info : info,

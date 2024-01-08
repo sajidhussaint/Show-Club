@@ -24,8 +24,8 @@ const loadproductList = async (req, res,next) => {
 // LOAD ADD PRODUCT(ADMIN)
 const loadaddProduct = async (req, res) => {
   try {
-    const category = await CategoryDB.find({});
-    res.render("addProduct", { message: " ", category });
+    const categorys = await CategoryDB.find({});
+    res.render("addProduct", { message: " ", categorys });
   } catch (error) {
     console.log(error.message);
   }
@@ -44,7 +44,7 @@ const loadeditProduct = async (req, res) => {
 //VERIFY ADD PRODUCT(POST)(ADMIN)
 const verifyaddProduct = async (req, res) => {
   try {
-   
+    const categorys = await CategoryDB.find({});
     var arrimage = [];
 
     if (req.files && req.files.length > 0) {
@@ -65,11 +65,10 @@ const verifyaddProduct = async (req, res) => {
 
     const { name, category, price, quantity, description,gender } = req.body;
 
-    if (price && quantity > 0) {
       const existProduct = await ProductDB.findOne({ name: name });
 
       if (existProduct) {
-        res.render("addProduct", { message: "product exists" });
+        res.render("addProduct", { message:"product exists",categorys });
       } else {
         const productData = new ProductDB({
           name: name,
@@ -87,12 +86,9 @@ const verifyaddProduct = async (req, res) => {
         if (newProduct) {
           res.redirect("/admin/productlist");
         } else {
-          res.render("addProduct", { message: "something went wrong" });
+          res.render("addProduct", { message:"something went wrong",categorys });
         }
       }
-    } else {
-      res.render("addProduct", { message: "cannot give a negative value" }); //, categories: category
-    }
   } catch (error) {
     console.log(error.message);
   }
@@ -143,7 +139,6 @@ const editProduct = async (req, res) => {
         //  imageArr.push(req.files[i].filename);
       }
     }
-    console.log(imageArr);
 
     if (req.files && req.files.length > 0) {
       await ProductDB.updateOne(
@@ -211,8 +206,6 @@ const loadProductDetail = async (req, res) => {
       path : 'offer',
       match :  { startingDate : { $lte : new Date() }, expiryDate : { $gte : new Date() }}
   }).populate('review.user')
-
-  console.log(product.review.user,'fffff');
     if (req.session.user_id) {
       const carts = await cartDB.findOne({ userId: req.session.user_id });
       if (carts) {
@@ -232,7 +225,6 @@ const loadProductDetail = async (req, res) => {
 
 const applyProductOffer= async(req,res,next)=>{
   try { 
-    console.log('working apply product');
     const { offerId, productId } = req.body
             await ProductDB.updateOne({ _id : productId },{
                 $set : {

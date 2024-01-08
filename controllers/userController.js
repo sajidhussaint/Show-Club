@@ -133,7 +133,7 @@ const resetsendVerifymail = async (name, email, token) => {
 const loadHome = async (req, res, next) => {
   try {
     const session = req.session.user_id;
-    console.log(session, "load home session");
+    console.log(session, "homeSession");
     const product = await Product.find({ blocked: false }).populate({
       path: "offer",
       match: {
@@ -176,8 +176,6 @@ const loadsearch = async (req, res, next) => {
     const price = req.query.price;
     const searchItem = req.query.searchItem;
     const filterCategory = req.query.category;
-
-    console.log(filterCategory);
     const condition = { blocked: false };
 
     if (filterCategory) {
@@ -204,17 +202,6 @@ const loadsearch = async (req, res, next) => {
     const filteredProducts = productCategory.filter(
       (product) => product.category && product.category.name === filterCategory
     );
-
-    // console.log(filteredProducts);
-
-    // const products = await Product.aggregate([
-    //   {
-    //     $match: {
-    //       name: { $regex: "^" + searchItem, $options: "i" },
-    //     },
-    //   },
-    // ]);
-
     const products = await Product.find(condition)
       .populate({
         path: "offer",
@@ -353,8 +340,6 @@ const mobileOtp = async (req, res, next) => {
   try {
     const inputEmail = req.body.inputEmail;
     const inputPassword = req.body.inputPassword;
-
-    console.log(inputEmail, inputPassword);
     const userData = await User.findOne({
       $or: [{ inputEmail }, { mob: inputEmail }],
     });
@@ -374,15 +359,8 @@ const mobileOtp = async (req, res, next) => {
     if (!passwordMatch) {
       return res.render("login", { message: "Invalid username or password" });
     }
-
     const otpMob = Math.floor(1000 + Math.random() * 9999);
-
-    console.log("this is OTP:", otpMob);
     const user = userData._id;
-    console.log("this is userid:", user);
-
-    // sendVerifymail(req.body.name, inputEmail, otpGenarated);
-    // res.render("404", { inputEmail });
     res.json({ success: true, otpMob, user });
   } catch (error) {
     next(error);
@@ -393,10 +371,7 @@ const loadmobileOtp = async (req, res, next) => {
   try {
     const mobOtp = req.query.mobOtp;
     const user = req.query.user;
-    console.log(mobOtp, "u", user);
-
     const message = `Your OTP is: ${mobOtp}`;
-
     twilioClient.messages
       .create({
         body: message,
@@ -674,7 +649,6 @@ const invoiceDownload = async (req, res) => {
 const review = async (req, res, next) => {
   try {
     const id = req.body.id;
-    console.log(id);
     const { review, rating } = req.body;
     const newReview = {
       user: req.session.user_id,

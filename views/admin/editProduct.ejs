@@ -162,4 +162,61 @@
     );
   }
 </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const form = document.querySelector("form");
+      form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          
+          // Validate the form fields here
+          const productName = document.getElementById("productName").value;
+          const price = document.getElementById("price").value;
+          const quantity = document.getElementById("quantity").value;
+          const description = document.getElementById("description").value;
+  
+          // Add your validation logic here
+          if (!productName || !price || !description) {
+              // Display a toast notification for required fields error
+              Toastify({
+                  text: "Please fill in all required fields",
+                  duration: 3000,
+                  gravity: "top",
+                  style: {
+                      background: "red",
+                  },
+              }).showToast();
+              return;
+          }
+  
+          if (isNaN(quantity) || quantity < 0) {
+              // Display a toast notification for quantity below 0 error
+              Toastify({
+                  text: "Quantity must be a non-negative number",
+                  duration: 3000,
+                  gravity: "top",
+                  style: {
+                      background: "red",
+                  },
+              }).showToast();
+              return;
+          }
+          if (isNaN(price) || price < 100) {
+              // Display a toast notification for quantity below 0 error
+              Toastify({
+                  text: "Price must be a  higher",
+                  duration: 3000,
+                  gravity: "top",
+                  style: {
+                      background: "red",
+                  },
+              }).showToast();
+              return;
+          }
+  
+          // If all fields are valid, submit the form
+          form.submit();
+      });
+  });
+  </script>
 <%- include('./layouts/footer') %>

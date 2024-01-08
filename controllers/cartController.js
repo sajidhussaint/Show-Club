@@ -45,9 +45,7 @@ const loadCheckOut = async (req, res) => {
 
     if( cartData && cartData.coupon) {
      var discounted = await couponHelper.discountPrice( cartData.coupon, cartData.grandTotal )
-  }
-  console.log(discounted);
-  
+  } 
     res.render("checkout",{address,cartproduct,order,discounted,user});
   } catch (error) {
     console.log(error.message);
@@ -76,8 +74,6 @@ const addtoCart = async (req, res) => {
   
   
   const total = quantity * (productData.price-discount);
-  console.log(total);
-
     if (cartdata) {
       const findProduct = await cart.findOne({
         userId: userid,

@@ -220,17 +220,17 @@
 
             <ul>
               <li>
-                <span>Subtotal</span> <span>₹<%= cartproduct.grandTotal%></span>
+                <span>Subtotal</span> <span>₹<%= cartproduct.grandTotal %></span>
 
               </li>
               <% if(cartproduct.coupon){ %>
               <li><span>Discount</span> <span>-₹<%=discounted.discountAmount %></span></li>
-			  <li><span>Order Total</span> <span>₹<%= discounted.discountedTotal%></span></li>
-              <input id="grandTotal" name="grandTotal" type="hidden" value="<%= cartproduct.grandTotal %>">
+              <li><span>Order Total</span> <span>₹<%= discounted.discountedTotal%></span></li>
+              <input id="grandTotal" name="grandTotal" type="hidden" value="<%= discounted.discountedTotal %>">
               <% }else{ %>
-				
-				<li><span>Discount</span> <span>₹0</span></li>
-				<li><span>Order Total</span> <span>₹<%= cartproduct.grandTotal%></span></li>
+
+              <li><span>Discount</span> <span>₹0</span></li>
+              <li><span>Order Total</span> <span>₹<%= cartproduct.grandTotal%></span></li>
               <input id="grandTotal" name="grandTotal" type="hidden" value="<%= cartproduct.grandTotal %>">
 
               <% } %>
@@ -271,10 +271,25 @@
                   <label><input type="radio" name="payment" id="cashOnDelivery" value="cod" checked="true"> Cash On Delivery</label>
                   <br>
                   <label><input type="radio" name="payment" id="" value="razorpay"> RazorPay</label>
-                  <% if(user.wallet){ %>
-                    <br>
-                    <label><input type="radio" name="payment" id="" value="wallet"> Wallet</label>
-                    <% } %>
+                  <% if(user.wallet && user.wallet > 0){ %>
+
+                    <ul class="checkout__total__all">
+                       
+                          <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+                              
+                                  <input type="checkbox" id="wallet" name="wallet" value="<%= user.wallet %>">
+                                  <label  for="wallet">Use wallet</label>
+                              
+                              <span> ₹ <%= user.wallet %> </span>
+                          </div
+                      
+                  </ul>
+
+
+<!-- 
+                  <br>
+                  <label><input type="radio" name="payment" id="" value="wallet"> Wallet</label> -->
+                  <% } %>
                 </div>
               </div>
             </div>
@@ -343,31 +358,10 @@
   })
 </script>
 
-<!-- <script>
-	document.getElementById('razorpayBtn').addEventListener('click', function() {
-	  var options = {
-		key: 'YOUR_RAZORPAY_KEY', // Your Razorpay API Key
-		amount: 10000, // Amount in paise (example: 10000 paise = ₹100)
-		currency: 'INR', // Currency code
-		name: 'Your Company Name', // Your company name
-		description: 'Test Payment', // Payment description
-		handler: function(response) {
-		  // Handle the payment success response here
-		  alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
-		},
-		prefill: {
-		  name: 'John Doe',
-		  email: 'john@example.com',
-		  contact: '+919876543210'
-		}
-	  };
-	  var rzp = new Razorpay(options);
-	  rzp.open();
-	});
-  </script> -->
 
 <script>
   function placeOrder() {
+    
     const address = document.querySelector(
       'input[name = "selectedAddress"]:checked'
     ).value;
@@ -377,6 +371,12 @@
     const total = document.getElementById("grandTotal").value;
     const email = document.getElementById("addressEmail").value;
     const mobile = document.getElementById("addressMobile").value;
+    const walletCheckbox = document.querySelector('input[name="wallet"]:checked');
+    
+    let walletAmount
+    if( walletCheckbox ) {
+             walletAmount = walletCheckbox.value
+        }
 
     if (payment == "razorpay") {
       $.ajax({
@@ -387,6 +387,7 @@
           address,
           total,
           email,
+          walletAmount
         },
 
         success: (response) => {
@@ -423,6 +424,8 @@
                   };
                   var rzp = new Razorpay(options);
                   rzp.open();
+                }else if(response.datas==true){
+                  window.location = "/order_Placed";
                 } else {
                   Swal.fire({
                     title: "Error",
@@ -438,8 +441,7 @@
           }
         },
       });
-    }
-    else {
+    } else {
       $.ajax({
         url: "/orderPlace",
         method: "post",
@@ -447,6 +449,7 @@
           payment,
           address,
           total,
+          walletAmount
         },
         success: (response) => {
           if (response.success) {

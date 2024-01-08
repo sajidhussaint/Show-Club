@@ -1,7 +1,7 @@
 <%- include('./layouts/header') %>
 <h4 style="padding: 50px">EDIT COUPON</h4>
 <div class="container-edit" style="padding: 0 50px">
-  <form method="POST" action="/admin/addCoupon">
+  <form method="POST" action="/admin/editCoupon">
     <label for="productName">COUPON CODE:</label>
     <input class="form-control " type="text" id="code" name="code" style="text-transform: uppercase" value="<%=coupon.code%>" required /><br />
 
@@ -17,11 +17,11 @@
 
     <label for="start">Start date:</label>
 
-    <input class="form-control " type="date" id="start" name="start"  min="0" max="" value="<%=coupon.startingDate%>" />
+    <input class="form-control " type="date" id="start" name="start"  min="0" max="" value="<%=coupon.startingDate ? coupon.startingDate.toISOString().substr(0, 10) : ''%>" />
 
     <label for="start">Expire date:</label>
 
-    <input class="form-control " type="date" id="end" name="end" value="" min="" max="" value="<%=coupon.expiryDate%>" />
+    <input class="form-control " type="date" id="end" name="end" min="0" max="" value="<%=coupon.expiryDate ? coupon.expiryDate.toISOString().substr(0, 10) : ''%>" />
     <label style="color: red"></label>
     <input class="form-control btn btn-primary "  type="submit" value="Save" />
   </form>

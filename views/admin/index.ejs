@@ -145,7 +145,6 @@ for(let i=0;i<'<%=Category.length%>';i++){
   const Category=String(document.getElementById(`Category${i}`).value) 
   CategorySale.push(Category)
 }
-console.log(CategorySale);
 
 let Casuals = parseInt("<%=ordersCategory.Casuals%>");
 let sports = parseInt("<%=ordersCategory.sports%>");
@@ -245,9 +244,6 @@ var options = {
 
 const revenue = <%- JSON.stringify(result.map(item => item.dailyrevenue)) %>;
 const days = <%- JSON.stringify(result.map(item => item._id)) %>;
-
-  console.log(days);
-  console.log(revenue);
 
 var options = {
   series: [{

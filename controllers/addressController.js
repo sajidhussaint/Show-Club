@@ -4,7 +4,7 @@ const AddressDB = require("../model/addressModel");
 const loadAddAddress=async(req,res)=>{
   try {
     const url=req.query.url
-    console.log(url);
+    
       res.render('addAddress',{url})
   } catch (error) {
       console.log(error.message)
@@ -193,7 +193,6 @@ const addAddressPage = async (req, res) => {
     } = req.body;
 
     if (address) {
-      console.log('WORKING ADDRES');
       await AddressDB.updateOne(
         {"address._id": value._id },
         {
@@ -246,7 +245,6 @@ const remove_address=async(req,res)=>{
   try {
        const id=req.session.user_id
        const Dataid= req.query.id
-       console.log(Dataid);
        await AddressDB.findOneAndUpdate({user:id},{$pull:{'address':{_id:Dataid}}})
        res.redirect('/profile')
 

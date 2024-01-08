@@ -7,7 +7,6 @@ const couponHelper = require( '../helpers/couponHelper' )
 const applyCoupon = async (req, res) => {
     try {
       const { couponCode, total } = req.body;
-      console.log(total, couponCode);
       const user = req.session.user_id;
       const coupon = await couponDB.find({ code: couponCode });
       // If coupon exists

@@ -186,9 +186,7 @@
         const cancelmsg = document.getElementById(`cancelspn-${offerId}`)
         try {
             const response = await axios.patch('/admin/cancel-offer',{ offerId })
-            console.log(response);
             if ( response.data.cancelled ) {
-                console.log();
                 cancelbtn.style.display = 'none'
                 spanbtn.className = ''
                 spanbtn.innerHTML = 'Cancelled'

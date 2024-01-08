@@ -25,8 +25,6 @@ user_Route.post("/contact",userController.verifyContact);
 
 user_Route.get("/add-to-wishlist",auth.isLogin,userController.loadWishList);
 
-
-
 user_Route.get("/order-complete",auth.isLogin,userController.loadOrderComplete);
 user_Route.get("/product-detail",productController.loadProductDetail);
 
@@ -65,8 +63,6 @@ user_Route.get("/profile",auth.isLogin,userController.loadProfile)
 user_Route.get("/orderDetails",orderController.loadOrderDetails)
 user_Route.post("/OrderCancel",adminController.OrderCancel)
 
-
-
 //cart
 user_Route.get("/cart",auth.isLogin,cartController.loadCart);//auth.isLogin,
 user_Route.post('/cart',cartController.addtoCart)
@@ -91,9 +87,6 @@ user_Route.get('/addnewAddress',auth.isLogin,addressController.loadnewAddress)//
 user_Route.post('/addnewAddress',addressController.addnewAddress)//in profile section
 
 
-
-
-
 // order
 user_Route.post('/orderPlace',orderController.proceed)
 user_Route.get('/order_Placed',auth.isLogin,orderController.loadOrderPlaced)
@@ -106,24 +99,12 @@ user_Route.get('/search',userController.loadsearch)
 
 user_Route.post("/applyCoupon",couponController.applyCoupon);
 
-
-
 // wallet
 user_Route.get('/walletHistory',userController.loadwalletHistory)
 
 user_Route.get('/invoice',userController.invoiceDownload)
 
-
-
-
 user_Route.post('/review',auth.isLogin,userController.review)
-
-
-// user_Route.get('/Proceed',cartController.loadProceed)
-
-
-
-
 
 // error handler 
 user_Route.use(errorHandler); 

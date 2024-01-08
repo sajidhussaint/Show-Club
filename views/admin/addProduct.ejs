@@ -1,103 +1,183 @@
 <%- include('./layouts/header') %>
-<div style="margin: 15px;">
-    <h3>Add Product Details</h3>
-    <div class="container-edit">
-    <form action="/admin/addproduct" method="POST" enctype="multipart/form-data">
-        <label for="productName">Product Name:</label>
-        <input type="text" id="productName" name="name" required><br>
+<div style="margin: 15px">
+  <h3>Add Product Details</h3>
+  <div class="container-edit">
+    <form
+      action="/admin/addproduct"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <label for="productName">Product Name:</label>
+      <input type="text" id="productName" name="name"  /><br />
 
-        <label for="category">Category:</label>
-        <select id="category" name="category" style="width: 200px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" required>
+      <label for="category">Category:</label>
+      <select
+        id="category"
+        name="category"
+        style="
+          width: 200px;
+          padding: 5px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        "
+        required
+      >
+        <% categorys.forEach(function(category) { %>
 
-            <% category.forEach(function(category) { %>
-                
-                <option value="<%=category._id %>"><%=category.name%></option>
-                <% }); %>  
-                
-          </select>
-          <br>
-        <label for="price">gender:</label>
-        <select id="gender" name="gender" style="width: 200px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" required>
-                
-                <option value="men">men</option>
-                <option value="women">women</option>
-                
-                
-          </select><br>
+        <option value="<%=category._id %>"><%=category.name%></option>
+        <% }); %>
+      </select>
+      <br />
+      <label for="price">gender:</label>
+      <select
+        id="gender"
+        name="gender"
+        style="
+          width: 200px;
+          padding: 5px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        "
+        required
+      >
+        <option value="men">men</option>
+        <option value="women">women</option></select
+      ><br />
 
+      <label for="price">Price:</label>
+      <input type="number" step="10" id="price" name="price" /><br />
 
-        <label for="price">Price:</label>
-        <input type="number" step="10" id="price" name="price" required><br>
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" /><br />
 
-        <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" name="quantity" required><br>
-            
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" rows="4"></textarea
+      ><br />
 
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" rows="4" required></textarea><br>
+      <br />
+      <label for="productImage" class="form-label">Image:</label>
 
-        <br>
-            <label for="productImage" class="form-label">Image:</label>
-            
-            <input type="file" class="form-control" id="productImage" name="ProductImage" multiple required>
+      <input
+        type="file"
+        class="form-control"
+        id="productImage"
+        name="ProductImage"
+        multiple
         
-<br>
-        <input type="submit" value="Save">
+      />
+
+      <br />
+      <input type="submit" value="Save" />
     </form>
-    <h3><%=message %></h3>
+    <h2 style="color: red;"><%=message %></h2>
+  </div>
 </div>
-</div>
 
-    <style>
-        .container-edit{
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 30px;
-        }
+<style>
+  .container-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+  }
 
-        h3 {
-            margin: 0;
-            margin-right: 15px;
+  h3 {
+    margin: 0;
+    margin-right: 15px;
+  }
 
-        }
+  form {
+    display: flex;
+    flex-direction: column;
+  }
 
-        form {
-            display: flex;
-            flex-direction: column;
-        }
+  label {
+    margin-bottom: 5px;
+  }
 
-        label {
-            margin-bottom: 5px;
-        }
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200%;
+  }
 
-        input[type="text"],
-        input[type="number"],
-        textarea {
-            padding: 3px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 200%;
-        }
+  textarea {
+    resize: vertical;
+  }
 
-        textarea {
-            resize: vertical;
-        }
+  input[type="submit"] {
+    padding: 10px;
+    background-color: #39943c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 50%;
+  }
 
-        input[type="submit"] {
-            padding: 10px;
-            background-color: #39943c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 50%;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #106315;
-        }
-    </style>
-    <%- include('./layouts/footer') %>
-
+  input[type="submit"]:hover {
+    background-color: #106315;
+  }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            // Validate the form fields here
+            const productName = document.getElementById("productName").value;
+            const price = document.getElementById("price").value;
+            const quantity = document.getElementById("quantity").value;
+            const description = document.getElementById("description").value;
+    
+            // Add your validation logic here
+            if (!productName || !price || !description) {
+                // Display a toast notification for required fields error
+                Toastify({
+                    text: "Please fill in all required fields",
+                    duration: 3000,
+                    gravity: "top",
+                    style: {
+                        background: "red",
+                    },
+                }).showToast();
+                return;
+            }
+    
+            if (isNaN(quantity) || quantity < 0) {
+                // Display a toast notification for quantity below 0 error
+                Toastify({
+                    text: "Quantity must be a non-negative number",
+                    duration: 3000,
+                    gravity: "top",
+                    style: {
+                        background: "red",
+                    },
+                }).showToast();
+                return;
+            }
+            if (isNaN(price) || price < 100) {
+                // Display a toast notification for quantity below 0 error
+                Toastify({
+                    text: "Price must be a  higher",
+                    duration: 3000,
+                    gravity: "top",
+                    style: {
+                        background: "red",
+                    },
+                }).showToast();
+                return;
+            }
+    
+            // If all fields are valid, submit the form
+            form.submit();
+        });
+    });
+    </script>
+    
+<%- include('./layouts/footer') %>

@@ -132,7 +132,6 @@
 
     async function enterOffer(offerId, productId) {
       $('#discountModal').modal('hide');
-      alert('Offer applied')
       const response = await axios.patch( '/admin/apply-product-offer', { offerId, productId })
       if( response.data.success ) {
           
