@@ -30,7 +30,7 @@ Explore our roadmap to see the planned features and improvements. We're committe
 A special thanks to our contributors and the open-source community for their support in making this project possible.
 
 🔗 **Links:**
-- [https://showclub.online/](#)
+https://showclub.online/
 
 🚀 **Join Us in Shaping the Future of Online Shopping!**
 
