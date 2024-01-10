@@ -35,6 +35,3 @@ https://showclub.online/
 🚀 **Join Us in Shaping the Future of Online Shopping!**
 
 Feel free to customize this template to best reflect your specific project details and goals.
-
-
-![Alt Olx2](https://drive.google.com/file/d/1_XXn941oUHT6l7L3DDnjqf7vbxyGIwpu/view?usp=drive_link)
