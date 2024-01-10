@@ -37,4 +37,4 @@ https://showclub.online/
 Feel free to customize this template to best reflect your specific project details and goals.
 
 
-![Alt Olx2](https://drive.google.com/drive/folders/1fgHW91t4zP9ftUgMk25Uu7Apt2DXF9GQ)
+![Alt Olx2](https://drive.google.com/file/d/1_XXn941oUHT6l7L3DDnjqf7vbxyGIwpu/view?usp=drive_link)
