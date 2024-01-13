@@ -1,4 +1,4 @@
-Welcome to E-Commerce project Showclub.
+Welcome to E-Commerce project Showclub
 
 🌐 **Overview:**
 This robust E-Commerce website is meticulously crafted using cutting-edge web technologies, including HTML, CSS, JavaScript, and Node.js. With a focus on delivering a seamless and secure online shopping experience, our project incorporates a range of features to enhance user engagement and satisfaction.
