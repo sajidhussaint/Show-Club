@@ -363,7 +363,7 @@ h1, h2, h3, h4, h5,
 
 #colorlib-hero {
 	height: 600px;
-	background: $brand-white url(../images/loader.gif) no-repeat center center;
+	background: $brand-white url(../images/main/loader.gif) no-repeat center center;
 	width: 100%;
 	float: left;
 	z-index: 0;
@@ -1886,7 +1886,7 @@ input[type="text"] {
 	width: 100%;
 	height: 100%;
 	z-index: 9999;
-	background: url(../images/loader.gif) center no-repeat #fff;
+	background: url(../images/main/loader.gif) center no-repeat #fff;
 }
 
 .animate-box {
