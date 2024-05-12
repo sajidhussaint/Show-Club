@@ -1,50 +1,101 @@
-
 <%- include('./layouts/header') %>
 
-<div class="container">
-    <div class="card mt-5">
-        <div class="card-body mt-3">
-            <h1 class="card-title">Add Banner</h1>
-            <form action="/admin/add-banner" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
-                <div class="form-group">
-                    <label for="bannerImage">Banner Image:</label>
-                    <input type="file" class="form-control-file" id="image" name="image" accept="image/*" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="info">Info:</label>
-                    <input type="text" class="form-control " id="info" name="info" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="title">Title:</label>
-                    <input type="text" class="form-control " id="title" name="title" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="description">Description:</label>
-                    <textarea class="form-control " id="description" name="description" rows="4" cols="50" required></textarea>
-                </div>
-                
-                <button type="submit" class="btn btn-primary">Add Banner</button>
-            </form>
+<div class="container mt-5">
+  <h4 class="card-title text-center">Add Banner</h4>
+  <div class="card">
+    <div class="card-body">
+      <form
+        action="/admin/add-banner"
+        method="POST"
+        enctype="multipart/form-data"
+        onsubmit="return validateForm()"
+      >
+        <div class="form-group">
+          <label for="bannerImage">Banner Image:</label>
+          <input
+            type="file"
+            class="form-control-file"
+            id="bannerImage"
+            name="image"
+            accept="image/*"
+            required
+          />
         </div>
+
+        <div class="form-group">
+          <label for="info">Info:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="info"
+            name="info"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="title">Title:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea
+            class="form-control"
+            id="description"
+            name="description"
+            rows="4"
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Banner</button>
+      </form>
     </div>
+  </div>
 </div>
 
+<style>
+  .card {
+    width: 50%;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .form-group label {
+    font-weight: bold;
+  }
+</style>
+
 <script>
-    function validateForm() {
-        const infoInput = document.getElementById('info');
-        const titleInput = document.getElementById('title');
-        const descriptionInput = document.getElementById('description');
+  function validateForm() {
+    const infoInput = document.getElementById("info");
+    const titleInput = document.getElementById("title");
+    const descriptionInput = document.getElementById("description");
 
-        if (infoInput.value.trim() === '' || titleInput.value.trim() === '' || descriptionInput.value.trim() === '') {
-            alert("Fields cannot be empty or contain only spaces.");
-            return false;
-        }
-
-        return true;
+    if (
+      infoInput.value.trim() === "" ||
+      titleInput.value.trim() === "" ||
+      descriptionInput.value.trim() === ""
+    ) {
+      alert("Fields cannot be empty or contain only spaces.");
+      return false;
     }
+
+    return true;
+  }
 </script>
 
 <%- include('./layouts/footer') %>

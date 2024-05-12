@@ -1,80 +1,68 @@
 <%- include('./layouts/header') %>
-<h4 style="padding: 50px">EDIT COUPON</h4>
-<div class="container-edit" style="padding: 0 50px">
-  <form method="POST" action="/admin/editCoupon">
-    <label for="productName">COUPON CODE:</label>
-    <input class="form-control " type="text" id="code" name="code" style="text-transform: uppercase" value="<%=coupon.code%>" required /><br />
 
-    <label for="description">Description:</label>
-    <textarea class="form-control " id="description" name="description" rows="3"><%=coupon.description%></textarea><br />
+<div class="container mt-5">
+  <h4 class="text-center mb-4">Edit Coupon</h4>
+</div>
 
-    <label for="discount">Discount:</label>
-    <input class="form-control " type="text" id="discount" name="discount" value="<%=coupon.discount%>" required /><br />
-    <label for="discount">Minimum Purchase:</label>
-    <input class="form-control " type="text" id="min" name="min" value="<%=coupon.minimum%>" required /><br />
-    <label for="discount">Maximum Purchase:</label>
-    <input class="form-control " type="text" id="max" name="max" value="<%=coupon.maximum%>" required /><br />
+<div class="container">
+  <div class="card p-4">
+    <form method="POST" action="/admin/editCoupon">
+      <div class="form-group">
+        <label for="couponCode">Coupon Code:</label>
+        <input type="text" class="form-control" id="couponCode" name="code" style="text-transform: uppercase" value="<%=coupon.code%>" required>
+      </div>
 
-    <label for="start">Start date:</label>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea class="form-control" id="description" name="description" rows="3"><%=coupon.description%></textarea>
+      </div>
 
-    <input class="form-control " type="date" id="start" name="start"  min="0" max="" value="<%=coupon.startingDate ? coupon.startingDate.toISOString().substr(0, 10) : ''%>" />
+      <div class="form-group">
+        <label for="discount">Discount:</label>
+        <input type="text" class="form-control" id="discount" name="discount" value="<%=coupon.discount%>" required>
+      </div>
 
-    <label for="start">Expire date:</label>
+      <div class="form-group">
+        <label for="minPurchase">Minimum Purchase:</label>
+        <input type="text" class="form-control" id="minPurchase" name="min" value="<%=coupon.minimum%>" required>
+      </div>
 
-    <input class="form-control " type="date" id="end" name="end" min="0" max="" value="<%=coupon.expiryDate ? coupon.expiryDate.toISOString().substr(0, 10) : ''%>" />
-    <label style="color: red"></label>
-    <input class="form-control btn btn-primary "  type="submit" value="Save" />
-  </form>
+      <div class="form-group">
+        <label for="maxPurchase">Maximum Purchase:</label>
+        <input type="text" class="form-control" id="maxPurchase" name="max" value="<%=coupon.maximum%>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="startDate">Start Date:</label>
+        <input type="date" class="form-control" id="startDate" name="start"  min="0" max="" value="<%=coupon.startingDate ? coupon.startingDate.toISOString().substr(0, 10) : ''%>">
+      </div>
+
+      <div class="form-group">
+        <label for="endDate">Expire Date:</label>
+        <input type="date" class="form-control" id="endDate" name="end" min="0" max="" value="<%=coupon.expiryDate ? coupon.expiryDate.toISOString().substr(0, 10) : ''%>">
+      </div>
+
+      <button type="submit" class="btn btn-primary ">Save</button>
+    </form>
+  </div>
 </div>
 
 <style>
-  .container-edit {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 30px;
-  }
-
-  h3 {
-    margin: 0;
-    margin-right: 15px;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-
-  label {
-    margin-bottom: 5px;
-  }
-
-  input[type="text"],
-  input[type="number"],
-  textarea {
-    padding: 3px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 200%;
-  }
-
-  textarea {
-    resize: vertical;
-  }
-
-  input[type="submit"] {
-    padding: 10px;
-    background-color: #2e8b25;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+  .card {
     width: 50%;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
   }
 
-  input[type="submit"]:hover {
-    background-color: #106315;
+  .form-group label {
+    font-weight: bold;
+  }
+
+  .form-control {
+    border-radius: 5px;
   }
 </style>
+
 <%- include('./layouts/footer') %>

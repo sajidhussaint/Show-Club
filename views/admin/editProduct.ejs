@@ -1,106 +1,92 @@
 <%- include('./layouts/header') %>
 
-<h3 style="margin: 5px;">Edit Product Details</h3>
-<div class="container-edit">
-  <form method="POST" action="/admin/editProduct?id=<%=product._id %>" enctype="multipart/form-data">
-    <label for="productName">Product Name:</label>
-    <input type="text" id="productName" name="name" value="<%=product.name %>" required><br>
+<div class="container mt-5">
+  <h4 class="text-center mb-4">Edit Product Details</h4>
+</div>
 
-    <label for="category">Category:</label>
-
-    <select id="category" name="category" style="width: 200px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" required>
-
-      <% category.forEach(function(category) { %>
-
-      <option value="<%=category._id %>" <% if(category.name==product.category){%> selected <% } %>><%=category.name %></option>
-      <% }); %>
-
-    </select>
-    <br>
-    <label for="price">gender:</label>
-        <select id="gender" name="gender" style="width: 200px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;" required>
-                
-                <option value="men">men</option>
-                <option value="women">women</option>
-                
-                
-          </select><br>
-    <label for="price">Price:</label>
-    <input type="number" id="price" name="price" value="<%=product.price  %>" required><br>
-
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" name="quantity" value="<%=product.quantity  %>" required><br>
-
-    <label for="description">Description:</label>
-    <input type="text" id="description" name="description" rows="4" value="<%=product.description  %>" required></input><br>
-
-    <br>
-    <label for="productImage" class="form-label">Image:</label>
-
-    <div class="card-body" id="reloadData">
-      <div class="input-upload ">
-        <% product.image.forEach((image) => {%>
-        <img style="border-radius: 20%; border: 1px solid rgb(206, 202, 202); margin: 5px; " id="product_img" width="100" height="100" src="/admin/IMAGES_DB/<%=image%>" alt="" />
-        <a onclick="deleteImage('<%=image%>','<%=product._id%>')"><i style="color: red; position: relative; bottom: 81px; right:33px" class="bi bi-x-circle-fill"></i></i></a>
-        <%}) %>
-
-        <input type="file" name="Image" class="form-control" multiple onchange="viewImage(event)" />
+<div class="container d-flex justify-content-center">
+  <div class="card p-4">
+    <form method="POST" action="/admin/editProduct?id=<%=product._id %>" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="productName">Product Name:</label>
+        <input type="text" class="form-control" id="productName" name="name" value="<%=product.name %>" required>
       </div>
-    </div>
 
-    <input type="submit" value="Save">
-  </form>
+      <div class="form-group">
+        <label for="category">Category:</label>
+        <select id="category" name="category" class="form-control" required>
+          <% category.forEach(function(category) { %>
+          <option value="<%=category._id %>" <% if(category.name==product.category){%> selected <% } %>><%=category.name %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" class="form-control" required>
+          <option value="men">Men</option>
+          <option value="women">Women</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="price">Price:</label>
+        <input type="number" class="form-control" id="price" name="price" value="<%=product.price %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="quantity">Quantity:</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" value="<%=product.quantity %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="text" class="form-control" id="description" name="description" value="<%=product.description %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="productImage" class="form-label">Image:</label>
+        <div class="card-body" id="reloadData">
+          <div class="input-upload">
+            <% product.image.forEach((image) => {%>
+            <img class="img-thumbnail" src="/admin/IMAGES_DB/<%=image%>" alt="Product Image" />
+            <a onclick="deleteImage('<%=image%>','<%=product._id%>')"><i class="bi bi-x-circle-fill text-danger"></i></a>
+            <%}) %>
+            <input type="file" name="Image" class="form-control" multiple onchange="viewImage(event)" />
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+  </div>
 </div>
 
 <style>
-  .container-edit {
+  .card {
+    width: 70%;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-group label {
+    font-weight: bold;
+  }
+
+  .form-control {
+    border-radius: 5px;
+  }
+
+  .input-upload {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 30px;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
-  h3 {
-    margin: 0;
-    margin-right: 15px;
-
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-
-  label {
-    margin-bottom: 5px;
-  }
-
-  input[type="text"],
-  input[type="number"],
-  textarea {
-    padding: 3px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 200%;
-  }
-
-  textarea {
-    resize: vertical;
-  }
-
-  input[type="submit"] {
-    padding: 10px;
-    background-color: #39943c;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 50%;
-  }
-
-  input[type="submit"]:hover {
-    background-color: #106315;
+  .input-upload img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 10px;
   }
 </style>
 <script>

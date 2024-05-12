@@ -1,66 +1,57 @@
 <%- include('./layouts/header') %>
-<h4> ADD CATEGORY</h4>
-<div class="container-edit" style="padding: 50px;">
-<form method="POST" action="/admin/addCategory">
-    <label for="productName">CATEGORY NAME:</label>
-    <input type="text" id="productName" name="name" required><br>
 
-    <label for="description">Description:</label>
-        <textarea id="description" name="description" rows="3" required></textarea><br>
-<label style="color: red;" > <%=message%></label>
-    <input type="submit" value="Save">
-</form>
+<div class="container mt-5">
+  <h4 class="text-center">Add Category</h4>
+</div>
+
+<div class="container p-5">
+  <div class="card p-4">
+    <form method="POST" action="/admin/addCategory">
+      <div class="form-group">
+        <label for="categoryName">Category Name:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="categoryName"
+          name="name"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea
+          class="form-control"
+          id="description"
+          name="description"
+          rows="3"
+          required
+        ></textarea>
+      </div>
+
+      <label style="color: red"><%=message%></label>
+
+      <button type="submit" class="btn btn-primary ">Save</button>
+    </form>
+  </div>
 </div>
 
 <style>
-    .container-edit{
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 30px;
-    }
+  .card {
+    width: 50%;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
 
-    h3 {
-        margin: 0;
-        margin-right: 15px;
+  .form-group label {
+    font-weight: bold;
+  }
 
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-    }
-
-    label {
-        margin-bottom: 5px;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    textarea {
-        padding: 3px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        width: 200%;
-    }
-
-    textarea {
-        resize: vertical;
-    }
-
-    input[type="submit"] {
-        padding: 10px;
-        background-color: #39943c;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        width: 50%;
-    }
-
-    input[type="submit"]:hover {
-        background-color: #106315;
-    }
+  .form-control {
+    border-radius: 5px;
+  }
 </style>
+
 <%- include('./layouts/footer') %>

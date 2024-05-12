@@ -1,183 +1,156 @@
 <%- include('./layouts/header') %>
-<div style="margin: 15px">
-  <h3>Add Product Details</h3>
-  <div class="container-edit">
+<div class="container mt-5">
+  <h4 class="text-center mb-4">Add Product Details</h4>
+</div>
+<div class="container d-flex justify-content-center">
+  <div class="card p-4">
     <form
       action="/admin/addproduct"
       method="POST"
       enctype="multipart/form-data"
     >
-      <label for="productName">Product Name:</label>
-      <input type="text" id="productName" name="name"  /><br />
-
-      <label for="category">Category:</label>
-      <select
-        id="category"
-        name="category"
-        style="
-          width: 200px;
-          padding: 5px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        "
-        required
-      >
-        <% categorys.forEach(function(category) { %>
-
-        <option value="<%=category._id %>"><%=category.name%></option>
-        <% }); %>
-      </select>
-      <br />
-      <label for="price">gender:</label>
-      <select
-        id="gender"
-        name="gender"
-        style="
-          width: 200px;
-          padding: 5px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        "
-        required
-      >
-        <option value="men">men</option>
-        <option value="women">women</option></select
-      ><br />
-
-      <label for="price">Price:</label>
-      <input type="number" step="10" id="price" name="price" /><br />
-
-      <label for="quantity">Quantity:</label>
-      <input type="number" id="quantity" name="quantity" /><br />
-
-      <label for="description">Description:</label>
-      <textarea id="description" name="description" rows="4"></textarea
-      ><br />
-
-      <br />
-      <label for="productImage" class="form-label">Image:</label>
-
-      <input
-        type="file"
-        class="form-control"
-        id="productImage"
-        name="ProductImage"
-        multiple
-        
-      />
-
-      <br />
-      <input type="submit" value="Save" />
+      <div class="form-group">
+        <label for="productName">Product Name:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="productName"
+          name="name"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="category">Category:</label>
+        <select id="category" name="category" class="form-control" required>
+          <% categorys.forEach(function(category) { %>
+          <option value="<%=category._id %>"><%=category.name%></option>
+          <% }); %>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" class="form-control" required>
+          <option value="men">Men</option>
+          <option value="women">Women</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="price">Price:</label>
+        <input
+          type="number"
+          step="10"
+          class="form-control"
+          id="price"
+          name="price"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="quantity">Quantity:</label>
+        <input
+          type="number"
+          class="form-control"
+          id="quantity"
+          name="quantity"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea
+          class="form-control"
+          id="description"
+          name="description"
+          rows="4"
+          required
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label for="productImage">Image:</label>
+        <input
+          type="file"
+          class="form-control"
+          id="productImage"
+          name="ProductImage"
+          multiple
+        />
+      </div>
+      <button type="submit" class="btn btn-primary ">Save</button>
     </form>
-    <h2 style="color: red;"><%=message %></h2>
+    <h2 style="color: red"><%=message %></h2>
   </div>
 </div>
 
 <style>
-  .container-edit {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 30px;
+  .card {
+    width: 70%;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-  h3 {
-    margin: 0;
-    margin-right: 15px;
+  .form-group label {
+    font-weight: bold;
   }
 
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-
-  label {
-    margin-bottom: 5px;
-  }
-
-  input[type="text"],
-  input[type="number"],
-  textarea {
-    padding: 3px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 200%;
-  }
-
-  textarea {
-    resize: vertical;
-  }
-
-  input[type="submit"] {
-    padding: 10px;
-    background-color: #39943c;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 50%;
-  }
-
-  input[type="submit"]:hover {
-    background-color: #106315;
+  .form-control {
+    border-radius: 5px;
   }
 </style>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector("form");
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            
-            // Validate the form fields here
-            const productName = document.getElementById("productName").value;
-            const price = document.getElementById("price").value;
-            const quantity = document.getElementById("quantity").value;
-            const description = document.getElementById("description").value;
-    
-            // Add your validation logic here
-            if (!productName || !price || !description) {
-                // Display a toast notification for required fields error
-                Toastify({
-                    text: "Please fill in all required fields",
-                    duration: 3000,
-                    gravity: "top",
-                    style: {
-                        background: "red",
-                    },
-                }).showToast();
-                return;
-            }
-    
-            if (isNaN(quantity) || quantity < 0) {
-                // Display a toast notification for quantity below 0 error
-                Toastify({
-                    text: "Quantity must be a non-negative number",
-                    duration: 3000,
-                    gravity: "top",
-                    style: {
-                        background: "red",
-                    },
-                }).showToast();
-                return;
-            }
-            if (isNaN(price) || price < 100) {
-                // Display a toast notification for quantity below 0 error
-                Toastify({
-                    text: "Price must be a  higher",
-                    duration: 3000,
-                    gravity: "top",
-                    style: {
-                        background: "red",
-                    },
-                }).showToast();
-                return;
-            }
-    
-            // If all fields are valid, submit the form
-            form.submit();
-        });
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // Validate the form fields here
+      const productName = document.getElementById("productName").value;
+      const price = document.getElementById("price").value;
+      const quantity = document.getElementById("quantity").value;
+      const description = document.getElementById("description").value;
+
+      // Add your validation logic here
+      if (!productName || !price || !description) {
+        // Display a toast notification for required fields error
+        Toastify({
+          text: "Please fill in all required fields",
+          duration: 3000,
+          gravity: "top",
+          style: {
+            background: "red",
+          },
+        }).showToast();
+        return;
+      }
+
+      if (isNaN(quantity) || quantity < 0) {
+        // Display a toast notification for quantity below 0 error
+        Toastify({
+          text: "Quantity must be a non-negative number",
+          duration: 3000,
+          gravity: "top",
+          style: {
+            background: "red",
+          },
+        }).showToast();
+        return;
+      }
+      if (isNaN(price) || price < 100) {
+        // Display a toast notification for quantity below 0 error
+        Toastify({
+          text: "Price must be a  higher",
+          duration: 3000,
+          gravity: "top",
+          style: {
+            background: "red",
+          },
+        }).showToast();
+        return;
+      }
+
+      // If all fields are valid, submit the form
+      form.submit();
     });
-    </script>
-    
+  });
+</script>
+
 <%- include('./layouts/footer') %>

@@ -295,7 +295,6 @@ const adminLoginVerify = async (req, res, next) => {
     }
     // Set up a session or token for authentication
     req.session.admin_id = user._id;
-    console.log(req.session.admin_id, ":session admin");
     res.redirect("/admin/dashboard"); //{messageS:'login succesfull'}
   } catch (error) {
     next(error);
