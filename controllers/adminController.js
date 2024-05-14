@@ -315,7 +315,7 @@ const adminLogout = async (req, res, next) => {
 const loadOrder = async (req, res, next) => {
   try {
     const order = await orderDB.find().populate("products.product_Id");
-    res.render("Admin_Order", { order });
+    res.render("admin_Order", { order });
   } catch (error) {
     next(error);
   }
@@ -421,7 +421,6 @@ const loadeditCoupon = async (req, res) => {
 
 const verifyeditCoupon = async (req, res, next) => {
   try {
-
     const { code, description, discount, start, end, min, max } = req.body;
     await couponDB.updateOne(
       { code: code },
@@ -474,8 +473,7 @@ const salesReport = async (req, res, next) => {
 
     const product = await orderDB
       .find({ "products.status": "delivered" })
-      .populate("products.product_Id")
-      .te("user");
+      .populate("products.product_Id");
     res.render("sales-report", {
       totalAmount,
       totalSold,

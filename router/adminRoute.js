@@ -33,6 +33,7 @@ admin_Route.post("/addCategory",auth.isLogin,adminController.insertCategory);
 admin_Route.get("/editCategory",auth.isLogin,adminController.loadeditCategory);
 admin_Route.post("/editCategory",auth.isLogin,adminController.editCategory);
 
+
 admin_Route.get("/Orders",adminController.loadOrder);
 admin_Route.post("/OrderCancel",adminController.OrderCancel);
 admin_Route.patch('/OrderUpdate',adminController.UpdateOrderStatus)

@@ -34,7 +34,7 @@ const loadaddProduct = async (req, res) => {
 const loadeditProduct = async (req, res) => {
   try {
     const id = req.query.product;
-    const product = await ProductDB.findOne({ _id: id });
+    const product = await ProductDB.findOne({ _id: id }).populate('category')
     const category = await CategoryDB.find({});
     res.render("editProduct", { product, category });
   } catch (error) {

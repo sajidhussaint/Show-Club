@@ -16,7 +16,7 @@
         <label for="category">Category:</label>
         <select id="category" name="category" class="form-control" required>
           <% category.forEach(function(category) { %>
-          <option value="<%=category._id %>" <% if(category.name==product.category){%> selected <% } %>><%=category.name %></option>
+          <option value="<%=category._id %>" <% if(category.name==product.category.name){%> selected <% } %>><%=category.name %> </option>
           <% }); %>
         </select>
       </div>
@@ -24,8 +24,8 @@
       <div class="form-group">
         <label for="gender">Gender:</label>
         <select id="gender" name="gender" class="form-control" required>
-          <option value="men">Men</option>
-          <option value="women">Women</option>
+          <option value="men" <% if(product.gender=="men"){%> selected <% } %> >Men</option>
+          <option value="women" <% if(product.gender=="women"){%> selected <% } %> >Women</option>
         </select>
       </div>
 

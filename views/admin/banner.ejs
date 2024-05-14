@@ -2,6 +2,10 @@
 
 
 <style>
+.action-buttons{
+  display: grid;
+  gap: 2px;
+}
 
     .container {
       max-width: 1200px;
@@ -85,8 +89,8 @@
                 <td><%= banner.title %></td>
                 <td><%= banner.description %></td>
                 <td class="action-buttons">
-                  <a href="/admin/edit-banner?id=<%= banner._id %>" class="btn btn-primary">Edit</a>
-                  <a href="/admin/delete?id=<%= banner._id %>" class="btn btn-danger">Delete</a>
+                  <a href="/admin/edit-banner?id=<%= banner._id %>" class="btn btn-primary ">Edit</a>
+                  <a href="/admin/delete?id=<%= banner._id %>" class="btn btn-danger ">Delete</a>
                 </td>
               </tr>
               <% }) %>
